@@ -4,5 +4,7 @@
     <string name="app_name">GeoBook</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="hello_world">Hello world!</string>
+    <string name="earthImageDescription">Picture of Earth from orbit</string>
+    <string name="version">Version 0.1</string>
 
 </resources>
