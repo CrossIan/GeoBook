@@ -39,7 +39,7 @@ public class SplashScreen extends Activity {
 				} finally {
 					finish();
 					// TODO: change to .Login
-					startActivity(new Intent("com.cse.geobook.Map"));
+					startActivity(new Intent("android.intent.action.MAP"));
 
 				}
 			}
