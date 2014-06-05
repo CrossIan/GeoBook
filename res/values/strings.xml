@@ -2,33 +2,33 @@
 <resources>
 
     <!-- GLOBAL STRINGS -->
-	<string name="app_name">GeoBook</string>
-	<string name="ok">OK</string>
-	<string name="hello_world">Hello world!</string>
-	
-	
-	<!-- STRINGS USED IN SplashScreen -->
-	<string name="title_activity_splash_screen">SplashScreen</string>
-	<string name="earthImageDescription">Picture of Earth from orbit</string>
-	<string name="version">Version 0.1</string>
-	
-	
-	<!-- STRINGS USED IN Map -->
-	<string name="title_activity_map">Map Viewer</string>
-	<string name="menu_map_profile">Profile</string>
-	<string name="menu_map_settings">Settings</string>
-	<string name="menu_map_about">About GeoBook</string>
-	<string name="menu_map_signout">Sign out</string>
-	<string name="dialog_about_title">About GeoBook</string>
-	<string name="dialog_about_message">Created by:\n\t\tIan Cross\n\t\tKevin Li\n\t\tNate Lyon\n\t\tRyan Wolfarth</string>
+    <string name="app_name">GeoBook</string>
+    <string name="ok">OK</string>
+    <string name="hello_world">Hello world!</string>
 
-	
-	<!-- STRINGS USED IN Photo -->
-	<string name="bCapture">capture?</string>
-	<string name="title_activity_photo">Photo Log</string>
-	
-	
-	<!-- DEBUG STRINGS -->
-	
-	
+    <!-- STRINGS USED IN SplashScreen -->
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="earthImageDescription">Picture of Earth from orbit</string>
+    <string name="version">Version 0.1</string>
+
+    <!-- STRINGS USED IN Map -->
+    <string name="title_activity_map">Map Viewer</string>
+    <string name="menu_map_profile">Profile</string>
+    <string name="menu_map_settings">Settings</string>
+    <string name="menu_map_about">About GeoBook</string>
+    <string name="menu_map_signout">Sign out</string>
+    <string name="dialog_about_title">About GeoBook</string>
+    <string name="dialog_about_message">Created by:\n\t\tIan Cross\n\t\tKevin Li\n\t\tNate Lyon\n\t\tRyan Wolfarth</string>
+
+    <!-- STRINGS USED IN Photo -->
+    <string name="bCapture">capture?</string>
+    <string name="title_activity_photo">Photo Log</string>
+
+    <!-- DEBUG STRINGS -->
+
+    <string name="title_activity_login">Login</string>
+    <string name="signin">Sign in</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+
 </resources>
