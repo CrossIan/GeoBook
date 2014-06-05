@@ -1,5 +1,6 @@
 package com.cse.geobook;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +9,7 @@ import android.view.MotionEvent;
 public class SplashScreen extends Activity {
 	// Variables that handle splash screen duration
 	protected boolean active = true;
-	protected int splashTime = 5000;
+	protected int splashTime = 3500;
 	protected int timeIncrement = 100;
 	protected int sleepTime = 100;
 
@@ -39,8 +40,9 @@ public class SplashScreen extends Activity {
 				} finally {
 					finish();
 					// TODO: change to .Login
-					startActivity(new Intent("android.intent.action.MAP"));
-
+					//startActivity(new Intent("android.intent.action.MAP"));
+					startActivity(new Intent(SplashScreen.this,
+							Login.class));
 				}
 			}
 		};
