@@ -48,7 +48,7 @@
         <activity
             android:name="com.cse.geobook.Photo"
             android:label="@string/title_activity_photo"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.PHOTO" />
 
@@ -67,6 +67,10 @@
         <activity
             android:name="com.cse.geobook.Login"
             android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name="com.cse.geobook.Profile"
+            android:label="@string/title_activity_profile" >
         </activity>
     </application>
 

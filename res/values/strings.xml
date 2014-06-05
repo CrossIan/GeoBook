@@ -24,11 +24,14 @@
     <string name="bCapture">capture?</string>
     <string name="title_activity_photo">Photo Log</string>
 
-    <!-- DEBUG STRINGS -->
-
+    <!-- STRINGS USED IN Login -->
     <string name="title_activity_login">Login</string>
     <string name="signin">Sign in</string>
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
+    
+    <!-- STRINGS USED IN Profile -->
+    <string name="title_activity_profile">User Profile</string>
+    <string name="userProfileImageDescription">User\'s profile picture</string>
 
 </resources>

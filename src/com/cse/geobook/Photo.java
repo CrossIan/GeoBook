@@ -15,7 +15,7 @@ public class Photo extends Activity implements OnClickListener {
 	ImageView ivPhoto;
 	Intent intent;
 	Bitmap image;
-	int data = 0;
+	int data = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

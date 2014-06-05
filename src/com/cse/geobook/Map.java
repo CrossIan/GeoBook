@@ -42,6 +42,8 @@ public class Map extends FragmentActivity {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 		    case R.id.menu_map_profile:
+		    	startActivity(new Intent(Map.this,
+						Profile.class));
 	            return true;
 		    case R.id.menu_map_settings:
 	            return true;
