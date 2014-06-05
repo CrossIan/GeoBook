@@ -24,5 +24,6 @@
 	<string name="dialog_about_message">Created by:\n\t\tIan Cross\n\t\tKevin Li\n\t\tNate Lyon\n\t\tRyan Wolfarth</string>
 
 	<!-- DEBUG STRINGS -->
-	
+	<string name="bCapture">capture?</string>
+	<string name="title_activity_photo">Photo Log</string>
 </resources>
