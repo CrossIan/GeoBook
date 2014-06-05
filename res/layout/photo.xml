@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/ivPhoto"
-        android:layout_width="319dp"
-        android:layout_height="431dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+	<ImageView
+		android:id="@+id/ivPhoto"
+		android:layout_width="319dp"
+		android:layout_height="431dp"
+		android:layout_gravity="center_vertical|center_horizontal" />
 
-    <Button
-        android:id="@+id/bCapture"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:text="@string/bCapture" />
+	<Button
+		android:id="@+id/bCapture"
+		android:layout_width="175dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal|center_vertical"
+		android:text="@string/bCapture" />
 
 </LinearLayout>
