@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -20,19 +21,33 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Map extends FragmentActivity {
 
 	GoogleMap gMap;
-	ArrayList<LatLng> caches;
+
 	Bundle extras;
+	ArrayList<LatLng> caches;
+	LatLng target;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
-
+		getExtras();
 		gMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
-		caches = getIntent().getParcelableArrayListExtra("caches");
-
+		getExtras();
 		setUpMap();
+	}
+
+	private void getExtras() {
+		extras = getIntent().getExtras();
+		caches = extras.getParcelableArrayList("caches");
+		target = extras.getParcelable("target");
+
+	}
+
+	private void addMarker(LatLng location) {
+		Marker m = gMap.addMarker(new MarkerOptions().position(location));
+		m.setTitle(""); // or add in MarkerOptions
+		m.setSnippet("");
 	}
 
 	/*
@@ -80,9 +95,23 @@ public class Map extends FragmentActivity {
 	}
 
 	public void setUpMap() {
+		gMap.setMyLocationEnabled(true);
 
-		for (int i = 0; i < caches.size(); i++) {
-			addMarker(caches.get(i));
+		/*
+		 * set target & zoom. if target is passed use that, else use default of
+		 * columbus ohio
+		 */
+		if (target != null) {
+			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(target, 11));
+		} else {
+			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+					39.961138, -83.001465), 11));
+		}
+		// set markers
+		if (caches != null) {
+			for (int i = 0; i < caches.size(); i++) {
+				addMarker(caches.get(i));
+			}
 		}
 
 		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
@@ -101,12 +130,6 @@ public class Map extends FragmentActivity {
 
 		});
 
-	}
-
-	private void addMarker(LatLng location) {
-		Marker m = gMap.addMarker(new MarkerOptions().position(location));
-		m.setTitle(""); // or add in MarkerOptions
-		m.setSnippet("");
 	}
 
 }

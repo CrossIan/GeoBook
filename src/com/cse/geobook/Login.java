@@ -23,20 +23,33 @@ public class Login extends Activity {
 				finish();
 				// Move to the map viewer
 				Intent map = new Intent("android.intent.action.MAP");
-
 				Bundle extra = new Bundle();
-				// test data for map
-				ArrayList<LatLng> t = new ArrayList<LatLng>();
-				t.add(new LatLng(-37.81319, 144.96298));
-				t.add(new LatLng(-33.87365, 151.20689));
-				t.add(new LatLng(-34.87365, 152.20689));
 
-				map.putParcelableArrayListExtra("caches", t);
-				// map.putExtra("caches", extra);
-
+				setDataToPass(extra);
+				map.putExtras(extra);
 				startActivity(map);
 			}
 		});
+
+	}
+
+	void setDataToPass(Bundle b) {
+		// target
+		b.putParcelable("target", new LatLng(39.961138, -83.001465));
+		// markers (caches)
+		ArrayList<LatLng> data = new ArrayList<LatLng>();
+
+		data.add(new LatLng(39.901138, -82.951465));
+		data.add(new LatLng(39.901138, -83.001465));
+		data.add(new LatLng(39.901138, -83.051465));
+		data.add(new LatLng(39.961138, -82.951465));
+		data.add(new LatLng(39.961138, -83.001465));
+		data.add(new LatLng(39.961138, -83.051465));
+		data.add(new LatLng(39.991138, -82.951465));
+		data.add(new LatLng(39.991138, -83.001465));
+		data.add(new LatLng(39.991138, -83.051465));
+
+		b.putParcelableArrayList("caches", data);
 
 	}
 }
