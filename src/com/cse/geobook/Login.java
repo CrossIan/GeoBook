@@ -3,6 +3,7 @@ package com.cse.geobook;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,17 +40,25 @@ public class Login extends Activity {
 		// markers (caches)
 		ArrayList<LatLng> data = new ArrayList<LatLng>();
 
-		data.add(new LatLng(39.901138, -82.951465));
-		data.add(new LatLng(39.901138, -83.001465));
-		data.add(new LatLng(39.901138, -83.051465));
-		data.add(new LatLng(39.961138, -82.951465));
-		data.add(new LatLng(39.961138, -83.001465));
-		data.add(new LatLng(39.961138, -83.051465));
-		data.add(new LatLng(39.991138, -82.951465));
-		data.add(new LatLng(39.991138, -83.001465));
-		data.add(new LatLng(39.991138, -83.051465));
-
+		DataParser reader = DataParser(getApplicationContext(), R.raw.test_data);
+		/*
+		 * data.add(new LatLng(39.901138, -82.951465)); data.add(new
+		 * LatLng(39.901138, -83.001465)); data.add(new LatLng(39.901138,
+		 * -83.051465)); data.add(new LatLng(39.961138, -82.951465));
+		 * data.add(new LatLng(39.961138, -83.001465)); data.add(new
+		 * LatLng(39.961138, -83.051465)); data.add(new LatLng(39.991138,
+		 * -82.951465)); data.add(new LatLng(39.991138, -83.001465));
+		 * data.add(new LatLng(39.991138, -83.051465));
+		 */
+		while (reader.ready()) {
+			data.add(new LatLng(reader.getLat(), reader.getLng()));
+		}
 		b.putParcelableArrayList("caches", data);
 
+	}
+
+	private DataParser DataParser(Context applicationContext, int testData) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
