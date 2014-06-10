@@ -25,18 +25,24 @@ public class DataParser {
 	}
 
 	double getLat() {
+		Double lat = 0.0;
 		try {
 			line = reader.readLine();
+			this.lastComma = line.indexOf(",");
+			lat = Double.parseDouble((String) line.substring(0, lastComma));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		int lastComma = line.indexOf(",");
-		return Double.parseDouble((String) line.substring(0, lastComma));
+		return lat;
+
 	}
 
+	/* getLat() must be called first!! */
 	double getLng() {
-		return Double.parseDouble(line.substring(lastComma + 1, line.length()));
+		Double lng = Double.parseDouble(line.substring(lastComma + 1,
+				line.length()));
+		return lng;
 	}
 
 	boolean ready() {
