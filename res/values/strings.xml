@@ -19,6 +19,10 @@
     <string name="menu_map_signout">Sign out</string>
     <string name="dialog_about_title">About GeoBook</string>
     <string name="dialog_about_message">Created by:\n\t\tIan Cross\n\t\tKevin Li\n\t\tNate Lyon\n\t\tRyan Wolfarth</string>
+    <string name="confirm_new_cache">Are you sure you would like to create a new cache here?</string>
+    <string name="new_cache">New Cache</string>
+    <string name="cache_option_yes">Yes</string>
+    <string name="cache_option_no">No</string>
 
     <!-- STRINGS USED IN Photo -->
     <string name="bCapture">capture?</string>
@@ -29,7 +33,7 @@
     <string name="signin">Sign in</string>
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
-    
+
     <!-- STRINGS USED IN Profile -->
     <string name="title_activity_profile">User Profile</string>
     <string name="userProfileImageDescription">User\'s profile picture</string>

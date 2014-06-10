@@ -12,6 +12,8 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -95,8 +97,11 @@ public class Map extends FragmentActivity {
 	}
 
 	public void setUpMap() {
-		gMap.setMyLocationEnabled(true);
 
+		gMap.setOnMarkerClickListener(new markerClickListener());
+		gMap.setOnMapClickListener(new clickListener());
+		gMap.setOnMapLongClickListener(new longClickListener());
+		gMap.setMyLocationEnabled(true);
 		/*
 		 * set target & zoom. if target is passed use that, else use default of
 		 * columbus ohio
@@ -114,21 +119,59 @@ public class Map extends FragmentActivity {
 			}
 		}
 
-		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+	}
 
-			@Override
-			public boolean onMarkerClick(Marker m) {
-				// TODO Auto-generated method stub
-				if (m.isInfoWindowShown()) {
-					m.hideInfoWindow();
-				} else {
-					m.showInfoWindow();
-				}
+	class clickListener implements OnMapClickListener {
 
-				return false;
+		@Override
+		public void onMapClick(LatLng arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	class longClickListener implements OnMapLongClickListener {
+		@Override
+		public void onMapLongClick(LatLng arg0) {
+			// TODO Auto-generated method stub
+			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+			builder.setMessage(R.string.confirm_new_cache)
+					.setTitle(R.string.new_cache)
+					.setPositiveButton(R.string.cache_option_yes,
+							new dialogListener())
+					.setNegativeButton(R.string.cache_option_no,
+							new dialogListener());
+
+			AlertDialog dialog = builder.create();
+			dialog.show();
+
+		}
+
+	}
+
+	class markerClickListener implements OnMarkerClickListener {
+		@Override
+		public boolean onMarkerClick(Marker m) {
+			// TODO Auto-generated method stub
+			if (m.isInfoWindowShown()) {
+				m.hideInfoWindow();
+			} else {
+				m.showInfoWindow();
 			}
 
-		});
+			return false;
+		}
+
+	}
+
+	class dialogListener implements DialogInterface.OnClickListener {
+
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
+
+		}
 
 	}
 
