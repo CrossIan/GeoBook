@@ -90,6 +90,9 @@ public class Map extends FragmentActivity {
 			dialog.show();
 			return true;
 		case R.id.menu_map_signout:
+			// 
+			finish();
+			startActivity(new Intent(Map.this, Login.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
