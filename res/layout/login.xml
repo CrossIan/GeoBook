@@ -1,65 +1,67 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="${packageName}.${activityClass}" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-    <TextView
-        android:id="@+id/signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:text="@string/signin"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
 
-    <EditText
-        android:id="@+id/passField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/emailField"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/emailField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/signin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:inputType="textEmailAddress" />
-
-    <CheckBox
-        android:id="@+id/twitterBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/emailField"
-        android:layout_below="@+id/signButton"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="50dp"
-        android:text="@string/twitter" />
-
-    <CheckBox
-        android:id="@+id/faceBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/twitterBox"
-        android:layout_alignBottom="@+id/twitterBox"
-        android:layout_alignLeft="@+id/emailField"
-        android:text="@string/facebook" />
-
-    <Button
-        android:id="@+id/signButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/passField"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp"
-        android:text="@string/signin" />
-
-</RelativeLayout>
+	    <TextView
+	        android:id="@+id/signin"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="26dp"
+	        android:text="@string/signin"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	    <EditText
+	        android:id="@+id/passField"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/emailField"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="15dp"
+	        android:ems="10"
+	        android:inputType="textPassword" />
+	
+	    <EditText
+	        android:id="@+id/emailField"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/signin"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="15dp"
+	        android:ems="10"
+	        android:inputType="textEmailAddress" />
+	
+	    <CheckBox
+	        android:id="@+id/twitterBox"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignRight="@+id/emailField"
+	        android:layout_below="@+id/signButton"
+	        android:layout_marginRight="16dp"
+	        android:layout_marginTop="50dp"
+	        android:text="@string/twitter" />
+	
+	    <CheckBox
+	        android:id="@+id/faceBox"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/twitterBox"
+	        android:layout_alignBottom="@+id/twitterBox"
+	        android:layout_alignLeft="@+id/emailField"
+	        android:text="@string/facebook" />
+	
+	    <Button
+	        android:id="@+id/signButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/passField"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="31dp"
+	        android:text="@string/signin" />
+	
+	</RelativeLayout>
+</ScrollView>
