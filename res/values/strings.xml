@@ -5,6 +5,8 @@
     <string name="app_name">GeoBook</string>
     <string name="ok">OK</string>
     <string name="hello_world">Hello world!</string>
+    <string name="userName">Current User Name</string>
+    <string name="currentRegion">Columbus, OH</string>
 
     <!-- STRINGS USED IN SplashScreen -->
     <string name="title_activity_splash_screen">SplashScreen</string>
@@ -37,5 +39,10 @@
     <!-- STRINGS USED IN Profile -->
     <string name="title_activity_profile">User Profile</string>
     <string name="userProfileImageDescription">User\'s profile picture</string>
+    <string name="cacheProgress">X of Y caches found</string>
+    <string name="lastCacheFound">Example cache name</string>
+    <string name="lastCacheDate">Example cache date</string>
+    <string name="lastCacheDifficulty">Example cache difficulty</string>
+    
 
 </resources>
