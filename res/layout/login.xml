@@ -1,57 +1,60 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	<RelativeLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-	    <TextView
-	        android:id="@+id/signin"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginTop="26dp"
-	        android:layout_marginTop="17dp"
-	        android:text="@string/signin"
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="17dp"
+            android:layout_marginTop="26dp"
+            android:text="@string/signin"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-	    <Button
-	        android:id="@+id/signButton"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/googleBox"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginTop="50dp"
-	        android:text="@string/cont" />
+        <Button
+            android:id="@+id/signButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginRadio"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="@string/cont" />
 
-	    <CheckBox
-	        android:id="@+id/faceBox"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/twitterBox"
-	        android:layout_below="@+id/signin"
-	        android:layout_marginTop="17dp"
-	        android:text="@string/facebook" />
+        <RadioGroup
+            android:id="@+id/loginRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/signButton"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:layout_centerVertical="true" >
 
-	    <CheckBox
-	        android:id="@+id/twitterBox"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignRight="@+id/signin"
-	        android:layout_alignTop="@+id/faceBox"
-	        android:layout_marginTop="17dp"
-	        android:text="@string/twitter" />
+            <RadioButton
+                android:id="@+id/radio0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/google" />
 
-	    <CheckBox
-	        android:id="@+id/googleBox"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/twitterBox"
-	        android:layout_below="@+id/twitterBox"
-	        android:layout_marginTop="17dp"
-	        android:text="@string/google" />
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/facebook" />
 
-	</RelativeLayout>
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/twitter" />
+        </RadioGroup>
+
+    </RelativeLayout>
 
 </ScrollView>
