@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,10 +24,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Map extends FragmentActivity {
 
 	// GoogleMap gMap;
-	MapView mapView;
-	GoogleMap gMap;
+	static MapView mapView;
+	static GoogleMap gMap;
 	Bundle extras;
-	ArrayList<LatLng> caches;
+	static ArrayList<LatLng> caches;
 	LatLng target;
 
 	@Override
@@ -38,6 +39,7 @@ public class Map extends FragmentActivity {
 		gMap = mapView.getMap();
 		getExtras();
 		setUpMap();
+
 	}
 
 	private void getExtras() {
@@ -47,7 +49,7 @@ public class Map extends FragmentActivity {
 
 	}
 
-	private void addMarker(LatLng location) {
+	static private void addMarker(LatLng location) {
 		Marker m = gMap.addMarker(new MarkerOptions().position(location));
 		m.setTitle(""); // or add in MarkerOptions
 		m.setSnippet("");
@@ -91,7 +93,7 @@ public class Map extends FragmentActivity {
 			dialog.show();
 			return true;
 		case R.id.menu_map_signout:
-			// 
+			//
 			finish();
 			startActivity(new Intent(Map.this, Login.class));
 			return true;
@@ -141,13 +143,14 @@ public class Map extends FragmentActivity {
 
 	class longClickListener implements OnMapLongClickListener {
 		@Override
-		public void onMapLongClick(LatLng arg0) {
-			// TODO Auto-generated method stub
+		public void onMapLongClick(LatLng cache) {
+			caches.add(cache);
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.confirm_new_cache)
 					.setTitle(R.string.new_cache)
 					.setPositiveButton(R.string.cache_option_yes,
 							new dialogListener())
+
 					.setNegativeButton(R.string.cache_option_no,
 							new dialogListener());
 
@@ -173,14 +176,40 @@ public class Map extends FragmentActivity {
 
 	}
 
-	class dialogListener implements DialogInterface.OnClickListener {
+	class viewClickListener implements View.OnClickListener {
 
 		@Override
-		public void onClick(DialogInterface dialog, int which) {
+		public void onClick(View v) {
 			// TODO Auto-generated method stub
 
 		}
 
+	}
+
+	class viewLongClickListener implements View.OnLongClickListener {
+
+		@Override
+		public boolean onLongClick(View v) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+	}
+
+	class dialogListener implements DialogInterface.OnClickListener {
+
+		public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
+			switch (which) {
+			case DialogInterface.BUTTON_POSITIVE:
+				addMarker(caches.get(caches.size() - 1));
+				mapView.
+				break;
+			case DialogInterface.BUTTON_NEUTRAL:
+				caches.remove(caches.size() - 1);
+				break;
+			}
+		}
 	}
 
 }
