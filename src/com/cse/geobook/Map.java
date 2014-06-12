@@ -203,7 +203,7 @@ public class Map extends FragmentActivity {
 			switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
 				addMarker(caches.get(caches.size() - 1));
-				mapView.
+
 				break;
 			case DialogInterface.BUTTON_NEUTRAL:
 				caches.remove(caches.size() - 1);
