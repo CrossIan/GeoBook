@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -56,5 +57,60 @@
         </RadioGroup>
 
     </RelativeLayout>
+=======
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" >
+
+		<TextView
+			android:id="@+id/signin"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="26dp"
+			android:text="@string/signin"
+			android:textAppearance="?android:attr/textAppearanceLarge" />
+
+		<Button
+			android:id="@+id/signButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/googleBox"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="50dp"
+			android:text="@string/cont" />
+
+		<CheckBox
+			android:id="@+id/faceBox"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignLeft="@+id/twitterBox"
+			android:layout_below="@+id/signin"
+			android:layout_marginTop="17dp"
+			android:text="@string/facebook" />
+
+		<CheckBox
+			android:id="@+id/twitterBox"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignRight="@+id/signin"
+			android:layout_alignTop="@+id/faceBox"
+			android:layout_marginTop="17dp"
+			android:text="@string/twitter" />
+
+		<CheckBox
+			android:id="@+id/googleBox"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignLeft="@+id/twitterBox"
+			android:layout_below="@+id/twitterBox"
+			android:layout_marginTop="17dp"
+			android:text="@string/google" />
+	</RelativeLayout>
+>>>>>>> FETCH_HEAD
 
 </ScrollView>
