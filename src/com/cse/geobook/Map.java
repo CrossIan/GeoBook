@@ -15,15 +15,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Map extends FragmentActivity {
 
+	// GoogleMap gMap;
+	MapView mapView;
 	GoogleMap gMap;
-
 	Bundle extras;
 	ArrayList<LatLng> caches;
 	LatLng target;
@@ -33,8 +34,8 @@ public class Map extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 		getExtras();
-		gMap = ((SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.map)).getMap();
+		mapView = ((MapView) findViewById(R.id.map));
+		gMap = mapView.getMap();
 		getExtras();
 		setUpMap();
 	}
@@ -118,6 +119,10 @@ public class Map extends FragmentActivity {
 				addMarker(caches.get(i));
 			}
 		}
+
+	}
+
+	public void setUpView() {
 
 	}
 
