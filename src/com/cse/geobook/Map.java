@@ -2,11 +2,11 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,16 +17,16 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Map extends FragmentActivity {
+public class Map extends Activity {
 
 	// GoogleMap gMap;
-	static MapView mapView;
-	static GoogleMap gMap;
+	MapView mapView;
+	GoogleMap gMap;
 	Bundle extras;
 	static ArrayList<LatLng> caches;
 	LatLng target;
@@ -34,13 +34,27 @@ public class Map extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		MapsInitializer.initialize(this);
 		setContentView(R.layout.map);
-		//mapView = ((MapView) findViewById(R.id.map));
-		gMap = ((SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.map)).getMap();
-		//gMap = (mapView.getMap();
-		getExtras();
-		setUpMap();
+		mapView = ((MapView) findViewById(R.id.mapView));
+
+		gMap = mapView.getMap();
+		// gMap = ((SupportMapFragment) getSupportFragmentManager()
+		// .findFragmentById(R.id.map)).getMap();
+		if (mapView != null) {
+			getExtras();
+			if (gMap != null) {
+				setUpMap();
+			} else {
+				AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+				builder.setMessage("gMap is null");
+
+				AlertDialog dialog = builder.create();
+				builder.show();
+			}
+		} else {
+			// error
+		}
 
 	}
 
@@ -51,8 +65,8 @@ public class Map extends FragmentActivity {
 
 	}
 
-	static private void addMarker(LatLng location) {
-		Marker m = gMap.addMarker(new MarkerOptions().position(location));
+	private void addMarker(LatLng location) {
+		Marker m = this.gMap.addMarker(new MarkerOptions().position(location));
 		m.setTitle(""); // or add in MarkerOptions
 		m.setSnippet("");
 	}
