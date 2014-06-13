@@ -16,8 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -25,7 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Map extends FragmentActivity {
 
 	// GoogleMap gMap;
-	MapView mapView;
+
 	GoogleMap gMap;
 	Bundle extras;
 	static ArrayList<LatLng> caches;
@@ -35,9 +34,6 @@ public class Map extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
-		mapView = ((MapView) findViewById(R.id.map));
-		MapsInitializer.initialize(this);
-		mapView.onCreate(savedInstanceState);
 
 		setUpMap();
 
@@ -105,7 +101,8 @@ public class Map extends FragmentActivity {
 
 	public void setUpMap() {
 		if (gMap == null) {
-			gMap = mapView.getMap();
+			gMap = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
 		}
 
 		getExtras();
@@ -215,30 +212,6 @@ public class Map extends FragmentActivity {
 				break;
 			}
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		mapView.onPause();
-		super.onPause();
-	}
-
-	@Override
-	protected void onDestroy() {
-		mapView.onDestroy();
-		super.onDestroy();
-	}
-
-	@Override
-	public void onLowMemory() {
-		super.onLowMemory();
-		mapView.onLowMemory();
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		mapView.onSaveInstanceState(outState);
 	}
 
 }
