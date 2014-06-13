@@ -2,11 +2,11 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Map extends Activity {
+public class Map extends FragmentActivity {
 
 	// GoogleMap gMap;
 	MapView mapView;
@@ -34,27 +34,12 @@ public class Map extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MapsInitializer.initialize(this);
 		setContentView(R.layout.map);
-		mapView = ((MapView) findViewById(R.id.mapView));
+		mapView = ((MapView) findViewById(R.id.map));
+		MapsInitializer.initialize(this);
+		mapView.onCreate(savedInstanceState);
 
-		gMap = mapView.getMap();
-		// gMap = ((SupportMapFragment) getSupportFragmentManager()
-		// .findFragmentById(R.id.map)).getMap();
-		if (mapView != null) {
-			getExtras();
-			if (gMap != null) {
-				setUpMap();
-			} else {
-				AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-				builder.setMessage("gMap is null");
-
-				AlertDialog dialog = builder.create();
-				builder.show();
-			}
-		} else {
-			// error
-		}
+		setUpMap();
 
 	}
 
@@ -119,7 +104,11 @@ public class Map extends Activity {
 	}
 
 	public void setUpMap() {
+		if (gMap == null) {
+			gMap = mapView.getMap();
+		}
 
+		getExtras();
 		gMap.setOnMarkerClickListener(new markerClickListener());
 		gMap.setOnMapClickListener(new clickListener());
 		gMap.setOnMapLongClickListener(new longClickListener());
@@ -226,6 +215,30 @@ public class Map extends Activity {
 				break;
 			}
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		mapView.onPause();
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		mapView.onDestroy();
+		super.onDestroy();
+	}
+
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		mapView.onLowMemory();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		mapView.onSaveInstanceState(outState);
 	}
 
 }
