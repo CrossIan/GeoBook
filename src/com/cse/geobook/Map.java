@@ -87,6 +87,102 @@ public class Map extends FragmentActivity {
 
 	}
 
+	private class clickListener implements OnMapClickListener,
+			OnMapLongClickListener, OnMarkerClickListener,
+			OnInfoWindowClickListener {
+
+		@Override
+		public void onMapClick(LatLng arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onMapLongClick(LatLng cache) {
+
+			/** dialog click listener ONLY for the below alert dialog box */
+			class dialogClickListener implements
+					DialogInterface.OnClickListener {
+
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						addMarker(caches.get(caches.size() - 1));
+
+						break;
+					case DialogInterface.BUTTON_NEUTRAL:
+						caches.remove(caches.size() - 1);
+						break;
+					}
+				}
+			}
+			dialogClickListener listener = new dialogClickListener();
+			caches.add(cache);
+			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+			builder.setMessage(R.string.confirm_new_cache)
+					.setTitle(R.string.new_cache)
+					.setPositiveButton(R.string.cache_option_yes, listener)
+
+					.setNegativeButton(R.string.cache_option_no, listener);
+
+			AlertDialog dialog = builder.create();
+			dialog.show();
+
+		}
+
+		@Override
+		public boolean onMarkerClick(Marker marker) {
+			// TODO Auto-generated method stub
+			if (marker.isInfoWindowShown()) {
+				marker.hideInfoWindow();
+			} else {
+				marker.showInfoWindow();
+			}
+
+			return false;
+		}
+
+		@Override
+		public void onInfoWindowClick(final Marker marker) {
+
+			/** dialog click listener ONLY for the below alert dialog box */
+			class dialogClickListener implements
+					DialogInterface.OnClickListener {
+
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						// TODO: goto cache view
+
+						Intent cache = new Intent("android.intent.action.CACHE");
+						Bundle extra = new Bundle();
+
+						Cache.setDataToPass(extra, marker);
+						cache.putExtras(extra);
+						startActivity(cache);
+						finish();
+
+						break;
+					case DialogInterface.BUTTON_NEUTRAL:
+						break;
+					}
+				}
+			}
+			dialogClickListener listener = new dialogClickListener();
+			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+			builder.setMessage(R.string.go_to_cache_message_ad)
+					.setTitle(R.string.view_cache_title_ad)
+					.setPositiveButton(R.string.cache_option_yes, listener)
+					.setNegativeButton(R.string.cache_option_no, listener);
+
+			AlertDialog dialog = builder.create();
+			dialog.show();
+
+		}
+	}
+
 	/*
 	 * Populates the map view menu
 	 */
@@ -134,93 +230,6 @@ public class Map extends FragmentActivity {
 		}
 	}
 
-	class clickListener implements OnMapClickListener, OnMapLongClickListener,
-			OnMarkerClickListener, OnInfoWindowClickListener {
-
-		@Override
-		public void onMapClick(LatLng arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onMapLongClick(LatLng cache) {
-
-			/** dialog click listener ONLY for the below alert dialog box */
-			class dialogClickListener implements
-					DialogInterface.OnClickListener {
-
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						addMarker(caches.get(caches.size() - 1));
-
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						caches.remove(caches.size() - 1);
-						break;
-					}
-				}
-			}
-			dialogClickListener listener = new dialogClickListener();
-			caches.add(cache);
-			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-			builder.setMessage(R.string.confirm_new_cache)
-					.setTitle(R.string.new_cache)
-					.setPositiveButton(R.string.cache_option_yes, listener)
-
-					.setNegativeButton(R.string.cache_option_no, listener);
-
-			AlertDialog dialog = builder.create();
-			dialog.show();
-
-		}
-
-		@Override
-		public boolean onMarkerClick(Marker m) {
-			// TODO Auto-generated method stub
-			if (m.isInfoWindowShown()) {
-				m.hideInfoWindow();
-			} else {
-				m.showInfoWindow();
-			}
-
-			return false;
-		}
-
-		@Override
-		public void onInfoWindowClick(Marker arg0) {
-
-			/** dialog click listener ONLY for the below alert dialog box */
-			class dialogClickListener implements
-					DialogInterface.OnClickListener {
-
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						// TODO: goto cache view
-
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						break;
-					}
-				}
-			}
-			dialogClickListener listener = new dialogClickListener();
-			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-			builder.setMessage(R.string.go_to_cache_message_ad)
-					.setTitle(R.string.view_cache_title_ad)
-					.setPositiveButton(R.string.cache_option_yes, listener)
-					.setNegativeButton(R.string.cache_option_no, listener);
-
-			AlertDialog dialog = builder.create();
-			dialog.show();
-
-		}
-	}
-
 	static void setDataToPass(Bundle b, Context c) {
 		// target
 		b.putParcelable("target", new LatLng(39.961138, -83.001465));
@@ -228,15 +237,7 @@ public class Map extends FragmentActivity {
 		ArrayList<LatLng> data = new ArrayList<LatLng>();
 
 		DataParser reader = new DataParser(c, R.raw.test_data);
-		/*
-		 * data.add(new LatLng(39.901138, -82.951465)); data.add(new
-		 * LatLng(39.901138, -83.001465)); data.add(new LatLng(39.901138,
-		 * -83.051465)); data.add(new LatLng(39.961138, -82.951465));
-		 * data.add(new LatLng(39.961138, -83.001465)); data.add(new
-		 * LatLng(39.961138, -83.051465)); data.add(new LatLng(39.991138,
-		 * -82.951465)); data.add(new LatLng(39.991138, -83.001465));
-		 * data.add(new LatLng(39.991138, -83.051465));
-		 */
+
 		for (int i = 0; i < 25; i++) {
 			data.add(new LatLng(reader.getLat(), reader.getLng()));
 		}

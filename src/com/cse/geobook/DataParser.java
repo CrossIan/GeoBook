@@ -45,6 +45,15 @@ public class DataParser {
 		return lng;
 	}
 
+	Cache getCache() {
+		Cache cache = new Cache();
+		return cache;
+	}
+
+	void writeCache() {
+		// TODO: save cache
+	}
+
 	boolean ready() {
 		boolean ready = false;
 		try {

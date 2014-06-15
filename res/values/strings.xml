@@ -48,4 +48,8 @@
     <string name="cont">Continue</string>
     <string name="google">Google</string>
 
+    <!-- STRINGS USED IN Cache -->
+    <string name="cachePicture">Picture</string>
+    <string name="title_activity_cache">Cache View</string>
+
 </resources>

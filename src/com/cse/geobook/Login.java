@@ -40,7 +40,6 @@ public class Login extends Activity {
 										Intent map = new Intent(
 												"android.intent.action.MAP");
 										Bundle extra = new Bundle();
-
 										Map.setDataToPass(extra,
 												getApplicationContext());
 										map.putExtras(extra);
