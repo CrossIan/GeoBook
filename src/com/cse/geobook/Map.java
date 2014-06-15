@@ -3,16 +3,17 @@ package com.cse.geobook;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -34,7 +35,6 @@ public class Map extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
-
 		setUpMap();
 
 	}
@@ -43,13 +43,48 @@ public class Map extends FragmentActivity {
 		extras = getIntent().getExtras();
 		caches = extras.getParcelableArrayList("caches");
 		target = extras.getParcelable("target");
-
 	}
 
 	private void addMarker(LatLng location) {
 		Marker m = this.gMap.addMarker(new MarkerOptions().position(location));
-		m.setTitle(""); // or add in MarkerOptions
-		m.setSnippet("");
+		m.setTitle("test"); // or add in MarkerOptions
+		m.setSnippet("more test");
+	}
+
+	private void setUpActionListeners() {
+		clickListener listener = new clickListener();
+		gMap.setOnMarkerClickListener(listener);
+		gMap.setOnMapClickListener(listener);
+		gMap.setOnMapLongClickListener(listener);
+		gMap.setOnInfoWindowClickListener(listener);
+	}
+
+	private void setUpMap() {
+		if (gMap == null) {
+			gMap = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
+		}
+		this.setUpActionListeners();
+		getExtras();
+
+		gMap.setMyLocationEnabled(true);
+		/*
+		 * set target & zoom. if target is passed use that, else use default of
+		 * columbus ohio
+		 */
+		if (target != null) {
+			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(target, 11));
+		} else {
+			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+					39.961138, -83.001465), 11));
+		}
+		// set markers
+		if (caches != null) {
+			for (int i = 0; i < caches.size(); i++) {
+				addMarker(caches.get(i));
+			}
+		}
+
 	}
 
 	/*
@@ -99,41 +134,9 @@ public class Map extends FragmentActivity {
 		}
 	}
 
-	public void setUpMap() {
-		if (gMap == null) {
-			gMap = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-		}
-
-		getExtras();
-		gMap.setOnMarkerClickListener(new markerClickListener());
-		gMap.setOnMapClickListener(new clickListener());
-		gMap.setOnMapLongClickListener(new longClickListener());
-		gMap.setMyLocationEnabled(true);
-		/*
-		 * set target & zoom. if target is passed use that, else use default of
-		 * columbus ohio
-		 */
-		if (target != null) {
-			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(target, 11));
-		} else {
-			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-					39.961138, -83.001465), 11));
-		}
-		// set markers
-		if (caches != null) {
-			for (int i = 0; i < caches.size(); i++) {
-				addMarker(caches.get(i));
-			}
-		}
-
-	}
-
-	public void setUpView() {
-
-	}
-
-	class clickListener implements OnMapClickListener {
+	class clickListener implements OnMapClickListener, OnMapLongClickListener,
+			OnMarkerClickListener, DialogInterface.OnClickListener,
+			OnInfoWindowClickListener {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
@@ -141,9 +144,6 @@ public class Map extends FragmentActivity {
 
 		}
 
-	}
-
-	class longClickListener implements OnMapLongClickListener {
 		@Override
 		public void onMapLongClick(LatLng cache) {
 			caches.add(cache);
@@ -151,19 +151,16 @@ public class Map extends FragmentActivity {
 			builder.setMessage(R.string.confirm_new_cache)
 					.setTitle(R.string.new_cache)
 					.setPositiveButton(R.string.cache_option_yes,
-							new dialogListener())
+							new clickListener())
 
 					.setNegativeButton(R.string.cache_option_no,
-							new dialogListener());
+							new clickListener());
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
 
 		}
 
-	}
-
-	class markerClickListener implements OnMarkerClickListener {
 		@Override
 		public boolean onMarkerClick(Marker m) {
 			// TODO Auto-generated method stub
@@ -175,30 +172,6 @@ public class Map extends FragmentActivity {
 
 			return false;
 		}
-
-	}
-
-	class viewClickListener implements View.OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
-	class viewLongClickListener implements View.OnLongClickListener {
-
-		@Override
-		public boolean onLongClick(View v) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-	}
-
-	class dialogListener implements DialogInterface.OnClickListener {
 
 		public void onClick(DialogInterface dialog, int which) {
 			// TODO Auto-generated method stub
@@ -212,6 +185,36 @@ public class Map extends FragmentActivity {
 				break;
 			}
 		}
+
+		@Override
+		public void onInfoWindowClick(Marker arg0) {
+			arg0.setTitle("other");
+			arg0.setVisible(false);
+
+		}
+	}
+
+	static void setDataToPass(Bundle b, Context c) {
+		// target
+		b.putParcelable("target", new LatLng(39.961138, -83.001465));
+		// markers (caches)
+		ArrayList<LatLng> data = new ArrayList<LatLng>();
+
+		DataParser reader = new DataParser(c, R.raw.test_data);
+		/*
+		 * data.add(new LatLng(39.901138, -82.951465)); data.add(new
+		 * LatLng(39.901138, -83.001465)); data.add(new LatLng(39.901138,
+		 * -83.051465)); data.add(new LatLng(39.961138, -82.951465));
+		 * data.add(new LatLng(39.961138, -83.001465)); data.add(new
+		 * LatLng(39.961138, -83.051465)); data.add(new LatLng(39.991138,
+		 * -82.951465)); data.add(new LatLng(39.991138, -83.001465));
+		 * data.add(new LatLng(39.991138, -83.051465));
+		 */
+		for (int i = 0; i < 25; i++) {
+			data.add(new LatLng(reader.getLat(), reader.getLng()));
+		}
+		b.putParcelableArrayList("caches", data);
+
 	}
 
 }
