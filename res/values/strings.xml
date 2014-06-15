@@ -25,6 +25,8 @@
     <string name="new_cache">New Cache</string>
     <string name="cache_option_yes">Yes</string>
     <string name="cache_option_no">No</string>
+    <string name="go_to_cache_message_ad">View Cache?</string>
+    <string name="view_cache_title_ad">View Cache</string>
 
     <!-- STRINGS USED IN Photo -->
     <string name="bCapture">capture?</string>
@@ -45,6 +47,5 @@
     <string name="lastCacheDifficulty">Example cache difficulty</string>
     <string name="cont">Continue</string>
     <string name="google">Google</string>
-    
 
 </resources>

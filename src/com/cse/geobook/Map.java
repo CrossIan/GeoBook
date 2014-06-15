@@ -135,8 +135,7 @@ public class Map extends FragmentActivity {
 	}
 
 	class clickListener implements OnMapClickListener, OnMapLongClickListener,
-			OnMarkerClickListener, DialogInterface.OnClickListener,
-			OnInfoWindowClickListener {
+			OnMarkerClickListener, OnInfoWindowClickListener {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
@@ -146,15 +145,32 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onMapLongClick(LatLng cache) {
+
+			/** dialog click listener ONLY for the below alert dialog box */
+			class dialogClickListener implements
+					DialogInterface.OnClickListener {
+
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						addMarker(caches.get(caches.size() - 1));
+
+						break;
+					case DialogInterface.BUTTON_NEUTRAL:
+						caches.remove(caches.size() - 1);
+						break;
+					}
+				}
+			}
+			dialogClickListener listener = new dialogClickListener();
 			caches.add(cache);
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.confirm_new_cache)
 					.setTitle(R.string.new_cache)
-					.setPositiveButton(R.string.cache_option_yes,
-							new clickListener())
+					.setPositiveButton(R.string.cache_option_yes, listener)
 
-					.setNegativeButton(R.string.cache_option_no,
-							new clickListener());
+					.setNegativeButton(R.string.cache_option_no, listener);
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
@@ -173,23 +189,34 @@ public class Map extends FragmentActivity {
 			return false;
 		}
 
-		public void onClick(DialogInterface dialog, int which) {
-			// TODO Auto-generated method stub
-			switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				addMarker(caches.get(caches.size() - 1));
-
-				break;
-			case DialogInterface.BUTTON_NEUTRAL:
-				caches.remove(caches.size() - 1);
-				break;
-			}
-		}
-
 		@Override
 		public void onInfoWindowClick(Marker arg0) {
-			arg0.setTitle("other");
-			arg0.setVisible(false);
+
+			/** dialog click listener ONLY for the below alert dialog box */
+			class dialogClickListener implements
+					DialogInterface.OnClickListener {
+
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						// TODO: goto cache view
+
+						break;
+					case DialogInterface.BUTTON_NEUTRAL:
+						break;
+					}
+				}
+			}
+			dialogClickListener listener = new dialogClickListener();
+			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+			builder.setMessage(R.string.go_to_cache_message_ad)
+					.setTitle(R.string.view_cache_title_ad)
+					.setPositiveButton(R.string.cache_option_yes, listener)
+					.setNegativeButton(R.string.cache_option_no, listener);
+
+			AlertDialog dialog = builder.create();
+			dialog.show();
 
 		}
 	}
@@ -215,6 +242,13 @@ public class Map extends FragmentActivity {
 		}
 		b.putParcelableArrayList("caches", data);
 
+	}
+
+	@Override
+	protected void onPause() {
+
+		super.onPause();
+		// TODO: save state
 	}
 
 }
