@@ -162,7 +162,6 @@ public class Map extends FragmentActivity {
 						Cache.setDataToPass(extra, marker);
 						cache.putExtras(extra);
 						startActivity(cache);
-						finish();
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
