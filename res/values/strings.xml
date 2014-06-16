@@ -51,5 +51,6 @@
     <!-- STRINGS USED IN Cache -->
     <string name="cachePicture">Picture</string>
     <string name="title_activity_cache">Cache View</string>
+    <string name="title_activity_google_login">GoogleLogin</string>
 
 </resources>

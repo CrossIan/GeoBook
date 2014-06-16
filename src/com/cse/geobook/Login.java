@@ -29,7 +29,7 @@ public class Login extends Activity {
 
 				// set dialog message
 				alertDialogBuilder
-						.setMessage("Click yes to exit!")
+						.setMessage("Proceed to sign in?")
 						.setCancelable(false)
 						.setPositiveButton("Yes",
 								new DialogInterface.OnClickListener() {
@@ -45,6 +45,8 @@ public class Login extends Activity {
 										map.putExtras(extra);
 										Login.this.startActivity(map);
 										Login.this.finish();
+//										finish();
+//										startActivity(new Intent(Login.this, GoogleLogin.class));
 									}
 								})
 						.setNegativeButton("No",

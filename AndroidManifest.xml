@@ -20,6 +20,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- End developer.google.com -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
         android:allowBackup="true"
@@ -83,6 +85,10 @@
         <activity
             android:name="com.cse.geobook.Profile"
             android:label="@string/title_activity_profile" >
+        </activity>
+        <activity
+            android:name="com.cse.geobook.GoogleLogin"
+            android:label="@string/title_activity_google_login" >
         </activity>
     </application>
 
