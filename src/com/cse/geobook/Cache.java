@@ -24,13 +24,13 @@ public class Cache extends Activity {
 		setContentView(R.layout.cache);
 		cacheName = (EditText) findViewById(R.id.cacheName);
 		description = (EditText) findViewById(R.id.cacheDescription);
-		if (savedInstanceState != null)
-			getExtras();
+		getExtras();
 
 	}
 
 	private void getExtras() {
 		Bundle extras = getIntent().getExtras();
+
 		cacheName.setText((extras.getString("title")));
 		description.setText((extras.getString("snippit")));
 		position = (new LatLng(extras.getDouble("Lat"), extras.getDouble("Lng")));
