@@ -5,31 +5,70 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 
 public class Login extends Activity {
 
 	private static final int DIALOG_ALERT = 10;
+	
+	// Widget sockets we'll use later
+	private Button signInButton;
+	private RadioGroup signInOption;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.login);
+		
+		// Link to widgets
+		signInButton = (Button) this.findViewById(R.id.signInButton);
+		signInOption = (RadioGroup) this.findViewById(R.id.loginRadio);
 
-		final Button button = (Button) this.findViewById(R.id.signButton);
-		button.setOnClickListener(new View.OnClickListener() {
+		
+		
+		// Set action for onClick
+		signInButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				int option = signInOption.getCheckedRadioButtonId();
+				option = option - signInOption.getId();
+				String dialogTitle,dialogMessage;
+				switch (option) {
+				case 1:
+					// Google+
+					dialogTitle = "Sign in with Google+";
+					dialogMessage = "Proceed to Google+ sign in?";
+					break;
+				case 2:
+					// Facebook
+					dialogTitle = "Sign in with Facebook";
+					dialogMessage = "Proceed to Facebook sign in?";
+					break;
+				case 3:
+					// Twitter
+					dialogTitle = "Sign in with Twitter";
+					dialogMessage = "Proceed to Twitter sign in?";
+					break;
+				default:
+					dialogTitle = "Error in Login.java";
+					dialogMessage = "Error in Login.java";
+					Log.e("","Error in Login.java");
+				}
+				
+				
+				
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 						Login.this);
 
 				// set title
-				alertDialogBuilder.setTitle("Sign in");
+				alertDialogBuilder.setTitle(dialogTitle);
 
 				// set dialog message
 				alertDialogBuilder
-						.setMessage("Click yes to exit!")
+						.setMessage(dialogMessage)
 						.setCancelable(false)
 						.setPositiveButton("Yes",
 								new DialogInterface.OnClickListener() {

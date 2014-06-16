@@ -19,7 +19,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
-            android:id="@+id/signButton"
+            android:id="@+id/signInButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/loginRadio"
@@ -31,7 +31,7 @@
             android:id="@+id/loginRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/signButton"
+            android:layout_alignRight="@+id/signInButton"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="40dp"
             android:layout_centerVertical="true" >
