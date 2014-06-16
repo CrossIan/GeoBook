@@ -35,8 +35,10 @@
     <!-- STRINGS USED IN Login -->
     <string name="title_activity_login">Login</string>
     <string name="signin">Sign in</string>
+    <string name="google_plus">Google+</string>
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
+    <string name="title_activity_google_login">GoogleLogin</string>
 
     <!-- STRINGS USED IN Profile -->
     <string name="title_activity_profile">User Profile</string>

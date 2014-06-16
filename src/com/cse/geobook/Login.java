@@ -62,7 +62,6 @@ public class Login extends Activity {
 				
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 						Login.this);
-
 				// set title
 				alertDialogBuilder.setTitle(dialogTitle);
 
@@ -84,6 +83,8 @@ public class Login extends Activity {
 										map.putExtras(extra);
 										Login.this.startActivity(map);
 										Login.this.finish();
+//										finish();
+//										startActivity(new Intent(Login.this, GoogleLogin.class));
 									}
 								})
 						.setNegativeButton("No",
