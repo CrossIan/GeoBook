@@ -50,7 +50,7 @@ public class Map extends FragmentActivity {
 		Marker m = this.gMap.addMarker(new MarkerOptions().position(location));
 		m.setTitle(extras.getString(Integer.toString(id))); // or add in
 															// MarkerOptions
-		m.setSnippet("more test");
+		m.setSnippet("");
 	}
 
 	private void addMarker(LatLng location) {
