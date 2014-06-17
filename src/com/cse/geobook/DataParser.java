@@ -15,7 +15,8 @@ public class DataParser {
 	 */
 	BufferedReader reader;
 	String line;
-	int lastComma;
+	int firstComma = 11;
+	int secondComma = 23;
 
 	DataParser(Context c, int id) {
 		InputStream stream = c.getResources().openRawResource(id);
@@ -28,8 +29,7 @@ public class DataParser {
 		Double lat = 0.0;
 		try {
 			line = reader.readLine();
-			this.lastComma = line.indexOf(",");
-			lat = Double.parseDouble((String) line.substring(0, lastComma));
+			lat = Double.parseDouble((String) line.substring(0, firstComma));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,9 +40,14 @@ public class DataParser {
 
 	/* getLat() must be called first!! */
 	double getLng() {
-		Double lng = Double.parseDouble(line.substring(lastComma + 1,
-				line.length()));
+		Double lng = Double.parseDouble(line.substring(firstComma + 1,
+				secondComma));
 		return lng;
+	}
+
+	String getName() {
+		String name = line.substring(secondComma + 1, line.length());
+		return name;
 	}
 
 	Cache getCache() {

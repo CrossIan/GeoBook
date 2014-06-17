@@ -30,6 +30,7 @@ public class Map extends FragmentActivity {
 	Bundle extras;
 	static ArrayList<LatLng> caches;
 	LatLng target;
+	static int startCacheNameID = 900;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +46,15 @@ public class Map extends FragmentActivity {
 		target = extras.getParcelable("target");
 	}
 
+	private void addMarker(LatLng location, int id) {
+		Marker m = this.gMap.addMarker(new MarkerOptions().position(location));
+		m.setTitle(extras.getString(Integer.toString(id))); // or add in
+															// MarkerOptions
+		m.setSnippet("more test");
+	}
+
 	private void addMarker(LatLng location) {
 		Marker m = this.gMap.addMarker(new MarkerOptions().position(location));
-		m.setTitle("test"); // or add in MarkerOptions
-		m.setSnippet("more test");
 	}
 
 	private void setUpActionListeners() {
@@ -81,7 +87,7 @@ public class Map extends FragmentActivity {
 		// set markers
 		if (caches != null) {
 			for (int i = 0; i < caches.size(); i++) {
-				addMarker(caches.get(i));
+				addMarker(caches.get(i), i + startCacheNameID);
 			}
 		}
 
@@ -235,11 +241,14 @@ public class Map extends FragmentActivity {
 		// markers (caches)
 		ArrayList<LatLng> data = new ArrayList<LatLng>();
 
-		DataParser reader = new DataParser(c, R.raw.test_data);
-
-		for (int i = 0; i < 25; i++) {
+		DataParser reader = new DataParser(c, R.raw.ohio);
+		int i = startCacheNameID;
+		while (reader.ready()) {
 			data.add(new LatLng(reader.getLat(), reader.getLng()));
+			b.putString(Integer.toString(i), reader.getName());
+			i++;
 		}
+
 		b.putParcelableArrayList("caches", data);
 
 	}
