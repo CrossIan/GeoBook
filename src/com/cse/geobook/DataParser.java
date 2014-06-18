@@ -28,8 +28,8 @@ public class DataParser {
 	double getLat() {
 		Double lat = 0.0;
 		try {
-			line = reader.readLine();
-			lat = Double.parseDouble((String) line.substring(0, firstComma));
+			this.line = this.reader.readLine();
+			lat = Double.parseDouble(this.line.substring(0, this.firstComma));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,20 +40,21 @@ public class DataParser {
 
 	/* getLat() must be called first!! */
 	double getLng() {
-		Double lng = Double.parseDouble(line.substring(firstComma + 1,
-				secondComma));
+		Double lng = Double.parseDouble(this.line.substring(
+		        this.firstComma + 1, this.secondComma));
 		return lng;
 	}
 
 	String getName() {
-		String name = line.substring(secondComma + 1, line.length());
+		String name = this.line.substring(this.secondComma + 1,
+		        this.line.length());
 		return name;
 	}
 
-	Cache getCache() {
-		Cache cache = new Cache();
-		return cache;
-	}
+	// Cache getCache() {
+	// Cache cache = new Cache();
+	// return cache;
+	// }
 
 	void writeCache() {
 		// TODO: save cache
@@ -62,7 +63,7 @@ public class DataParser {
 	boolean ready() {
 		boolean ready = false;
 		try {
-			ready = reader.ready();
+			ready = this.reader.ready();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

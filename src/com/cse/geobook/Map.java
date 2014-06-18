@@ -35,21 +35,21 @@ public class Map extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.map);
-		setUpMap();
+		this.setContentView(R.layout.map);
+		this.setUpMap();
 
 	}
 
 	private void getExtras() {
-		extras = getIntent().getExtras();
-		caches = extras.getParcelableArrayList("caches");
-		target = extras.getParcelable("target");
+		this.extras = this.getIntent().getExtras();
+		caches = this.extras.getParcelableArrayList("caches");
+		this.target = this.extras.getParcelable("target");
 	}
 
 	private void addMarker(LatLng location, int id) {
 		Marker m = this.gMap.addMarker(new MarkerOptions().position(location));
-		m.setTitle(extras.getString(Integer.toString(id))); // or add in
-															// MarkerOptions
+		m.setTitle(this.extras.getString(Integer.toString(id))); // or add in
+		// MarkerOptions
 		m.setSnippet("");
 	}
 
@@ -59,43 +59,44 @@ public class Map extends FragmentActivity {
 
 	private void setUpActionListeners() {
 		clickListener listener = new clickListener();
-		gMap.setOnMarkerClickListener(listener);
-		gMap.setOnMapClickListener(listener);
-		gMap.setOnMapLongClickListener(listener);
-		gMap.setOnInfoWindowClickListener(listener);
+		this.gMap.setOnMarkerClickListener(listener);
+		this.gMap.setOnMapClickListener(listener);
+		this.gMap.setOnMapLongClickListener(listener);
+		this.gMap.setOnInfoWindowClickListener(listener);
 	}
 
 	private void setUpMap() {
-		if (gMap == null) {
-			gMap = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
+		if (this.gMap == null) {
+			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
+			        .findFragmentById(R.id.map)).getMap();
 		}
 		this.setUpActionListeners();
-		getExtras();
+		this.getExtras();
 
-		gMap.setMyLocationEnabled(true);
+		this.gMap.setMyLocationEnabled(true);
 		/*
 		 * set target & zoom. if target is passed use that, else use default of
 		 * columbus ohio
 		 */
-		if (target != null) {
-			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(target, 11));
+		if (this.target != null) {
+			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+			        this.target, 11));
 		} else {
-			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-					39.961138, -83.001465), 11));
+			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+			        new LatLng(39.961138, -83.001465), 11));
 		}
 		// set markers
 		if (caches != null) {
 			for (int i = 0; i < caches.size(); i++) {
-				addMarker(caches.get(i), i + startCacheNameID);
+				this.addMarker(caches.get(i), i + startCacheNameID);
 			}
 		}
 
 	}
 
 	private class clickListener implements OnMapClickListener,
-			OnMapLongClickListener, OnMarkerClickListener,
-			OnInfoWindowClickListener {
+	        OnMapLongClickListener, OnMarkerClickListener,
+	        OnInfoWindowClickListener {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
@@ -108,18 +109,19 @@ public class Map extends FragmentActivity {
 
 			/** dialog click listener ONLY for the below alert dialog box */
 			class dialogClickListener implements
-					DialogInterface.OnClickListener {
+			        DialogInterface.OnClickListener {
 
+				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						addMarker(caches.get(caches.size() - 1));
+						case DialogInterface.BUTTON_POSITIVE:
+							Map.this.addMarker(caches.get(caches.size() - 1));
 
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						caches.remove(caches.size() - 1);
-						break;
+							break;
+						case DialogInterface.BUTTON_NEUTRAL:
+							caches.remove(caches.size() - 1);
+							break;
 					}
 				}
 			}
@@ -127,10 +129,10 @@ public class Map extends FragmentActivity {
 			caches.add(cache);
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.confirm_new_cache)
-					.setTitle(R.string.new_cache)
-					.setPositiveButton(R.string.cache_option_yes, listener)
+			        .setTitle(R.string.new_cache)
+			        .setPositiveButton(R.string.cache_option_yes, listener)
 
-					.setNegativeButton(R.string.cache_option_no, listener);
+			        .setNegativeButton(R.string.cache_option_no, listener);
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
@@ -154,33 +156,35 @@ public class Map extends FragmentActivity {
 
 			/** dialog click listener ONLY for the below alert dialog box */
 			class dialogClickListener implements
-					DialogInterface.OnClickListener {
+			        DialogInterface.OnClickListener {
 
+				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						// TODO: goto cache view
+						case DialogInterface.BUTTON_POSITIVE:
+							// TODO: goto cache view
 
-						Intent cache = new Intent("android.intent.action.CACHE");
-						Bundle extra = new Bundle();
+							Intent cache = new Intent(
+							        "android.intent.action.CACHE");
+							Bundle extra = new Bundle();
 
-						Cache.setDataToPass(extra, marker);
-						cache.putExtras(extra);
-						startActivity(cache);
+							// Cache.setDataToPass(extra, marker);
+							cache.putExtras(extra);
+							Map.this.startActivity(cache);
 
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						break;
+							break;
+						case DialogInterface.BUTTON_NEUTRAL:
+							break;
 					}
 				}
 			}
 			dialogClickListener listener = new dialogClickListener();
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.go_to_cache_message_ad)
-					.setTitle(R.string.view_cache_title_ad)
-					.setPositiveButton(R.string.cache_option_yes, listener)
-					.setNegativeButton(R.string.cache_option_no, listener);
+			        .setTitle(R.string.view_cache_title_ad)
+			        .setPositiveButton(R.string.cache_option_yes, listener)
+			        .setNegativeButton(R.string.cache_option_no, listener);
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
@@ -195,7 +199,7 @@ public class Map extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_map, menu);
+		this.getMenuInflater().inflate(R.menu.menu_map, menu);
 		return true;
 	}
 
@@ -206,32 +210,33 @@ public class Map extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.menu_map_profile:
-			startActivity(new Intent(Map.this, Profile.class));
-			return true;
-		case R.id.menu_map_settings:
-			return true;
-		case R.id.menu_map_about:
-			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-			builder.setMessage(R.string.dialog_about_message).setTitle(
-					R.string.dialog_about_title);
-			builder.setPositiveButton(R.string.ok,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// User clicked OK button
-						}
-					});
+			case R.id.menu_map_profile:
+				this.startActivity(new Intent(Map.this, Profile.class));
+				return true;
+			case R.id.menu_map_settings:
+				return true;
+			case R.id.menu_map_about:
+				AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+				builder.setMessage(R.string.dialog_about_message).setTitle(
+				        R.string.dialog_about_title);
+				builder.setPositiveButton(R.string.ok,
+				        new DialogInterface.OnClickListener() {
+					        @Override
+					        public void onClick(DialogInterface dialog, int id) {
+						        // User clicked OK button
+					        }
+				        });
 
-			AlertDialog dialog = builder.create();
-			dialog.show();
-			return true;
-		case R.id.menu_map_signout:
-			//
-			finish();
-			startActivity(new Intent(Map.this, Login.class));
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+				AlertDialog dialog = builder.create();
+				dialog.show();
+				return true;
+			case R.id.menu_map_signout:
+				//
+				this.finish();
+				this.startActivity(new Intent(Map.this, Login.class));
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
