@@ -1,10 +1,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#666666" >
 
 	<RelativeLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+	    android:layout_height="match_parent"
+	    android:background="#666666" >
 	
 	    <ImageView
 	        android:id="@+id/profpic"
@@ -27,6 +29,7 @@
 	        android:layout_marginTop="40dp"
 	        android:text="Most Recent"
 	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="#1919BA"
 	        android:textSize="22sp" />
 
 	    <TextView
@@ -37,7 +40,8 @@
 	        android:layout_centerHorizontal="true"
 	        android:layout_marginTop="17dp"
 	        android:text="@string/cacheProgress"
-	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFFFFF" />
 
 	    <ProgressBar
 	        android:id="@+id/cacheprogbar"
@@ -46,7 +50,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/pgrtext"
 	        android:layout_centerHorizontal="true"
-	        android:max="60"
+	        android:max="100"
 	        android:progress="35" />
 
 	    <ImageView
@@ -70,12 +74,13 @@
 	        android:id="@+id/usrname"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
 	        android:layout_alignLeft="@+id/cachename"
 	        android:layout_alignTop="@+id/profpic"
+	        android:layout_marginBottom="5dp"
+	        android:layout_marginTop="5dp"
 	        android:text="@string/userName"
 	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="#1919BA"
 	        android:textSize="24sp" />
 
 	    <TextView
@@ -86,6 +91,7 @@
 	        android:layout_below="@+id/usrname"
 	        android:text="@string/currentRegion"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFFFFF"
 	        android:textSize="15sp" />
 
 	    <TextView
@@ -94,9 +100,10 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignLeft="@+id/cacheprogbar"
 	        android:layout_alignTop="@+id/cacheimg"
-	        android:text="@string/lastCacheFound"
 	        android:layout_marginBottom="5dp"
+	        android:text="@string/lastCacheFound"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFFFFF"
 	        android:textSize="20sp" />
 
 	    <TextView
@@ -105,9 +112,10 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignLeft="@+id/cachename"
 	        android:layout_below="@+id/cachename"
-	        android:text="@string/lastCacheDate"
 	        android:layout_marginBottom="5dp"
+	        android:text="@string/lastCacheDate"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFFFFF"
 	        android:textSize="15sp" />
 
 	    <TextView
@@ -119,6 +127,7 @@
 	        android:layout_marginBottom="5dp"
 	        android:text="@string/lastCacheDifficulty"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFFFFF"
 	        android:textSize="15sp" />
 	
 	</RelativeLayout>

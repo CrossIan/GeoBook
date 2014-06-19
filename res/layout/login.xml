@@ -1,7 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#666666" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +16,8 @@
             android:layout_marginBottom="17dp"
             android:layout_marginTop="26dp"
             android:text="@string/signin"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#1919BA" />
 
         <Button
             android:id="@+id/signInButton"
@@ -25,7 +26,8 @@
             android:layout_below="@+id/loginRadio"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:text="@string/cont" />
+            android:text="@string/cont"
+            android:textColor="#1919BA" />
 
         <RadioGroup
             android:id="@+id/loginRadio"
@@ -41,19 +43,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/google_plus" />
+                android:text="@string/google_plus"
+                android:textColor="#FFFFFF" />
 
             <RadioButton
                 android:id="@+id/radio1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/facebook" />
+                android:text="@string/facebook"
+                android:textColor="#FFFFFF" />
 
             <RadioButton
                 android:id="@+id/radio2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/twitter" />
+                android:text="@string/twitter"
+                android:textColor="#FFFFFF" />
+
         </RadioGroup>
 
 
