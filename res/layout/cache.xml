@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#666666"
     android:orientation="vertical" >
 
     <!-- TEST IMAGE -->
@@ -20,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:ems="10" />
+        android:ems="10"
+        android:textColor="#FFFFFF" />
 
     <EditText
         android:id="@+id/cacheDescription"
@@ -28,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:ems="10"
-        android:inputType="textMultiLine" >
+        android:inputType="textMultiLine"
+        android:textColor="#FFFFFF" >
 
         <requestFocus />
     </EditText>
