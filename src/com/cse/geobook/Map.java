@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -96,12 +98,25 @@ public class Map extends FragmentActivity {
 
 	private class clickListener implements OnMapClickListener,
 	        OnMapLongClickListener, OnMarkerClickListener,
-	        OnInfoWindowClickListener {
+	        OnInfoWindowClickListener, OnMyLocationButtonClickListener {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
 			// TODO Auto-generated method stub
+		}
 
+		@Override
+		public boolean onMyLocationButtonClick() {
+			if (Map.this.gMap != null) {
+				Map.this.gMap.stopAnimation();
+				Location myloc = Map.this.gMap.getMyLocation();
+				if (myloc != null) {
+					Map.this.gMap.animateCamera(CameraUpdateFactory
+					        .newLatLng(new LatLng(myloc.getLatitude(), myloc
+					                .getLongitude())));
+				}
+			}
+			return true;
 		}
 
 		@Override
