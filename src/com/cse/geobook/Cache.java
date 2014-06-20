@@ -14,6 +14,9 @@ public class Cache extends Activity {
 	EditText cacheName;
 	EditText description;
 	LatLng position;
+	public static String TARGET_LOC = "target_loc",
+			TARGET_NAME = "target_name", CACHE_LOCATION = "cacheLocation",
+			CACHE_TITLES = "cacheTitles", ZOOM = "zoom";
 
 	// PHOTO
 

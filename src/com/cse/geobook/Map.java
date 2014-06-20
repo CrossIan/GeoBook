@@ -1,6 +1,7 @@
 package com.cse.geobook;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -33,11 +34,18 @@ public class Map extends FragmentActivity {
 
 	GoogleMap gMap;
 	Bundle extras;
-	static ArrayList<LatLng> caches;
+
+	HashMap<String, Marker> cache;
+
+	// eventually remove and only use hash to reduce storage cost
+	static ArrayList<LatLng> cachesLocation;
 	static ArrayList<String> cacheTitles;
-	LatLng target;
-	static int startCacheNameID = 900;
+
+	LatLng target_loc;
+	String target_name;
+	int zoom;
 	Button listView;
+	static int startCacheNameID = 900;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +62,7 @@ public class Map extends FragmentActivity {
 				mapToList.putExtras(extras);
 
 				startActivity(mapToList);
+				finish();
 
 			}
 		});
@@ -63,16 +72,28 @@ public class Map extends FragmentActivity {
 
 	private void getExtras() {
 		this.extras = this.getIntent().getExtras();
-		caches = this.extras.getParcelableArrayList("caches");
-		cacheTitles = this.extras.getStringArrayList("cacheTitles");
-		this.target = this.extras.getParcelable("target");
+		cachesLocation = this.extras
+				.getParcelableArrayList(Cache.CACHE_LOCATION);
+		cacheTitles = this.extras.getStringArrayList(Cache.CACHE_TITLES);
+
+		target_loc = this.extras.getParcelable(Cache.TARGET_LOC);
+		target_name = this.extras.getString(Cache.TARGET_NAME);
+		zoom = this.extras.getInt(Cache.ZOOM);
+
 	}
 
-	private void addMarker(LatLng location, String title) {
+	private void initHash() {
+
+		cache = new HashMap<String, Marker>();
+
+	}
+
+	private Marker addMarker(LatLng location, String title) {
 		Marker m = this.gMap.addMarker(new MarkerOptions().position(location));
 		m.setTitle(title); // or add in
 		// MarkerOptions
 		m.setSnippet("");
+		return m;
 	}
 
 	private void addMarker(LatLng location) {
@@ -94,23 +115,31 @@ public class Map extends FragmentActivity {
 		}
 		this.setUpActionListeners();
 		this.getExtras();
+		this.initHash();
 
 		this.gMap.setMyLocationEnabled(true);
 		/*
 		 * set target & zoom. if target is passed use that, else use default of
 		 * columbus ohio
 		 */
-		if (this.target != null) {
+		if (this.target_loc != null) {
 			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					this.target, 11));
+					this.target_loc, zoom));
+			/*
+			 * if (target_name != null && target_name.compareTo("") != 0) {
+			 * cache.get(target_name).showInfoWindow(); }
+			 */
 		} else {
 			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					new LatLng(39.961138, -83.001465), 11));
+					new LatLng(39.961138, -83.001465), zoom));
 		}
 		// set markers
-		if (caches != null && cacheTitles != null) {
-			for (int i = 0; i < caches.size(); i++) {
-				this.addMarker(caches.get(i), cacheTitles.get(i));
+		if (cachesLocation != null && cacheTitles != null) {
+			for (int i = 0; i < cachesLocation.size(); i++) {
+				Marker m = this.addMarker(cachesLocation.get(i),
+						cacheTitles.get(i));
+
+				cache.put(cacheTitles.get(i), m);
 			}
 		}
 
@@ -151,17 +180,18 @@ public class Map extends FragmentActivity {
 					// TODO Auto-generated method stub
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
-						Map.this.addMarker(caches.get(caches.size() - 1));
+						Map.this.addMarker(cachesLocation.get(cachesLocation
+								.size() - 1));
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
-						caches.remove(caches.size() - 1);
+						cachesLocation.remove(cachesLocation.size() - 1);
 						break;
 					}
 				}
 			}
 			dialogClickListener listener = new dialogClickListener();
-			caches.add(cache);
+			cachesLocation.add(cache);
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.confirm_new_cache)
 					.setTitle(R.string.new_cache)
@@ -276,7 +306,7 @@ public class Map extends FragmentActivity {
 
 	static void setDataToPass(Bundle b, Context c) {
 		// target
-		b.putParcelable("target", new LatLng(39.961138, -83.001465));
+		b.putParcelable(Cache.TARGET_LOC, new LatLng(39.961138, -83.001465));
 		// markers (caches)
 		ArrayList<LatLng> data = new ArrayList<LatLng>();
 		ArrayList<String> title = new ArrayList<String>();
@@ -288,9 +318,9 @@ public class Map extends FragmentActivity {
 			title.add(reader.getName());
 			i++;
 		}
-		b.putStringArrayList("cacheTitles", title);
+		b.putStringArrayList(Cache.CACHE_TITLES, title);
 
-		b.putParcelableArrayList("caches", data);
+		b.putParcelableArrayList(Cache.CACHE_LOCATION, data);
 
 	}
 

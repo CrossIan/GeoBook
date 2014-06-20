@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 public class Login extends Activity {
 
 	private static final int DIALOG_ALERT = 10;
-	
+
 	// Widget sockets we'll use later
 	private Button signInButton;
 	private RadioGroup signInOption;
@@ -22,20 +25,18 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.login);
-		
+
 		// Link to widgets
 		signInButton = (Button) this.findViewById(R.id.signInButton);
 		signInOption = (RadioGroup) this.findViewById(R.id.loginRadio);
 
-		
-		
 		// Set action for onClick
 		signInButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				int option = signInOption.getCheckedRadioButtonId();
 				option = option - signInOption.getId();
-				String dialogTitle,dialogMessage;
+				String dialogTitle, dialogMessage;
 				switch (option) {
 				case 1:
 					// Google+
@@ -55,11 +56,9 @@ public class Login extends Activity {
 				default:
 					dialogTitle = "Error in Login.java";
 					dialogMessage = "Error in Login.java";
-					Log.e("","Error in Login.java");
+					Log.e("", "Error in Login.java");
 				}
-				
-				
-				
+
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 						Login.this);
 				// set title
@@ -75,16 +74,25 @@ public class Login extends Activity {
 									public void onClick(DialogInterface dialog,
 											int id) {
 										// Move to the map viewer
+										MarkerOptions marker = new MarkerOptions();
+
+										marker.position(new LatLng(39.961138,
+												-83.001465));
 										Intent map = new Intent(
 												"android.intent.action.MAP");
 										Bundle extra = new Bundle();
 										Map.setDataToPass(extra,
 												getApplicationContext());
+										extra.putInt(Cache.ZOOM, 11);
+										extra.putParcelable(Cache.TARGET_LOC,
+												new LatLng(39.961138,
+														-83.001465));
+
 										map.putExtras(extra);
 										Login.this.startActivity(map);
 										Login.this.finish();
-//										finish();
-//										startActivity(new Intent(Login.this, GoogleLogin.class));
+										finish();
+
 									}
 								})
 						.setNegativeButton("No",
@@ -108,5 +116,4 @@ public class Login extends Activity {
 		});
 
 	}
-
 }
