@@ -65,17 +65,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.cse.geobook.CacheList"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.CACHE_LIST" />
 
-        <!-- required by maps -->
-        <uses-library android:name="com.google.android.maps" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBSynp55necy7jJdmJ4w3dYOI2nfVPE2k8" />
-
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.cse.geobook.Login"
             android:label="@string/title_activity_login" >
@@ -88,6 +86,16 @@
             android:name="com.cse.geobook.GoogleLogin"
             android:label="@string/title_activity_google_login" >
         </activity>
+
+        <!-- required by maps -->
+        <uses-library android:name="com.google.android.maps" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBSynp55necy7jJdmJ4w3dYOI2nfVPE2k8" />
     </application>
 
 </manifest>
