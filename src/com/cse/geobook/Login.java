@@ -1,5 +1,7 @@
 package com.cse.geobook;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -74,20 +76,33 @@ public class Login extends Activity {
 									public void onClick(DialogInterface dialog,
 											int id) {
 										// Move to the map viewer
-										MarkerOptions marker = new MarkerOptions();
-
-										marker.position(new LatLng(39.961138,
+										MarkerOptions target = new MarkerOptions();
+										String ti;
+										target.position(new LatLng(39.961138,
 												-83.001465));
+
 										Intent map = new Intent(
 												"android.intent.action.MAP");
 										Bundle extra = new Bundle();
-										Map.setDataToPass(extra,
-												getApplicationContext());
-										extra.putInt(Cache.ZOOM, 11);
-										extra.putParcelable(Cache.TARGET_LOC,
-												new LatLng(39.961138,
-														-83.001465));
 
+										DataParser reader = new DataParser(
+												getApplicationContext(),
+												R.raw.ohio);
+										ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
+										while (reader.ready()) {
+											MarkerOptions marker = new MarkerOptions()
+													.position(new LatLng(reader
+															.getLat(), reader
+															.getLng()));
+											String title = (reader.getName());
+											marker.title(title);
+											cache_array.add(marker);
+										}
+
+										Data data = new Data(cache_array,
+												target, 11);
+										extra.putParcelable(Data.CACHE_DATA,
+												data);
 										map.putExtras(extra);
 										Login.this.startActivity(map);
 										Login.this.finish();

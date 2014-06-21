@@ -1,25 +1,18 @@
 package com.cse.geobook;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class CacheList extends ListActivity {
 	static int startCacheNameID = 900;
 
-	HashMap<String, Pair<String, LatLng>> cache;
-	ArrayList<String> cacheTitle;
-	ArrayList<LatLng> cacheLocation;
+	Data caches;
+	String[] titles;
 	Bundle extras;
 
 	@Override
@@ -28,52 +21,39 @@ public class CacheList extends ListActivity {
 		Log.d(this.getClass().toString(), "getting extras");
 
 		getExtras();
-		initHash();
-		if (cacheTitle != null && cacheLocation != null) {
-			String[] titles = new String[cacheTitle.size()];
-			for (int i = 0; i < cacheTitle.size(); i++) {
-				titles[i] = cacheTitle.get(i);
+		if (caches != null) {
+			int size = caches.data.size();
+			titles = new String[size];
+			for (int i = 0; i < size; i++) {
+				String next = caches.data.get(i).getTitle();
+				titles[i] = next;
 			}
+
+			// initialize menu
 			setListAdapter(new ArrayAdapter<String>(CacheList.this,
 					android.R.layout.simple_list_item_1, titles));
+
 		}
 	}
 
 	private void getExtras() {
 		this.extras = this.getIntent().getExtras();
-		Log.d(this.getClass().toString(), extras.toString());
-
-		cacheLocation = this.extras
-				.getParcelableArrayList(Cache.CACHE_LOCATION);
-		cacheTitle = this.extras.getStringArrayList(Cache.CACHE_TITLES);
-
-	}
-
-	private void initHash() {
-		cache = new HashMap<String, Pair<String, LatLng>>();
-		for (int i = 0; i < cacheLocation.size(); i++) {
-			cache.put(cacheTitle.get(i), new Pair<String, LatLng>("test",
-					cacheLocation.get(i)));
-		}
-
+		caches = extras.getParcelable(Data.CACHE_DATA);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
-		int zoom = 15;
+		int zoom = 16;
 
-		Bundle extra = new Bundle();
-		extra.putAll(extras);
-		extras.remove(Cache.ZOOM);
-		extras.putInt(Cache.ZOOM, zoom);
-		extras.remove(Cache.TARGET_LOC);
-		extras.putParcelable(Cache.TARGET_LOC,
-				cache.get(cacheTitle.get(position)).second);
-		extras.putString(Cache.TARGET_NAME, cacheTitle.get(position));
+		Data data = new Data(caches.data, caches.data.get(position), zoom);
+
+		Bundle extras_new = new Bundle();
+		extras_new.putParcelable(Data.CACHE_DATA, data);
+
 		Intent map = new Intent("android.intent.action.MAP");
-		map.putExtras(extras);
+		map.putExtras(extras_new);
 		startActivity(map);
 		finish();
 
