@@ -75,15 +75,14 @@ public class Login extends Activity {
 										Intent map = new Intent(
 												"android.intent.action.MAP");
 										Bundle extra = new Bundle();
-
 										DataParser reader = new DataParser(
-												getApplicationContext(),
-												R.raw.ohio);
+												getApplicationContext());
 
 										Data data = reader.read();
 										extra.putParcelable(Data.CACHE_DATA,
 												data);
 										map.putExtras(extra);
+
 										Login.this.startActivity(map);
 										Login.this.finish();
 										finish();

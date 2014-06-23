@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,9 @@ public class Map extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.map);
 		this.getExtras();
+		DataParser reader = new DataParser(getApplicationContext());
+
+		caches = reader.read();
 
 		listView = (Button) findViewById(R.id.mapToList);
 		listView.setOnClickListener(new OnClickListener() {
@@ -55,6 +59,9 @@ public class Map extends FragmentActivity {
 			}
 		});
 		this.setUpMap();
+		Log.d("file", this.fileList().toString());
+		DataParser.overwriteAll(caches, getApplicationContext());
+		Log.d("file", this.fileList().toString());
 	}
 
 	private void getExtras() {
@@ -134,8 +141,12 @@ public class Map extends FragmentActivity {
 					// TODO Auto-generated method stub
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
-						gMap.addMarker(new MarkerOptions().position(pos));
+						MarkerOptions mo = new MarkerOptions().position(pos);
+						caches.data.add(mo);
+						gMap.addMarker(mo);
 						// Todo place in hash map
+						DataParser
+								.overwriteAll(caches, getApplicationContext());
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
