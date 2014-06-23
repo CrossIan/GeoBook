@@ -4,8 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import android.content.Context;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DataParser {
 
@@ -25,7 +29,7 @@ public class DataParser {
 		this.reader = readr;
 	}
 
-	double getLat() {
+	private double getLat() {
 		Double lat = 0.0;
 		try {
 			this.line = this.reader.readLine();
@@ -39,15 +43,15 @@ public class DataParser {
 	}
 
 	/* getLat() must be called first!! */
-	double getLng() {
+	private double getLng() {
 		Double lng = Double.parseDouble(this.line.substring(
-		        this.firstComma + 1, this.secondComma));
+				this.firstComma + 1, this.secondComma));
 		return lng;
 	}
 
-	String getName() {
+	private String getName() {
 		String name = this.line.substring(this.secondComma + 1,
-		        this.line.length());
+				this.line.length());
 		return name;
 	}
 
@@ -69,6 +73,27 @@ public class DataParser {
 			e.printStackTrace();
 		}
 		return ready;
+	}
+
+	public Data read() {
+
+		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
+		while (ready()) {
+			MarkerOptions marker = new MarkerOptions().position(new LatLng(
+					getLat(), getLng()));
+			String title = (getName());
+			marker.title(title);
+			cache_array.add(marker);
+		}
+		MarkerOptions target = new MarkerOptions();
+
+		target.position(new LatLng(39.961138, -83.001465));
+		Data data = new Data(cache_array, target, 11);
+		return data;
+	}
+
+	public void write() {
+
 	}
 
 }
