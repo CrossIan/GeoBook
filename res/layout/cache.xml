@@ -36,4 +36,11 @@
         <requestFocus />
     </EditText>
 
+    <Button
+        android:id="@+id/save"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="@string/saveButton" />
+
 </LinearLayout>

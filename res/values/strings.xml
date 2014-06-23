@@ -53,6 +53,7 @@
 
     <!-- STRINGS USED IN Cache -->
     <string name="cachePicture">Picture</string>
+    <string name="saveButton">Save</string>
     <string name="title_activity_cache">Cache View</string>
 
     <!-- STRINGS USED IN ListView -->
