@@ -39,9 +39,6 @@ public class Map extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.map);
 		this.getExtras();
-		DataParser reader = new DataParser(getApplicationContext());
-
-		caches = reader.read();
 
 		listView = (Button) findViewById(R.id.mapToList);
 		listView.setOnClickListener(new OnClickListener() {
@@ -195,9 +192,17 @@ public class Map extends FragmentActivity {
 					case DialogInterface.BUTTON_POSITIVE:
 						// TODO: goto cache view
 
+						MarkerOptions mo = new MarkerOptions();
+						mo.title(marker.getTitle());
+						mo.snippet(marker.getSnippet());
+						mo.position(marker.getPosition());
+
 						Intent cache = new Intent("android.intent.action.CACHE");
 						Bundle extra = new Bundle();
-						extra.putParcelable(Data.CACHE_DATA, extra);
+
+						caches.target = mo;
+						extra.putParcelable(Data.CACHE_DATA, caches);
+
 						cache.putExtras(extra);
 						Map.this.startActivity(cache);
 

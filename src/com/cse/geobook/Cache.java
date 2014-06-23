@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Cache extends Activity {
 
@@ -14,9 +15,7 @@ public class Cache extends Activity {
 	EditText cacheName;
 	EditText description;
 	LatLng position;
-	public static String TARGET_LOC = "target_loc",
-			TARGET_NAME = "target_name", CACHE_LOCATION = "cacheLocation",
-			CACHE_TITLES = "cacheTitles", ZOOM = "zoom";
+	MarkerOptions mo;
 
 	// PHOTO
 
@@ -33,10 +32,11 @@ public class Cache extends Activity {
 
 	private void getExtras() {
 		Bundle extras = getIntent().getExtras();
-
-		cacheName.setText((extras.getString("title")));
-		description.setText((extras.getString("snippit")));
-		position = (new LatLng(extras.getDouble("Lat"), extras.getDouble("Lng")));
+		Data data = extras.getParcelable(Data.CACHE_DATA);
+		mo = data.target;
+		cacheName.setText(mo.getTitle());
+		description.setText(mo.getSnippet());
+		position = mo.getPosition();
 
 	}
 
