@@ -27,6 +27,7 @@
     <string name="cache_option_no">No</string>
     <string name="go_to_cache_message_ad">View Cache?</string>
     <string name="view_cache_title_ad">View Cache</string>
+    <string name="list_view">Cache List</string>
 
     <!-- STRINGS USED IN Photo -->
     <string name="bCapture">capture?</string>
@@ -52,9 +53,13 @@
 
     <!-- STRINGS USED IN Cache -->
     <string name="cachePicture">Picture</string>
+    <string name="saveButton">Save</string>
     <string name="title_activity_cache">Cache View</string>
     
     <!-- STRINGS USED IN Settings -->
     <string name="pin_color">Pin Color</string>
+
+    <!-- STRINGS USED IN ListView -->
+    <string name="title_activity_listView">List View</string>
 
 </resources>
