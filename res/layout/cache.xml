@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#666666"
@@ -11,36 +12,73 @@
         android:id="@+id/ivPhoto"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
         android:contentDescription="@string/cachePicture"
-        android:src="@drawable/earth_logo" >
-    </ImageView>
+        android:src="@drawable/earth_logo" />
 
     <EditText
         android:id="@+id/cacheName"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="5dp"
         android:ems="10"
-        android:textColor="#FFFFFF" />
-
-    <EditText
-        android:id="@+id/cacheDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:textColor="#FFFFFF" >
-
-        <requestFocus />
-    </EditText>
+        android:textColor="#FFFFFF"
+        android:width="100dp" />
 
     <Button
         android:id="@+id/save"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:text="@string/saveButton" />
 
-</LinearLayout>
+    <RatingBar
+        android:id="@+id/ratingBar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPhoto"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp" />
+
+    <EditText
+        android:id="@+id/cacheDescription"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ratingBar1"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:maxLines="6"
+        android:textColor="#FFFFFF" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/coords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ratingBar1"
+        android:layout_below="@+id/cacheName"
+        android:layout_marginTop="17dp"
+        android:text="Lat Long"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/datevisited"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cacheDescription"
+        android:layout_below="@+id/coords"
+        android:layout_marginTop="5dp"
+        android:text="date visited"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>
