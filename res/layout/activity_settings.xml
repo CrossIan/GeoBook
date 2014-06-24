@@ -12,7 +12,8 @@
         android:layout_alignRight="@+id/button1"
         android:layout_below="@+id/button1"
         android:layout_marginTop="36dp"
-        android:text="Reset Counter" />
+        android:text="Reset Counter" 
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/button1"
@@ -20,16 +21,18 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Reset Progress" />
+        android:text="Reset Progress"
+        android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/textView1"
+    <!--<ListView
+        android:id="@+id/listView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button1"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_marginBottom="82dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="34dp"
         android:text="Pin Color "
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+    </ListView> -->
 
 </RelativeLayout>

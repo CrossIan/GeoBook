@@ -65,6 +65,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.cse.geobook.Settings"
+            android:label="@string/menu_map_settings"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.SETTINGS" />
+                
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
 
         <!-- required by maps -->
         <uses-library android:name="com.google.android.maps" />
