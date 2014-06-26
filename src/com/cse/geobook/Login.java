@@ -30,6 +30,7 @@ public class Login extends Activity implements OnClickListener {
 		// Init Widget Button and set click listener
 		signInButton = (Button) findViewById(R.id.signInButton);
 		signInButton.setOnClickListener(this);
+		signInOption = (RadioGroup) this.findViewById(R.id.loginRadio);
 	}
 
 	
@@ -42,9 +43,31 @@ public class Login extends Activity implements OnClickListener {
 
 			// Create Object of Dialog class
 			final Dialog login = new Dialog(this);
+			
+			int option = signInOption.getCheckedRadioButtonId();
+			option = option - signInOption.getId();
+			String dialogTitle;
+			switch (option) {
+			case 1:
+				// Google+
+				dialogTitle = "Sign in with Google+";
+				break;
+			case 2:
+				// Facebook
+				dialogTitle = "Sign in with Facebook";
+				break;
+			case 3:
+				// Twitter
+				dialogTitle = "Sign in with Twitter";
+				break;
+			default:
+				dialogTitle = "Error in Login.java";
+				Log.e("", "Error in Login.java");
+			}
+			login.setTitle(dialogTitle);
+			
 			// Set GUI of login screen
 			login.setContentView(R.layout.login_dialog);
-			login.setTitle("Login to Pulse 7");
 
 			// Init button of login GUI
 			Button btnLogin = (Button) login.findViewById(R.id.btnLogin);
@@ -54,10 +77,11 @@ public class Login extends Activity implements OnClickListener {
 			final EditText txtPassword = (EditText) login
 					.findViewById(R.id.txtPassword);
 
+			
 			// Attached listener for login GUI button
 			btnLogin.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v) {
+				public void onClick(View v) {			
 					if (txtUsername.getText().toString().trim().length() > 0
 							&& txtPassword.getText().toString().trim().length() > 0) {
 						// Validate Your login credential here than display
@@ -67,6 +91,19 @@ public class Login extends Activity implements OnClickListener {
 
 						// Redirect to dashboard / home screen.
 						login.dismiss();
+						Intent map = new Intent("android.intent.action.MAP");
+						Bundle extra = new Bundle();
+						DataParser reader = new DataParser(
+								getApplicationContext());
+
+						Data data = reader.read();
+						extra.putParcelable(Data.CACHE_DATA, data);
+						map.putExtras(extra);
+
+						Login.this.startActivity(map);
+						Login.this.finish();
+						finish();
+						
 					} else {
 						Toast.makeText(Login.this,
 								"Please enter Username and Password",
