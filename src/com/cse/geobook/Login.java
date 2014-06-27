@@ -82,6 +82,9 @@ public class Login extends Activity implements OnClickListener {
 			btnLogin.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {			
+					/*
+					 * Try to validate sign in info. Proceed to map activity if ok.
+					 */
 					if (txtUsername.getText().toString().trim().length() > 0
 							&& txtPassword.getText().toString().trim().length() > 0) {
 						// Validate Your login credential here than display
@@ -89,22 +92,30 @@ public class Login extends Activity implements OnClickListener {
 						Toast.makeText(Login.this,
 								"Login Sucessfull", Toast.LENGTH_LONG).show();
 
-						// Redirect to dashboard / home screen.
+						// Close dialog box
 						login.dismiss();
+						/*
+						 * Prepare to launch the map activity. 
+						 */
+						// TODO Maybe start the map loader in a different thread?
+						//		Seems to work fine now, but could be added at stage 3.
 						Intent map = new Intent("android.intent.action.MAP");
 						Bundle extra = new Bundle();
 						DataParser reader = new DataParser(
 								getApplicationContext());
-
 						Data data = reader.read();
 						extra.putParcelable(Data.CACHE_DATA, data);
 						map.putExtras(extra);
-
+						// Finish login activity and move to map view
 						Login.this.startActivity(map);
 						Login.this.finish();
 						finish();
 						
-					} else {
+					} 
+					/*
+					 * No username and/or password entered. Prompt for info
+					 */
+					else {
 						Toast.makeText(Login.this,
 								"Please enter Username and Password",
 								Toast.LENGTH_LONG).show();
@@ -112,6 +123,10 @@ public class Login extends Activity implements OnClickListener {
 					}
 				}
 			});
+			/*
+			 * Cancel button listener
+			 * 	Go back to the sign in selection view
+			 */
 			btnCancel.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -119,110 +134,8 @@ public class Login extends Activity implements OnClickListener {
 				}
 			});
 
-			// Make dialog box visible.
+			// Make dialog box visible after the user has selected their sign in method
 			login.show();
 		}
 	}
 }
-
-// public class Login extends Activity {
-//
-//
-//
-// // Widget sockets we'll use later
-// private Button signInButton;
-// private RadioGroup signInOption;
-//
-// @Override
-// protected void onCreate(Bundle savedInstanceState) {
-// super.onCreate(savedInstanceState);
-// this.setContentView(R.layout.login);
-//
-// // Link to widgets
-// signInButton = (Button) this.findViewById(R.id.signInButton);
-// signInOption = (RadioGroup) this.findViewById(R.id.loginRadio);
-//
-// // Set action for onClick
-// signInButton.setOnClickListener(new View.OnClickListener() {
-// @Override
-// public void onClick(View v) {
-// int option = signInOption.getCheckedRadioButtonId();
-// option = option - signInOption.getId();
-// String dialogTitle, dialogMessage;
-// switch (option) {
-// case 1:
-// // Google+
-// dialogTitle = "Sign in with Google+";
-// dialogMessage = "Proceed to Google+ sign in?";
-// break;
-// case 2:
-// // Facebook
-// dialogTitle = "Sign in with Facebook";
-// dialogMessage = "Proceed to Facebook sign in?";
-// break;
-// case 3:
-// // Twitter
-// dialogTitle = "Sign in with Twitter";
-// dialogMessage = "Proceed to Twitter sign in?";
-// break;
-// default:
-// dialogTitle = "Error in Login.java";
-// dialogMessage = "Error in Login.java";
-// Log.e("", "Error in Login.java");
-// }
-//
-// AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-// Login.this);
-// // set title
-// alertDialogBuilder.setTitle(dialogTitle);
-//
-// // set dialog message
-// alertDialogBuilder
-// .setMessage(dialogMessage)
-// .setCancelable(false)
-// .setPositiveButton("Yes",
-// new DialogInterface.OnClickListener() {
-// @Override
-// public void onClick(DialogInterface dialog,
-// int id) {
-// // Move to the map viewer
-//
-// Intent map = new Intent(
-// "android.intent.action.MAP");
-// Bundle extra = new Bundle();
-// DataParser reader = new DataParser(
-// getApplicationContext());
-//
-// Data data = reader.read();
-// extra.putParcelable(Data.CACHE_DATA,
-// data);
-// map.putExtras(extra);
-//
-// Login.this.startActivity(map);
-// Login.this.finish();
-// finish();
-//
-// }
-// })
-// .setNegativeButton("No",
-// new DialogInterface.OnClickListener() {
-// @Override
-// public void onClick(DialogInterface dialog,
-// int id) {
-// // if this button is clicked, just close
-// // the dialog box and do nothing
-// dialog.cancel();
-// }
-// });
-//
-// // create alert dialog
-// AlertDialog alertDialog = alertDialogBuilder.create();
-//
-// // show it
-// alertDialog.show();
-//
-// }
-// });
-//
-// }
-// }
