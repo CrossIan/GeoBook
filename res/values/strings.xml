@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -65,7 +64,6 @@
     <string name="title_activity_cache_list_">CacheList_Activity</string>
 
 </resources>
-=======
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -130,4 +128,3 @@
     <string name="title_activity_listView">List View</string>
 
 </resources>
->>>>>>> FETCH_HEAD
