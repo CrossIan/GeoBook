@@ -92,10 +92,6 @@
             android:name="com.cse.geobook.Profile"
             android:label="@string/title_activity_profile" >
         </activity>
-        <activity
-            android:name="com.cse.geobook.GoogleLogin"
-            android:label="@string/title_activity_google_login" >
-        </activity>
 
         <!-- required by maps -->
         <uses-library android:name="com.google.android.maps" />
