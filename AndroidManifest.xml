@@ -66,6 +66,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.cse.geobook.Settings"
+            android:label="@string/menu_map_settings"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.cse.geobook.CacheList"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -82,10 +92,6 @@
             android:name="com.cse.geobook.Profile"
             android:label="@string/title_activity_profile" >
         </activity>
-        <activity
-            android:name="com.cse.geobook.GoogleLogin"
-            android:label="@string/title_activity_google_login" >
-        </activity>
 
         <!-- required by maps -->
         <uses-library android:name="com.google.android.maps" />
@@ -96,6 +102,11 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBSynp55necy7jJdmJ4w3dYOI2nfVPE2k8" />
+
+        <activity
+            android:name="com.cse.geobook.CacheList_Activity"
+            android:label="@string/title_activity_listView" >
+        </activity>
     </application>
 
 </manifest>
