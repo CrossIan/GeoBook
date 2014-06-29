@@ -250,9 +250,8 @@ public class Map extends FragmentActivity {
 				this.startActivity(new Intent(Map.this, Profile.class));
 				return true;
 			case R.id.menu_map_settings:
-				// this.startActivity(new Intent(Map.this, Settings.class));
-				this.startActivity(new Intent(Map.this,
-				        CacheList_Activity.class));
+				this.startActivity(new Intent(Map.this, Settings.class));
+				//this.startActivity(new Intent(Map.this,CacheList_Activity.class));
 				return true;
 			case R.id.menu_map_about:
 				AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
