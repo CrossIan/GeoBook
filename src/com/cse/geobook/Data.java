@@ -45,8 +45,9 @@ public class Data implements Parcelable {
 			data.add(new MarkerOptions().title(title).snippet(description)
 					.position(new LatLng(lat, lng)));
 		}
-		target = new MarkerOptions().title(in.readString()).position(
-				new LatLng(in.readDouble(), in.readDouble()));
+		target = new MarkerOptions().title(in.readString())
+				.snippet(in.readString())
+				.position(new LatLng(in.readDouble(), in.readDouble()));
 		zoom = in.readInt();
 	}
 
@@ -68,8 +69,10 @@ public class Data implements Parcelable {
 
 		}
 		dest.writeString(target.getTitle());
+		dest.writeString(target.getSnippet());
 		dest.writeDouble(target.getPosition().latitude);
 		dest.writeDouble(target.getPosition().longitude);
+
 		dest.writeInt(zoom);
 	}
 }

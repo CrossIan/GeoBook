@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,13 +56,6 @@ public class Map extends FragmentActivity {
 			}
 		});
 		this.setUpMap();
-		Log.d("file", this.fileList().toString());
-		DataParser writer = new DataParser(getApplicationContext(),
-				"PersistentData.txt");
-
-		writer.overwriteAll(this.caches);
-		writer.close();
-		Log.d("file", this.fileList().toString());
 	}
 
 	private void getExtras() {
@@ -208,6 +200,8 @@ public class Map extends FragmentActivity {
 						MarkerOptions mo = new MarkerOptions();
 						mo.title(marker.getTitle());
 						mo.snippet(marker.getSnippet());
+						mo.snippet(marker.getTitle());
+
 						mo.position(marker.getPosition());
 
 						Intent cache = new Intent("android.intent.action.CACHE");
@@ -218,6 +212,7 @@ public class Map extends FragmentActivity {
 
 						cache.putExtras(extra);
 						Map.this.startActivity(cache);
+						finish();
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
