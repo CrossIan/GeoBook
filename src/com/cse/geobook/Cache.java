@@ -52,8 +52,9 @@ public class Cache extends Activity {
 					}
 					i++;
 				}
-
-				DataParser.overwriteAll(data, getApplicationContext());
+				DataParser writer = new DataParser(getApplicationContext(),
+						"PersistentData.txt");
+				writer.overwriteAll(data, getApplicationContext());
 			}
 		});
 	}

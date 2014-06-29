@@ -20,10 +20,19 @@ public class DataParser {
 	 * Stream passed should be getResources().openRawResources(R.raw.*) where *
 	 * is the id of the file
 	 */
-	static String FILENAME = "PersistentData.txt";
+	String FILENAME;
 
 	BufferedReader reader;
 
+	/**
+	 * Constructor
+	 * 
+	 * Creates an instance of {@code DataParser} based on the {@code file} Can
+	 * Read and Write to / from {@code file}
+	 * 
+	 * @param c
+	 * @param file
+	 */
 	DataParser(Context c, String file) {
 		this.FILENAME = file;
 		InputStream stream;
@@ -51,15 +60,11 @@ public class DataParser {
 		}
 	}
 
-	// Cache getCache() {
-	// Cache cache = new Cache();
-	// return cache;
-	// }
-
-	void writeCache() {
-		// TODO: save cache
-	}
-
+	/**
+	 * determines whether the stream is ready, and can be read from.
+	 * 
+	 * @return
+	 */
 	boolean ready() {
 		boolean ready = false;
 		try {
@@ -71,6 +76,12 @@ public class DataParser {
 		return ready;
 	}
 
+	/**
+	 * Reads all contents from a text file and returns a representation of the
+	 * contents
+	 * 
+	 * @return
+	 */
 	public Data read() {
 
 		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
@@ -103,8 +114,13 @@ public class DataParser {
 		return data;
 	}
 
-	/** used when you delete a place */
-	public static void overwriteAll(Data write, Context c) {
+	/**
+	 * Completely overwritest the file contained in this
+	 * 
+	 * 
+	 */
+
+	public void overwriteAll(Data write, Context c) {
 
 		ArrayList<MarkerOptions> data = write.data;
 
@@ -118,6 +134,8 @@ public class DataParser {
 				writeMarker(temp, writer);
 			}
 			writer.close();
+
+			Log.d("data", "data has been saved");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,7 +145,8 @@ public class DataParser {
 		}
 	}
 
-	public static void append(MarkerOptions mo, Context c) {
+	// NOT WORKING
+	public void append(MarkerOptions mo, Context c) {
 
 		FileOutputStream writer;
 		try {
@@ -144,7 +163,13 @@ public class DataParser {
 		}
 	}
 
-	private static void writeMarker(MarkerOptions mo, FileOutputStream stream) {
+	/**
+	 * Writes a single marker to the {@code stream}
+	 * 
+	 * @param mo
+	 * @param stream
+	 */
+	private void writeMarker(MarkerOptions mo, FileOutputStream stream) {
 		String line = String.valueOf(mo.getPosition().latitude) + ","
 				+ mo.getPosition().longitude + "," + mo.getTitle() + "\n";
 		try {
