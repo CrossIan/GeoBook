@@ -102,7 +102,6 @@ public class Map extends FragmentActivity {
 		int size = this.caches.data.size();
 		for (int i = 0; i < size; i++) {
 			this.gMap.addMarker(this.caches.data.get(i));
-
 		}
 
 	}
@@ -200,7 +199,6 @@ public class Map extends FragmentActivity {
 						MarkerOptions mo = new MarkerOptions();
 						mo.title(marker.getTitle());
 						mo.snippet(marker.getSnippet());
-						mo.snippet(marker.getTitle());
 
 						mo.position(marker.getPosition());
 

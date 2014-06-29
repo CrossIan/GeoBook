@@ -14,6 +14,18 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * <pre>
+ * Reads in a file where each line is of the format:
+ * 
+ * 		latitude,longitude,title,description
+ * 
+ * </pre>
+ * 
+ * @author Nate
+ * 
+ */
+
 public class DataParser {
 
 	/*
@@ -62,6 +74,24 @@ public class DataParser {
 	}
 
 	/**
+	 * Writes a single marker to the {@code stream}
+	 * 
+	 * @param mo
+	 * @param stream
+	 */
+	private void writeMarker(MarkerOptions mo, FileOutputStream stream) {
+		String line = String.valueOf(mo.getPosition().latitude) + ","
+				+ mo.getPosition().longitude + "," + mo.getTitle() + ","
+				+ mo.getSnippet() + "\n";
+		try {
+			stream.write(line.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * determines whether the stream is ready, and can be read from.
 	 * 
 	 * @return
@@ -93,13 +123,16 @@ public class DataParser {
 				line = this.reader.readLine();
 				String[] contents = line.split(",");
 
-				String title = contents[2];
-
 				Double lat = Double.parseDouble(contents[0]);
 				Double lng = Double.parseDouble(contents[1]);
-
-				MarkerOptions marker = new MarkerOptions().position(
-						new LatLng(lat, lng)).title(title);
+				String title = contents[2];
+				String description = "";
+				for (int i = 3; i < contents.length; i++) {
+					description += contents[3];
+				}
+				MarkerOptions marker = new MarkerOptions()
+						.position(new LatLng(lat, lng)).title(title)
+						.snippet(description);
 				cache_array.add(marker);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -159,23 +192,6 @@ public class DataParser {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Writes a single marker to the {@code stream}
-	 * 
-	 * @param mo
-	 * @param stream
-	 */
-	private void writeMarker(MarkerOptions mo, FileOutputStream stream) {
-		String line = String.valueOf(mo.getPosition().latitude) + ","
-				+ mo.getPosition().longitude + "," + mo.getTitle() + "\n";
-		try {
-			stream.write(line.getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

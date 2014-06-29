@@ -3,15 +3,12 @@ package com.cse.geobook;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Cache extends Activity {
@@ -77,24 +74,6 @@ public class Cache extends Activity {
 		cacheName.setText(data.target.getTitle());
 		description.setText(data.target.getSnippet());
 
-	}
-
-	static void setDataToPass(Bundle b, Marker marker) {
-
-		b.putString("title", marker.getTitle());
-		b.putString("snippit", marker.getSnippet());
-		b.putDouble("Lat", marker.getPosition().latitude);
-		b.putDouble("Lng", marker.getPosition().longitude);
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-
-		Toast.makeText(this, data.target.getSnippet(), Toast.LENGTH_SHORT)
-				.show();
-
-		return super.onTouchEvent(event);
 	}
 
 }
