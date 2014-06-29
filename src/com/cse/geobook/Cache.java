@@ -53,17 +53,19 @@ public class Cache extends Activity {
 					i++;
 				}
 
-				DataParser.overwriteAll(data, getApplicationContext());
+				(new DataParser(getApplicationContext(), Data.ALL_CACHES))
+						.overwriteAll(data, getApplicationContext());
 			}
 		});
 	}
 
 	private void getExtras() {
 		Bundle extras = getIntent().getExtras();
-		data = extras.getParcelable(Data.CACHE_DATA);
-		cacheName.setText(data.target.getTitle());
-		description.setText(data.target.getSnippet());
-
+		if (extras != null) {
+			data = extras.getParcelable(Data.CACHE_DATA);
+			cacheName.setText(data.target.getTitle());
+			description.setText(data.target.getSnippet());
+		}
 	}
 
 	static void setDataToPass(Bundle b, Marker marker) {

@@ -20,30 +20,25 @@ public class DataParser {
 	 * Stream passed should be getResources().openRawResources(R.raw.*) where *
 	 * is the id of the file
 	 */
-	static String FILE = "PersistentData.txt";
-	static String FOUND = "FoundCacheData.txt";
 
 	BufferedReader reader;
+	String filename;
 
-	DataParser(Context c) {
+	/**
+	 * constructor, creates a new object of type DataParser based on the file,
+	 * {@code this} is able to read and write to the {@code file}
+	 * 
+	 * @param c
+	 * @param file
+	 */
+	DataParser(Context c, String file) {
 		InputStream stream;
-		InputStream found;
+		this.filename = file;
 
 		try {
-			stream = c.openFileInput(FILE);
+			stream = c.openFileInput(file);
 			BufferedReader readr = new BufferedReader(new InputStreamReader(
-			        stream));
-
-			this.reader = readr;
-			Log.d("data", "persistent data read in, this is desireable");
-		} catch (FileNotFoundException e) {
-
-			e.printStackTrace();
-		}
-		try {
-			found = c.openFileInput(FOUND);
-			BufferedReader readr = new BufferedReader(new InputStreamReader(
-			        found));
+					stream));
 
 			this.reader = readr;
 			Log.d("data", "persistent data read in, this is desireable");
@@ -56,22 +51,14 @@ public class DataParser {
 		if (this.reader == null) {
 			stream = c.getResources().openRawResource(R.raw.ohio);
 			BufferedReader readr = new BufferedReader(new InputStreamReader(
-			        stream));
+					stream));
 			this.reader = readr;
 			Log.d("data", "static data read in, this is not desireable");
 
 		}
 	}
 
-	// Cache getCache() {
-	// Cache cache = new Cache();
-	// return cache;
-	// }
-
-	void writeCache() {
-		// TODO: save cache
-	}
-
+	/** checks if the stream can be read */
 	boolean ready() {
 		boolean ready = false;
 		try {
@@ -99,7 +86,7 @@ public class DataParser {
 				Double lng = Double.parseDouble(contents[1]);
 
 				MarkerOptions marker = new MarkerOptions().position(
-				        new LatLng(lat, lng)).title(title);
+						new LatLng(lat, lng)).title(title);
 				cache_array.add(marker);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -115,14 +102,14 @@ public class DataParser {
 		return data;
 	}
 
-	/** used when you delete a place */
-	public static void overwriteAll(Data write, Context c) {
+	/** Overwrites the entire contents of {@code this.filname} */
+	public void overwriteAll(Data write, Context c) {
 
 		ArrayList<MarkerOptions> data = write.data;
 
 		FileOutputStream writer;
 		try {
-			writer = c.openFileOutput(FILE, Context.MODE_PRIVATE);
+			writer = c.openFileOutput(filename, Context.MODE_PRIVATE);
 			int size = data.size();
 
 			for (int i = 0; i < size; i++) {
@@ -139,36 +126,20 @@ public class DataParser {
 		}
 	}
 
-	/** used when you delete a place */
-	public static void saveFound(Data write, Context c) {
-
-		ArrayList<MarkerOptions> data = write.data;
-
-		FileOutputStream writer;
-		try {
-			writer = c.openFileOutput(FOUND, Context.MODE_PRIVATE);
-			int size = data.size();
-
-			for (int i = 0; i < size; i++) {
-				MarkerOptions temp = data.get(i);
-				writeMarkerFound(temp, writer);
-			}
-			writer.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public static void append(MarkerOptions mo, Context c) {
+	/**
+	 * NOT WORKING YET
+	 * 
+	 * Appends the passed {@code MarkerOptions mo} to the end of the
+	 * {@code stream}
+	 * 
+	 * @param mo
+	 * @param c
+	 */
+	public void append(MarkerOptions mo, Context c) {
 
 		FileOutputStream writer;
 		try {
-
-			writer = c.openFileOutput(FILE, Context.MODE_APPEND);
+			writer = c.openFileOutput(filename, Context.MODE_APPEND);
 			writeMarker(mo, writer);
 			writer.close();
 		} catch (FileNotFoundException e) {
@@ -180,26 +151,10 @@ public class DataParser {
 		}
 	}
 
-	public static void appendFound(MarkerOptions mo, Context c) {
-
-		FileOutputStream writer;
-		try {
-
-			writer = c.openFileOutput(FOUND, Context.MODE_APPEND);
-			writeMarkerFound(mo, writer);
-			writer.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private static void writeMarker(MarkerOptions mo, FileOutputStream stream) {
+	/** Writes to the passed {@code stream} the {@code MarkerOptions mo} */
+	private void writeMarker(MarkerOptions mo, FileOutputStream stream) {
 		String line = String.valueOf(mo.getPosition().latitude) + ","
-		        + mo.getPosition().longitude + "," + mo.getTitle() + "\n";
+				+ mo.getPosition().longitude + "," + mo.getTitle() + "\n";
 		try {
 			stream.write(line.getBytes());
 		} catch (IOException e) {
@@ -208,12 +163,9 @@ public class DataParser {
 		}
 	}
 
-	private static void writeMarkerFound(MarkerOptions mo,
-	        FileOutputStream found) {
-		String line = String.valueOf(mo.getPosition().latitude) + ","
-		        + mo.getPosition().longitude + "," + mo.getTitle() + "\n";
+	public void close() {
 		try {
-			found.write(line.getBytes());
+			this.reader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
