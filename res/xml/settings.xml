@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    
-    <ListPreference 
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="pref_pinColor"
         android:title="@string/pin_color"
-        android:key="ColorList"
-        android:summary="Change the color of the pins displayed on the map"
+        android:dialogTitle="@string/pin_color_dialog"
         android:entries="@array/ColorList"
         android:entryValues="@array/ColorListValues" >
     </ListPreference>
-
+    <EditTextPreference 
+        android:key="pref_profileName"
+        android:title="Edit Profile Name"
+        android:dialogTitle="Customize the profile name"/>
 </PreferenceScreen>

@@ -46,7 +46,7 @@ public class Map extends FragmentActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent mapToList = new Intent(
-						"android.intent.action.CACHE_LIST");
+				        "android.intent.action.CACHE_LIST");
 				Bundle extra = new Bundle();
 				extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 				mapToList.putExtras(extra);
@@ -58,6 +58,12 @@ public class Map extends FragmentActivity {
 		this.setUpMap();
 	}
 
+	/**
+	 * Used to retrieve {@code Bundle extras} if any, otherwise initializes
+	 * {@code caches} from persistent data.
+	 * 
+	 * Guarantees {@code caches } != null
+	 */
 	private void getExtras() {
 
 		this.extras = this.getIntent().getExtras();
@@ -76,6 +82,9 @@ public class Map extends FragmentActivity {
 
 	}
 
+	/**
+	 * Method where all action listeners are added
+	 */
 	private void setUpActionListeners() {
 		clickListener listener = new clickListener();
 		this.gMap.setOnMarkerClickListener(listener);
@@ -84,6 +93,15 @@ public class Map extends FragmentActivity {
 		this.gMap.setOnInfoWindowClickListener(listener);
 	}
 
+	/**
+	 * <pre>
+	 * Initialzes {@code this.gMap} 
+	 * Adds all markers to {@code gMap}
+	 * 
+	 * </pre>
+	 * 
+	 * @requires {@code caches} != null
+	 */
 	private void setUpMap() {
 		if (this.gMap == null) {
 			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
@@ -106,6 +124,12 @@ public class Map extends FragmentActivity {
 
 	}
 
+	/**
+	 * class to implement all Listeners
+	 * 
+	 * @author Nate
+	 * 
+	 */
 	private class clickListener implements OnMapClickListener,
 			OnMapLongClickListener, OnMarkerClickListener,
 			OnInfoWindowClickListener, OnMyLocationButtonClickListener {
@@ -149,10 +173,10 @@ public class Map extends FragmentActivity {
 								getApplicationContext(), "PersistentData.txt");
 						writer.overwriteAll(Map.this.caches);
 
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						// Todo
-						break;
+							break;
+						case DialogInterface.BUTTON_NEUTRAL:
+							// Todo
+							break;
 					}
 				}
 			}
@@ -160,10 +184,10 @@ public class Map extends FragmentActivity {
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.confirm_new_cache)
-					.setTitle(R.string.new_cache)
-					.setPositiveButton(R.string.cache_option_yes, listener)
+			        .setTitle(R.string.new_cache)
+			        .setPositiveButton(R.string.cache_option_yes, listener)
 
-					.setNegativeButton(R.string.cache_option_no, listener);
+			        .setNegativeButton(R.string.cache_option_no, listener);
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
@@ -187,43 +211,42 @@ public class Map extends FragmentActivity {
 
 			/** dialog click listener ONLY for the below alert dialog box */
 			class dialogClickListener implements
-					DialogInterface.OnClickListener {
+			        DialogInterface.OnClickListener {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						// TODO: goto cache view
+						case DialogInterface.BUTTON_POSITIVE:
+							// TODO: goto cache view
 
-						MarkerOptions mo = new MarkerOptions();
-						mo.title(marker.getTitle());
-						mo.snippet(marker.getSnippet());
+							MarkerOptions mo = new MarkerOptions();
+							mo.title(marker.getTitle());
+							mo.snippet(marker.getSnippet());
+							mo.position(marker.getPosition());
 
-						mo.position(marker.getPosition());
+							Intent cache = new Intent("android.intent.action.CACHE");
+							Bundle extra = new Bundle();
 
-						Intent cache = new Intent("android.intent.action.CACHE");
-						Bundle extra = new Bundle();
+							Map.this.caches.target = mo;
+							extra.putParcelable(Data.CACHE_DATA,
+							        Map.this.caches);
 
-						Map.this.caches.target = mo;
-						extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+							cache.putExtras(extra);
+							Map.this.startActivity(cache);
 
-						cache.putExtras(extra);
-						Map.this.startActivity(cache);
-						finish();
-
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						break;
+							break;
+						case DialogInterface.BUTTON_NEUTRAL:
+							break;
 					}
 				}
 			}
 			dialogClickListener listener = new dialogClickListener();
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.go_to_cache_message_ad)
-					.setTitle(R.string.view_cache_title_ad)
-					.setPositiveButton(R.string.cache_option_yes, listener)
-					.setNegativeButton(R.string.cache_option_no, listener);
+			        .setTitle(R.string.view_cache_title_ad)
+			        .setPositiveButton(R.string.cache_option_yes, listener)
+			        .setNegativeButton(R.string.cache_option_no, listener);
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
@@ -249,35 +272,36 @@ public class Map extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.menu_map_profile:
-			this.startActivity(new Intent(Map.this, Profile.class));
-			return true;
-		case R.id.menu_map_settings:
-			// this.startActivity(new Intent(Map.this, Settings.class));
-			this.startActivity(new Intent(Map.this, CacheList_Activity.class));
-			return true;
-		case R.id.menu_map_about:
-			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-			builder.setMessage(R.string.dialog_about_message).setTitle(
-					R.string.dialog_about_title);
-			builder.setPositiveButton(R.string.ok,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int id) {
-							// User clicked OK button
-						}
-					});
+			case R.id.menu_map_profile:
+				this.startActivity(new Intent(Map.this, Profile.class));
+				return true;
+			case R.id.menu_map_settings:
+				// this.startActivity(new Intent(Map.this, Settings.class));
+				this.startActivity(new Intent(Map.this,
+				        CacheList_Activity.class));
+				return true;
+			case R.id.menu_map_about:
+				AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+				builder.setMessage(R.string.dialog_about_message).setTitle(
+				        R.string.dialog_about_title);
+				builder.setPositiveButton(R.string.ok,
+				        new DialogInterface.OnClickListener() {
+					        @Override
+					        public void onClick(DialogInterface dialog, int id) {
+						        // User clicked OK button
+					        }
+				        });
 
-			AlertDialog dialog = builder.create();
-			dialog.show();
-			return true;
-		case R.id.menu_map_signout:
-			//
-			this.finish();
-			this.startActivity(new Intent(Map.this, Login.class));
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+				AlertDialog dialog = builder.create();
+				dialog.show();
+				return true;
+			case R.id.menu_map_signout:
+				//
+				this.finish();
+				this.startActivity(new Intent(Map.this, Login.class));
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
