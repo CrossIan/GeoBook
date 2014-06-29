@@ -20,14 +20,16 @@ public class DataParser {
 	 * Stream passed should be getResources().openRawResources(R.raw.*) where *
 	 * is the id of the file
 	 */
-	static String FILE = "PersistentData.txt";
+	static String FILENAME = "PersistentData.txt";
+
 	BufferedReader reader;
 
-	DataParser(Context c) {
+	DataParser(Context c, String file) {
+		this.FILENAME = file;
 		InputStream stream;
 
 		try {
-			stream = c.openFileInput(FILE);
+			stream = c.openFileInput(FILENAME);
 			BufferedReader readr = new BufferedReader(new InputStreamReader(
 					stream));
 
@@ -72,7 +74,7 @@ public class DataParser {
 	public Data read() {
 
 		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
-		while (ready()) {
+		while (this.ready()) {
 
 			String line;
 			try {
@@ -108,7 +110,7 @@ public class DataParser {
 
 		FileOutputStream writer;
 		try {
-			writer = c.openFileOutput(FILE, Context.MODE_PRIVATE);
+			writer = c.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			int size = data.size();
 
 			for (int i = 0; i < size; i++) {
@@ -130,7 +132,7 @@ public class DataParser {
 		FileOutputStream writer;
 		try {
 
-			writer = c.openFileOutput(FILE, Context.MODE_APPEND);
+			writer = c.openFileOutput(FILENAME, Context.MODE_APPEND);
 			writeMarker(mo, writer);
 			writer.close();
 		} catch (FileNotFoundException e) {
