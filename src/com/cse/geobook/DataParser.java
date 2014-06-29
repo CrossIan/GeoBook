@@ -21,7 +21,7 @@ public class DataParser {
 	 * is the id of the file
 	 */
 	String FILENAME;
-
+	Context context;
 	BufferedReader reader;
 
 	/**
@@ -35,6 +35,7 @@ public class DataParser {
 	 */
 	DataParser(Context c, String file) {
 		this.FILENAME = file;
+		this.context = c;
 		InputStream stream;
 
 		try {
@@ -108,6 +109,7 @@ public class DataParser {
 		}
 		MarkerOptions target = new MarkerOptions();
 
+		// default target
 		target.position(new LatLng(39.961138, -83.001465));
 		Data data = new Data(cache_array, target, 11);
 
@@ -120,13 +122,13 @@ public class DataParser {
 	 * 
 	 */
 
-	public void overwriteAll(Data write, Context c) {
+	public void overwriteAll(Data write) {
 
 		ArrayList<MarkerOptions> data = write.data;
 
 		FileOutputStream writer;
 		try {
-			writer = c.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+			writer = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			int size = data.size();
 
 			for (int i = 0; i < size; i++) {
@@ -174,6 +176,15 @@ public class DataParser {
 				+ mo.getPosition().longitude + "," + mo.getTitle() + "\n";
 		try {
 			stream.write(line.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void close() {
+		try {
+			this.reader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

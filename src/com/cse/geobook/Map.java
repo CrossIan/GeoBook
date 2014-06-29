@@ -38,6 +38,7 @@ public class Map extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.map);
+
 		this.getExtras();
 
 		this.listView = (Button) this.findViewById(R.id.mapToList);
@@ -59,13 +60,28 @@ public class Map extends FragmentActivity {
 		Log.d("file", this.fileList().toString());
 		DataParser writer = new DataParser(getApplicationContext(),
 				"PersistentData.txt");
-		writer.overwriteAll(this.caches, this.getApplicationContext());
+
+		writer.overwriteAll(this.caches);
+		writer.close();
 		Log.d("file", this.fileList().toString());
 	}
 
 	private void getExtras() {
+
 		this.extras = this.getIntent().getExtras();
-		this.caches = this.extras.getParcelable(Data.CACHE_DATA);
+
+		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
+			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
+		}
+
+		if (this.caches == null) {
+			DataParser reader = new DataParser(getApplicationContext(),
+					"PersistentData.txt");
+			caches = reader.read();
+
+			reader.close();
+		}
+
 	}
 
 	private void setUpActionListeners() {
@@ -87,20 +103,14 @@ public class Map extends FragmentActivity {
 		/*
 		 * set up markers
 		 */
-		if (this.caches != null) {
-			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					this.caches.target.getPosition(), this.caches.zoom));
-			// set markers
-			if (this.caches != null) {
 
-				int size = this.caches.data.size();
-				for (int i = 0; i < size; i++) {
-					this.gMap.addMarker(this.caches.data.get(i));
-				}
-			}
-		} else {
-			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					new LatLng(39.961138, -83.001465), 11));
+		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+				this.caches.target.getPosition(), this.caches.zoom));
+		// set markers
+		int size = this.caches.data.size();
+		for (int i = 0; i < size; i++) {
+			this.gMap.addMarker(this.caches.data.get(i));
+
 		}
 
 	}
@@ -146,8 +156,7 @@ public class Map extends FragmentActivity {
 						// Todo place in hash map
 						DataParser writer = new DataParser(
 								getApplicationContext(), "PersistentData.txt");
-						writer.overwriteAll(Map.this.caches,
-								Map.this.getApplicationContext());
+						writer.overwriteAll(Map.this.caches);
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
@@ -277,40 +286,6 @@ public class Map extends FragmentActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-
-	}
-
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-
-		DataParser reader = new DataParser(getApplicationContext(),
-				"PersistentData.txt");
-		caches = reader.read();
-
-		if (this.caches != null) {
-			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					this.caches.target.getPosition(), this.caches.zoom));
-			// set markers
-			if (this.caches != null) {
-
-				int size = this.caches.data.size();
-				for (int i = 0; i < size; i++) {
-					this.gMap.addMarker(this.caches.data.get(i));
-				}
-			}
-		} else {
-			this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					new LatLng(39.961138, -83.001465), 11));
-		}
-
 	}
 
 	@Override

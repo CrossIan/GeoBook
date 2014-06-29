@@ -96,10 +96,6 @@ public class Login extends Activity implements OnClickListener {
 						// 3.
 						Intent map = new Intent("android.intent.action.MAP");
 						Bundle extra = new Bundle();
-						DataParser reader = new DataParser(
-								getApplicationContext(), "PersistentData.txt");
-						Data data = reader.read();
-						extra.putParcelable(Data.CACHE_DATA, data);
 						map.putExtras(extra);
 						// Finish login activity and move to map view
 						Login.this.startActivity(map);
