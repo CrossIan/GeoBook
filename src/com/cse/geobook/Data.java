@@ -15,8 +15,6 @@ public class Data implements Parcelable {
 	int zoom;
 
 	public static String CACHE_DATA;
-	static String ALL_CACHES = "PersistentData.txt";
-	static String FOUND_CACHES = "FoundCacheData.txt";
 
 	public Data(ArrayList<MarkerOptions> ar, MarkerOptions target, int zoom) {
 		this.data = ar;

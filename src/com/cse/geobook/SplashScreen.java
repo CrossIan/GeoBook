@@ -1,5 +1,6 @@
 package com.cse.geobook;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,10 +38,11 @@ public class SplashScreen extends Activity {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} finally {
-					// TODO: change to .Login
-					// startActivity(new Intent("android.intent.action.MAP"));
-					startActivity(new Intent(SplashScreen.this, Login.class));
 					finish();
+					// TODO: change to .Login
+					//startActivity(new Intent("android.intent.action.MAP"));
+					startActivity(new Intent(SplashScreen.this,
+							Login.class));
 				}
 			}
 		};

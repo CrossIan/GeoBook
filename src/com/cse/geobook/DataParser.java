@@ -20,23 +20,16 @@ public class DataParser {
 	 * Stream passed should be getResources().openRawResources(R.raw.*) where *
 	 * is the id of the file
 	 */
+	static String FILENAME = "PersistentData.txt";
 
 	BufferedReader reader;
-	String filename;
 
-	/**
-	 * constructor, creates a new object of type DataParser based on the file,
-	 * {@code this} is able to read and write to the {@code file}
-	 * 
-	 * @param c
-	 * @param file
-	 */
 	DataParser(Context c, String file) {
+		this.FILENAME = file;
 		InputStream stream;
-		this.filename = file;
 
 		try {
-			stream = c.openFileInput(file);
+			stream = c.openFileInput(FILENAME);
 			BufferedReader readr = new BufferedReader(new InputStreamReader(
 					stream));
 
@@ -58,7 +51,15 @@ public class DataParser {
 		}
 	}
 
-	/** checks if the stream can be read */
+	// Cache getCache() {
+	// Cache cache = new Cache();
+	// return cache;
+	// }
+
+	void writeCache() {
+		// TODO: save cache
+	}
+
 	boolean ready() {
 		boolean ready = false;
 		try {
@@ -102,14 +103,14 @@ public class DataParser {
 		return data;
 	}
 
-	/** Overwrites the entire contents of {@code this.filname} */
-	public void overwriteAll(Data write, Context c) {
+	/** used when you delete a place */
+	public static void overwriteAll(Data write, Context c) {
 
 		ArrayList<MarkerOptions> data = write.data;
 
 		FileOutputStream writer;
 		try {
-			writer = c.openFileOutput(filename, Context.MODE_PRIVATE);
+			writer = c.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			int size = data.size();
 
 			for (int i = 0; i < size; i++) {
@@ -126,20 +127,12 @@ public class DataParser {
 		}
 	}
 
-	/**
-	 * NOT WORKING YET
-	 * 
-	 * Appends the passed {@code MarkerOptions mo} to the end of the
-	 * {@code stream}
-	 * 
-	 * @param mo
-	 * @param c
-	 */
-	public void append(MarkerOptions mo, Context c) {
+	public static void append(MarkerOptions mo, Context c) {
 
 		FileOutputStream writer;
 		try {
-			writer = c.openFileOutput(filename, Context.MODE_APPEND);
+
+			writer = c.openFileOutput(FILENAME, Context.MODE_APPEND);
 			writeMarker(mo, writer);
 			writer.close();
 		} catch (FileNotFoundException e) {
@@ -151,21 +144,11 @@ public class DataParser {
 		}
 	}
 
-	/** Writes to the passed {@code stream} the {@code MarkerOptions mo} */
-	private void writeMarker(MarkerOptions mo, FileOutputStream stream) {
+	private static void writeMarker(MarkerOptions mo, FileOutputStream stream) {
 		String line = String.valueOf(mo.getPosition().latitude) + ","
 				+ mo.getPosition().longitude + "," + mo.getTitle() + "\n";
 		try {
 			stream.write(line.getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void close() {
-		try {
-			this.reader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
