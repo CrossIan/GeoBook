@@ -123,17 +123,23 @@ public class DataParser {
 				line = this.reader.readLine();
 				String[] contents = line.split(",");
 
-				Double lat = Double.parseDouble(contents[0]);
-				Double lng = Double.parseDouble(contents[1]);
-				String title = contents[2];
-				String description = "";
-				for (int i = 3; i < contents.length; i++) {
-					description += contents[3];
+				// if line matches required format
+				String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
+				if (contents[0].matches(matchDouble)
+						&& contents[1].matches(matchDouble)) {
+
+					Double lat = Double.parseDouble(contents[0]);
+					Double lng = Double.parseDouble(contents[1]);
+					String title = contents[2];
+					String description = "";
+					for (int i = 3; i < contents.length; i++) {
+						description += contents[3];
+					}
+					MarkerOptions marker = new MarkerOptions()
+							.position(new LatLng(lat, lng)).title(title)
+							.snippet(description);
+					cache_array.add(marker);
 				}
-				MarkerOptions marker = new MarkerOptions()
-						.position(new LatLng(lat, lng)).title(title)
-						.snippet(description);
-				cache_array.add(marker);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
