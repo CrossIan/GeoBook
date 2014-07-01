@@ -17,6 +17,7 @@
     <string name="title_activity_map">Map Viewer</string>
     <string name="menu_map_profile">Profile</string>
     <string name="menu_map_settings">Settings</string>
+    <string name="menu_map_cache_list">Cache List</string>
     <string name="menu_map_about">About GeoBook</string>
     <string name="menu_map_signout">Sign out</string>
     <string name="dialog_about_title">About GeoBook</string>
