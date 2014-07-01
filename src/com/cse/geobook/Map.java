@@ -294,15 +294,16 @@ public class Map extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
-		switch (item.getItemId()) {
-		case R.id.menu_map_profile:
+		if(item.getItemId() == R.id.menu_map_profile){
 			this.startActivity(new Intent(Map.this, Profile.class));
 			return true;
-		case R.id.menu_map_settings:
+		}
+		else if(item.getItemId() == R.id.menu_map_settings){
 			this.startActivity(new Intent(Map.this, Settings.class));
 			//this.startActivity(new Intent(Map.this, CacheList_Activity.class));
 			return true;
-		case R.id.menu_map_cache_list:
+		}
+		else if(item.getItemId() == R.id.menu_map_cache_list){
 			Intent mapToList = new Intent("android.intent.action.CACHE_LIST");
 			Bundle extra = new Bundle();
 			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
@@ -310,7 +311,8 @@ public class Map extends FragmentActivity {
 
 			Map.this.startActivity(mapToList);
 			return true;
-		case R.id.menu_map_about:
+		}
+		else if(item.getItemId() == R.id.menu_map_about){
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.dialog_about_message).setTitle(
 					R.string.dialog_about_title);
@@ -325,15 +327,19 @@ public class Map extends FragmentActivity {
 			AlertDialog dialog = builder.create();
 			dialog.show();
 			return true;
-		case R.id.menu_map_signout:
+		}
+		else if(item.getItemId() == R.id.menu_map_signout){
 			//
 			this.finish();
 			this.startActivity(new Intent(Map.this, Login.class));
 			return true;
-		default:
-			return super.onOptionsItemSelected(item);
 		}
+		else
+			return false;
 	}
+	
+	
+	
 
 	@Override
 	protected void onPause() {
