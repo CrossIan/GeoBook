@@ -59,9 +59,9 @@ public class Cache extends Activity {
 				Bundle extras_new = new Bundle();
 				extras_new.putParcelable(Data.CACHE_DATA, data);
 
-				Intent map = new Intent("android.intent.action.MAP");
-				map.putExtras(extras_new);
-				startActivity(map);
+//				Intent map = new Intent("android.intent.action.MAP");
+//				map.putExtras(extras_new);
+//				startActivity(map);
 				finish();
 
 			}
