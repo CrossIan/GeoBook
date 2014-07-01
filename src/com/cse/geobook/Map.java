@@ -40,21 +40,21 @@ public class Map extends FragmentActivity {
 
 		this.getExtras();
 
-		this.listView = (Button) this.findViewById(R.id.mapToList);
-		this.listView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent mapToList = new Intent(
-						"android.intent.action.CACHE_LIST");
-				Bundle extra = new Bundle();
-				extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-				mapToList.putExtras(extra);
-
-				Map.this.startActivity(mapToList);
-				Map.this.finish();
-			}
-		});
+//		this.listView = (Button) this.findViewById(R.id.mapToList);
+//		this.listView.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				Intent mapToList = new Intent(
+//						"android.intent.action.CACHE_LIST");
+//				Bundle extra = new Bundle();
+//				extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+//				mapToList.putExtras(extra);
+//
+//				Map.this.startActivity(mapToList);
+//				Map.this.finish();
+//			}
+//		});
 		this.setUpMap();
 	}
 
@@ -277,6 +277,14 @@ public class Map extends FragmentActivity {
 		case R.id.menu_map_settings:
 			this.startActivity(new Intent(Map.this, Settings.class));
 			//this.startActivity(new Intent(Map.this, CacheList_Activity.class));
+			return true;
+		case R.id.menu_map_cache_list:
+			Intent mapToList = new Intent("android.intent.action.CACHE_LIST");
+			Bundle extra = new Bundle();
+			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			mapToList.putExtras(extra);
+
+			Map.this.startActivity(mapToList);
 			return true;
 		case R.id.menu_map_about:
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
