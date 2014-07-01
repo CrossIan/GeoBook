@@ -39,24 +39,9 @@ public class Map extends FragmentActivity {
 		this.setContentView(R.layout.map);
 
 		this.getExtras();
-
-//		this.listView = (Button) this.findViewById(R.id.mapToList);
-//		this.listView.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				Intent mapToList = new Intent(
-//						"android.intent.action.CACHE_LIST");
-//				Bundle extra = new Bundle();
-//				extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-//				mapToList.putExtras(extra);
-//
-//				Map.this.startActivity(mapToList);
-//				Map.this.finish();
-//			}
-//		});
 		this.setUpMap();
 	}
+	
 
 	/**
 	 * Used to retrieve {@code Bundle extras} if any, otherwise initializes
@@ -193,6 +178,9 @@ public class Map extends FragmentActivity {
 			dialog.show();
 
 		}
+		
+		
+		
 
 		@Override
 		public boolean onMarkerClick(Marker marker) {
@@ -202,57 +190,90 @@ public class Map extends FragmentActivity {
 			} else {
 				marker.showInfoWindow();
 			}
-
 			return false;
 		}
 
+		
+		
+		
 		@Override
 		public void onInfoWindowClick(final Marker marker) {
+			MarkerOptions mo = new MarkerOptions();
+			mo.title(marker.getTitle());
+			mo.snippet(marker.getSnippet());
+			mo.position(marker.getPosition());
 
-			/** dialog click listener ONLY for the below alert dialog box */
-			class dialogClickListener implements
-					DialogInterface.OnClickListener {
+			Intent cache = new Intent("android.intent.action.CACHE");
+			Bundle extra = new Bundle();
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						// TODO: goto cache view
+			Map.this.caches.target = mo;
+			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 
-						MarkerOptions mo = new MarkerOptions();
-						mo.title(marker.getTitle());
-						mo.snippet(marker.getSnippet());
-						mo.position(marker.getPosition());
+			cache.putExtras(extra);
+			Map.this.startActivity(cache);
+			
 
-						Intent cache = new Intent("android.intent.action.CACHE");
-						Bundle extra = new Bundle();
-
-						Map.this.caches.target = mo;
-						extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-
-						cache.putExtras(extra);
-						Map.this.startActivity(cache);
-
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						break;
-					}
-				}
-			}
-			dialogClickListener listener = new dialogClickListener();
-			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-			builder.setMessage(R.string.go_to_cache_message_ad)
-					.setTitle(R.string.view_cache_title_ad)
-					.setPositiveButton(R.string.cache_option_yes, listener)
-					.setNegativeButton(R.string.cache_option_no, listener);
-
-			AlertDialog dialog = builder.create();
-			dialog.show();
+//			/** dialog click listener ONLY for the below alert dialog box */
+//			class dialogClickListener implements
+//					DialogInterface.OnClickListener {
+//
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					MarkerOptions mo = new MarkerOptions();
+//					mo.title(marker.getTitle());
+//					mo.snippet(marker.getSnippet());
+//					mo.position(marker.getPosition());
+//
+//					Intent cache = new Intent("android.intent.action.CACHE");
+//					Bundle extra = new Bundle();
+//
+//					Map.this.caches.target = mo;
+//					extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+//
+//					cache.putExtras(extra);
+//					Map.this.startActivity(cache);
+//					
+//					// TODO Auto-generated method stub
+//					switch (which) {
+//					case DialogInterface.BUTTON_POSITIVE:
+//						// TODO: goto cache view
+//
+//						MarkerOptions mo = new MarkerOptions();
+//						mo.title(marker.getTitle());
+//						mo.snippet(marker.getSnippet());
+//						mo.position(marker.getPosition());
+//
+//						Intent cache = new Intent("android.intent.action.CACHE");
+//						Bundle extra = new Bundle();
+//
+//						Map.this.caches.target = mo;
+//						extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+//
+//						cache.putExtras(extra);
+//						Map.this.startActivity(cache);
+//
+//						break;
+//					case DialogInterface.BUTTON_NEUTRAL:
+//						break;
+//					}
+//				}
+//			}
+//			dialogClickListener listener = new dialogClickListener();
+//			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
+//			builder.setMessage(R.string.go_to_cache_message_ad)
+//					.setTitle(R.string.view_cache_title_ad)
+//					.setPositiveButton(R.string.cache_option_yes, listener)
+//					.setNegativeButton(R.string.cache_option_no, listener);
+//
+//			AlertDialog dialog = builder.create();
+//			dialog.show();
 
 		}
 	}
 
+	
+	
+	
 	/*
 	 * Populates the map view menu
 	 */
@@ -264,8 +285,11 @@ public class Map extends FragmentActivity {
 		return true;
 	}
 
+	
+	
+	
 	/*
-	 * Responds to touch events
+	 * Allows menu to respond to touch events
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
