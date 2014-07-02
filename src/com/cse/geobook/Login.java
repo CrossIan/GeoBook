@@ -20,6 +20,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.Person.Image;
 
 
 
@@ -91,12 +93,17 @@ public class Login extends Activity implements OnClickListener,
 		super.onStart();
 	}
 	
+	
+	@Override
 	protected void onStop() {
 	    super.onStop();
-
+	    // Log out of Google+ if logged on
 	    if (mGoogleApiClient.isConnected()) {
-	      mGoogleApiClient.disconnect();
-	    }
+	        Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+	        mGoogleApiClient.disconnect();
+	        mGoogleApiClient.connect();
+	      }
+
 	  }
 
 	
@@ -176,8 +183,16 @@ public class Login extends Activity implements OnClickListener,
 		// TODO
 		// Get user's name and profile picture. Link this to the in-app
 		//	hash (generated later
+		if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+			Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+			String personName = currentPerson.getDisplayName();
+			Image personPhoto = currentPerson.getImage();
+			String personGooglePlusProfile = currentPerson.getUrl();
+			
+			Toast.makeText(Login.this, personName, Toast.LENGTH_LONG).show();
+		}
 		
-		// Start the map
+		// Start the map 
 		Intent map = new Intent("android.intent.action.MAP");
 		Bundle extra = new Bundle();
 		map.putExtras(extra);
