@@ -62,11 +62,29 @@
         </RadioGroup>
 		 -->
 
+		<Button
+            android:id="@+id/facebookButton"
+            android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+		    android:layout_below="@+id/google_sign_in_button" 
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Facebook"
+            android:textColor="#1919BA" />
+		<Button
+            android:id="@+id/twitterButton"
+            android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+		    android:layout_below="@+id/facebookButton" 
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Twitter"
+            android:textColor="#1919BA" />
         <Button
             android:id="@+id/bypassButton"
             android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-		    android:layout_below="@+id/google_sign_in_button" 
+		    android:layout_below="@+id/twitterButton" 
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="Bypass login (testing)"
