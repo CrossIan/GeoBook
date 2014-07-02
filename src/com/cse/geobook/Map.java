@@ -334,8 +334,12 @@ public class Map extends FragmentActivity {
 
 		DataParser reader = new DataParser(getApplicationContext(),
 				"PersistentData.txt");
+		this.getExtras();
+		MarkerOptions mo = caches.target;
+		int zoom = caches.zoom;
 		caches = reader.read();
-
+		caches.target = mo;
+		caches.zoom = zoom;
 		reader.close();
 		this.removeAllMarkers();
 		this.setUpMap();

@@ -92,6 +92,43 @@ public class DataParser {
 	}
 
 	/**
+	 * Reads a single line and parses the line into a MarkerOptions
+	 * 
+	 * @return
+	 */
+	private MarkerOptions readMarker() {
+		MarkerOptions marker = null;
+
+		String line;
+		try {
+			line = this.reader.readLine();
+			String[] contents = line.split(",");
+
+			// if line matches required format
+			String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
+			if (contents[0].matches(matchDouble)
+					&& contents[1].matches(matchDouble)) {
+
+				Double lat = Double.parseDouble(contents[0]);
+				Double lng = Double.parseDouble(contents[1]);
+				String title = contents[2];
+				String description = "";
+				for (int i = 3; i < contents.length; i++) {
+					description += contents[3];
+				}
+				marker = new MarkerOptions().position(new LatLng(lat, lng))
+						.title(title).snippet(description);
+
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return marker;
+	}
+
+	/**
 	 * determines whether the stream is ready, and can be read from.
 	 * 
 	 * @return
@@ -116,40 +153,16 @@ public class DataParser {
 	public Data read() {
 
 		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
-		while (this.ready()) {
-
-			String line;
-			try {
-				line = this.reader.readLine();
-				String[] contents = line.split(",");
-
-				// if line matches required format
-				String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
-				if (contents[0].matches(matchDouble)
-						&& contents[1].matches(matchDouble)) {
-
-					Double lat = Double.parseDouble(contents[0]);
-					Double lng = Double.parseDouble(contents[1]);
-					String title = contents[2];
-					String description = "";
-					for (int i = 3; i < contents.length; i++) {
-						description += contents[3];
-					}
-					MarkerOptions marker = new MarkerOptions()
-							.position(new LatLng(lat, lng)).title(title)
-							.snippet(description);
-					cache_array.add(marker);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
 		MarkerOptions target = new MarkerOptions();
+		/*
+		 * if (this.ready()) { target = this.readMarker(); }
+		 */
+		while (this.ready()) {
+			cache_array.add(this.readMarker());
+		}
 
 		// default target
-		target.position(new LatLng(39.961138, -83.001465));
+
 		Data data = new Data(cache_array, target, 11);
 
 		return data;
@@ -170,8 +183,11 @@ public class DataParser {
 			writer = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			int size = data.size();
 
+			MarkerOptions temp = write.target;
+			writeMarker(temp, writer);
+
 			for (int i = 0; i < size; i++) {
-				MarkerOptions temp = data.get(i);
+				temp = data.get(i);
 				writeMarker(temp, writer);
 			}
 			writer.close();
