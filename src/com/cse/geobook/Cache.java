@@ -1,8 +1,8 @@
 package com.cse.geobook;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,6 +18,8 @@ public class Cache extends Activity {
 	EditText description;
 	Button save;
 	Data data;
+
+	final Double EPISILON = .00001;
 
 	// PHOTO
 
@@ -41,27 +43,32 @@ public class Cache extends Activity {
 				int i = 0;
 				while (searching && i < size) {
 					MarkerOptions temp = data.data.get(i);
-					if (temp.getPosition().latitude == data.target
-							.getPosition().latitude
-							&& temp.getPosition().longitude == data.target
-									.getPosition().longitude) {
+					if (Math.abs(temp.getPosition().latitude
+							- data.target.getPosition().latitude) < EPISILON
+							&& Math.abs(temp.getPosition().longitude
+									- data.target.getPosition().longitude) < EPISILON) {
 						temp.title(cacheName.getText().toString());
 						temp.snippet(description.getText().toString());
 						searching = false;
 					}
 					i++;
 				}
+				if (!searching) {
+					Log.d("data", "marker found");
+				} else {
+					Log.d("data", "marker not found");
+				}
 				DataParser writer = new DataParser(getApplicationContext(),
 						"PersistentData.txt");
 				writer.overwriteAll(data);
 				writer.close();
-
-				Bundle extras_new = new Bundle();
-				extras_new.putParcelable(Data.CACHE_DATA, data);
-
-//				Intent map = new Intent("android.intent.action.MAP");
-//				map.putExtras(extras_new);
-//				startActivity(map);
+				/*
+				 * Bundle extras_new = new Bundle();
+				 * extras_new.putParcelable(Data.CACHE_DATA, data);
+				 * 
+				 * Intent map = new Intent("android.intent.action.MAP");
+				 * map.putExtras(extras_new); startActivity(map);
+				 */
 				finish();
 
 			}
