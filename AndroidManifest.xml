@@ -6,7 +6,7 @@
 
     <!-- Start [pulled from] developer.google.com -->
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
     <uses-feature

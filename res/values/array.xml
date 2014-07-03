@@ -2,18 +2,43 @@
 <resources>
     
     <string-array name="ColorList">
-    <item>Color 1</item>
-    <item>Color 2</item>
-    <item>Color 3</item>
-    <item>Color 4</item>
-    
+    <item>Red (Default))</item>
+    <item>Azure</item>
+    <item>Blue</item>
+    <item>Cyan</item>
+    <item>Green</item>
+    <item>Magenta</item>
+    <item>Orange</item>
+    <item>Rose</item>
+    <item>Violet</item>
+    <item>Yellow</item>
     </string-array>
+    
     <string-array name="ColorListValues">
     <item>1</item>
-     <item>2</item>
-      <item>3</item>
-       <item>4</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+    <item>10</item>
     </string-array>  
     
+    <string-array name="RadiusList">
+    <item>5 Miles</item>
+    <item>10 Miles</item>
+    <item>50 Miles</item>
+    <item>100 Miles</item>
+    </string-array>
+    
+    <string-array name="RadiusListValues">
+    <item>5</item>
+     <item>10</item>
+      <item>50</item>
+       <item>100</item>
+    </string-array>
     
 </resources>

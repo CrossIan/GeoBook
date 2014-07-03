@@ -59,10 +59,6 @@
     <!-- STRINGS USED IN Settings -->
     <string name="pin_color">Pin Color</string>
     <string name="pin_color_dialog">Customize Pin Color</string>
-    <string name="reset_counter">Reset Counter</string>
-    <string name="reset_counter_dialog">Reset your counter for the number of caches collected</string>
-    <string name="reset_progress">Reset Progress</string>
-    <string name="reset_progress_dialog">Reset your current geocache progress</string>
 
     <!-- STRINGS USED IN ListView -->
     <string name="title_activity_listView">List View</string>
