@@ -47,7 +47,7 @@ public class CacheList extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		int zoom = 16;
 
-		Data data = new Data(caches.allCaches, caches.allCaches.get(position), zoom, asdf);
+		Data data = new Data(caches.foundCaches, caches.allCaches, caches.allCaches.get(position), zoom);
 
 		Bundle extras_new = new Bundle();
 		extras_new.putParcelable(Data.CACHE_DATA, data);

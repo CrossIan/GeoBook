@@ -236,7 +236,7 @@ public class Map extends FragmentActivity  {
 						// Todo place in hash map
 						DataParser writer = new DataParser(
 								getApplicationContext(), "PersistentData.txt");
-						writer.overwriteAll(Map.this.caches);
+						writer.overwriteAll(Map.this.caches.allCaches);
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
