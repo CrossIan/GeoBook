@@ -154,9 +154,9 @@ public class DataParser {
 
 		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
 		MarkerOptions target = new MarkerOptions();
-		/*
-		 * if (this.ready()) { target = this.readMarker(); }
-		 */
+		
+		if (this.ready()) { target = this.readMarker(); }
+		
 		while (this.ready()) {
 			cache_array.add(this.readMarker());
 		}

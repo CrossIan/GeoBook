@@ -3,8 +3,10 @@ package com.cse.geobook;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +22,8 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -87,6 +91,48 @@ public class Map extends FragmentActivity {
 	 * @requires {@code caches} != null
 	 */
 	private void setUpMap() {
+		
+		//Not sure if the parameter is correct for "Settings" that is supposed to be the preference file. If error occurs look into this.
+		SharedPreferences sharedPref = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+		//Default value in case sharedPref returns nothing for colorValue
+		String defaultValue = "1";
+		String colorValue = sharedPref.getString("pref_pinColor", defaultValue);
+		BitmapDescriptor colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+		
+		switch (colorValue){
+			case "1":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+				break;
+			case "2":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+				break;
+			case "3":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+				break;
+			case "4":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+				break;
+			case "5":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+				break;
+			case "6":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
+				break;
+			case "7":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+				break;
+			case "8":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+				break;
+			case "9":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
+				break;
+			case "10":
+				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+				break;
+		}
+
+		
 		if (this.gMap == null) {
 			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
@@ -104,7 +150,7 @@ public class Map extends FragmentActivity {
 		// set markers
 		int size = this.caches.data.size();
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.data.get(i)));
+			markers.add(this.gMap.addMarker(this.caches.data.get(i).icon(colorMarker)));
 		}
 
 	}

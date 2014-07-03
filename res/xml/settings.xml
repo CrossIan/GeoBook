@@ -5,7 +5,8 @@
         android:title="@string/pin_color"
         android:dialogTitle="@string/pin_color_dialog"
         android:entries="@array/ColorList"
-        android:entryValues="@array/ColorListValues" >
+        android:entryValues="@array/ColorListValues"
+        android:defaultValue="1" >
     </ListPreference>
     <ListPreference
         android:key="pref_radiusList"
