@@ -54,7 +54,9 @@ public class Cache extends Activity {
 						temp.title(cacheName.getText().toString());
 						temp.snippet(description.getText().toString());
 						searching = false;
-						data.allCaches.remove(i);
+						// data.foundCaches.add(temp);
+						// data.allCaches.remove(i);
+
 					}
 					i++;
 				}
@@ -63,12 +65,16 @@ public class Cache extends Activity {
 				} else {
 					Log.d("data", "marker not found");
 				}
-				DataParser writer = new DataParser(getApplicationContext(),
-						Cache.FOUND_CACHES);
-				writer.overwriteAll(data.foundCaches);
-				writer.overwriteAll(data.allCaches);
+				/*
+				 * DataParser found = new DataParser(getApplicationContext(),
+				 * Cache.FOUND_CACHES); found.overwriteAll(data.foundCaches);
+				 * found.close();
+				 */
+				DataParser all = new DataParser(getApplicationContext(),
+						Cache.ALL_CACHES);
+				all.overwriteAll(data.allCaches);
+				all.close();
 
-				writer.close();
 				/*
 				 * Bundle extras_new = new Bundle();
 				 * extras_new.putParcelable(Data.CACHE_DATA, data);

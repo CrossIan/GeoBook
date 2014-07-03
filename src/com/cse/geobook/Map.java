@@ -91,49 +91,51 @@ public class Map extends FragmentActivity {
 	 */
 	private void setUpMap() {
 
-		int colorValue = Settings.getColorMarker(this.getApplicationContext());
+		String colorValue = Settings.getColorMarker(this
+				.getApplicationContext());
 		// Default Value
 		BitmapDescriptor colorMarker = BitmapDescriptorFactory
 				.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 
 		switch (colorValue) {
-		case 1:
+		case "1":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 			break;
-		case 2:
+		case "2":
+
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 			break;
-		case 3:
+		case "3":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
 			break;
-		case 4:
+		case "4":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
 			break;
-		case 5:
+		case "5":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
 			break;
-		case 6:
+		case "6":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
 			break;
-		case 7:
+		case "7":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
 			break;
-		case 8:
+		case "8":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
 			break;
-		case 9:
+		case "9":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
 			break;
-		case 10:
+		case "10":
 			colorMarker = BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 			break;
@@ -154,19 +156,20 @@ public class Map extends FragmentActivity {
 
 		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
 				this.caches.target.getPosition(), this.caches.zoom));
+
 		// set all caches
 		int size = this.caches.allCaches.size();
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i).icon(
-					colorMarker)));
+			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i)));
 		}
 
 		// set found caches
 		size = this.caches.foundCaches.size();
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i).icon(
-					colorMarker)));
+			markers.add(this.gMap.addMarker(this.caches.foundCaches.get(i)
+					.icon(colorMarker)));
 		}
+
 	}
 
 	private void removeAllMarkers() {
@@ -397,12 +400,14 @@ public class Map extends FragmentActivity {
 			ac = all.read();
 			all.close();
 		}
+
 		if (foundCachesfile.exists()) {
 			DataParser found = new DataParser(getApplicationContext(),
 					Cache.FOUND_CACHES);
 			fc = found.read();
 			found.close();
 		}
+
 		if (targetCacheFile.exists()) {
 			DataParser target = new DataParser(getApplicationContext(),
 					Cache.TARGET_CACHE);
