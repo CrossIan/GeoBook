@@ -171,8 +171,6 @@ public class DataParser {
 
 	public void overwriteAll(ArrayList<MarkerOptions> data) {
 
-	
-
 		FileOutputStream writer;
 		try {
 			writer = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -216,7 +214,8 @@ public class DataParser {
 
 	public void close() {
 		try {
-			this.reader.close();
+			if (this.reader != null)
+				this.reader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

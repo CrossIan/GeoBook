@@ -1,71 +1,56 @@
 package com.cse.geobook;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusShare;
-
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.PlusShare;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.Person.Image;
 
-
-
 public class Login extends Activity implements OnClickListener,
-											   ConnectionCallbacks,
-										   	   OnConnectionFailedListener {
-	
-	
+		ConnectionCallbacks, OnConnectionFailedListener {
+
 	// -------------------------------------------------------*
 	// Google+ resources
 	// -------------------------------------------------------*
-	private GoogleApiClient mGoogleApiClient;	// Client to interact with Google API
-	private static final int RC_SIGN_IN = 0;	// Request code used to invoke sign-in user interactions
-	private boolean mSignInClicked;				// Track if sign in button has been clicked to resolve 
-	private ConnectionResult mConnectionResult;	// Store connection result from onConnectionFailed
-	private boolean mIntentInProgress = false;	// Prevents simultaneous sign-in attempts
+	private GoogleApiClient mGoogleApiClient; // Client to interact with Google
+												// API
+	private static final int RC_SIGN_IN = 0; // Request code used to invoke
+												// sign-in user interactions
+	private boolean mSignInClicked; // Track if sign in button has been clicked
+									// to resolve
+	private ConnectionResult mConnectionResult; // Store connection result from
+												// onConnectionFailed
+	private boolean mIntentInProgress = false; // Prevents simultaneous sign-in
+												// attempts
 
-
-	
 	// -------------------------------------------------------*
 	// Facebook login resources
 	// -------------------------------------------------------*
-	
 
-	
 	// -------------------------------------------------------*
 	// Twitter login resources
 	// -------------------------------------------------------*
-	
 
-	
-	
 	// -------------------------------------------------------*
 	// Generic resources
 	// -------------------------------------------------------*
-	private Button facebookButton,
-				   twitterButton,
-				   bypassButton,
-				   googleShareButton;
+	private Button facebookButton, twitterButton, bypassButton,
+			googleShareButton;
 
-	
-	
 	// Called when the activity is first created.
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,49 +67,45 @@ public class Login extends Activity implements OnClickListener,
 		bypassButton.setOnClickListener(this);
 		googleShareButton = (Button) findViewById(R.id.google_share_button);
 		googleShareButton.setOnClickListener(this);
-		
 		// Initialize Google API client
-		mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .addConnectionCallbacks(this)
-        .addOnConnectionFailedListener(this)
-        .addApi(Plus.API, null)
-        .addScope(Plus.SCOPE_PLUS_LOGIN)
-        .build();
+
+		// checks to see if this is being run on an emulator or device
+		if ("google_sdk".equals(Build.PRODUCT)) {
+			mGoogleApiClient = new GoogleApiClient.Builder(this)
+					.addConnectionCallbacks(this)
+					.addOnConnectionFailedListener(this).addApi(Plus.API, null)
+					.addScope(Plus.SCOPE_PLUS_LOGIN).build();
+		}
 	}
-	
-	
-	protected void onStart(){
+
+	protected void onStart() {
 		super.onStart();
 	}
-	
-	
+
 	@Override
 	protected void onStop() {
-	    super.onStop();
-	    // Log out of Google+ if logged on
-	    if (mGoogleApiClient.isConnected()) {
-	        Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-	        mGoogleApiClient.disconnect();
-	        mGoogleApiClient.connect();
-	      }
+		super.onStop();
+		// Log out of Google+ if logged on
+		if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+			mGoogleApiClient.disconnect();
+			mGoogleApiClient.connect();
+		}
 
-	  }
+	}
 
-	
-
-	
 	// Define click behavior
 	@Override
 	public void onClick(View v) {
 		//
 		// Try to sign in with Google+
-		if(v.getId() == R.id.google_sign_in_button){
+		if (v.getId() == R.id.google_sign_in_button) {
 			Toast.makeText(Login.this, "Attempting to login with Google+",
 					Toast.LENGTH_SHORT).show();
 			// Try to connect...
 			mGoogleApiClient.connect();
-			
-			// Start the map 
+
+			// Start the map
 			Intent map = new Intent("android.intent.action.MAP");
 			Bundle extra = new Bundle();
 			map.putExtras(extra);
@@ -135,19 +116,21 @@ public class Login extends Activity implements OnClickListener,
 		}
 		// Try to sign in with Facebook
 		else if (v == facebookButton) {
-			Toast.makeText(Login.this, "Attempting to login with Facebook (NON-OP)",
+			Toast.makeText(Login.this,
+					"Attempting to login with Facebook (NON-OP)",
 					Toast.LENGTH_SHORT).show();
 		}
 		// Try to sign in with Twitter
 		else if (v == twitterButton) {
-			Toast.makeText(Login.this, "Attempting to login with Twitter (NON-OP)",
+			Toast.makeText(Login.this,
+					"Attempting to login with Twitter (NON-OP)",
 					Toast.LENGTH_SHORT).show();
 		}
 		//
 		// Bypass login (dev only)
 		else if (v == bypassButton) {
-			Toast.makeText(Login.this, "Bypassing login...",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(Login.this, "Bypassing login...", Toast.LENGTH_SHORT)
+					.show();
 			Intent map = new Intent("android.intent.action.MAP");
 			Bundle extra = new Bundle();
 			map.putExtras(extra);
@@ -156,33 +139,29 @@ public class Login extends Activity implements OnClickListener,
 			Login.this.finish();
 			finish();
 		}
-		
-		else if(v == googleShareButton){
+
+		else if (v == googleShareButton) {
 			PlusShare.Builder builder = new PlusShare.Builder(this);
 
-		      // Set call-to-action metadata.
-		      builder.addCallToAction("CREATE_ITEM",	// Call-to-action button label
-							          Uri.parse("http://plus.google.com/pages/create"),	// Desktop use
-							          "/pages/create");	// Mobile use (512 character limit)
+			// Set call-to-action metadata.
+			builder.addCallToAction("CREATE_ITEM", // Call-to-action button
+													// label
+					Uri.parse("http://plus.google.com/pages/create"), // Desktop
+																		// use
+					"/pages/create"); // Mobile use (512 character limit)
 
-		      // Set the content url (for desktop use).
-		      builder.setContentUrl(Uri.parse("https://plus.google.com/pages/"));
+			// Set the content url (for desktop use).
+			builder.setContentUrl(Uri.parse("https://plus.google.com/pages/"));
 
-		      // Set the target deep-link ID (for mobile use).
-		      builder.setContentDeepLinkId("/pages/",
-		              null, null, null);
+			// Set the target deep-link ID (for mobile use).
+			builder.setContentDeepLinkId("/pages/", null, null, null);
 
-		      // Set the share text.
-		      builder.setText("Sample post using GeoBook!");
+			// Set the share text.
+			builder.setText("Sample post using GeoBook!");
 
-		      startActivityForResult(builder.getIntent(), 0);
+			startActivityForResult(builder.getIntent(), 0);
 		}
 	}
-
-
-
-
-
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
@@ -190,7 +169,7 @@ public class Login extends Activity implements OnClickListener,
 			try {
 				mIntentInProgress = true;
 				result.startResolutionForResult(this, // your activity
-                        RC_SIGN_IN);
+						RC_SIGN_IN);
 			} catch (SendIntentException e) {
 				// The intent was canceled before it was sent. Return to the
 				// default
@@ -202,43 +181,32 @@ public class Login extends Activity implements OnClickListener,
 		}
 	}
 
-
-
-
-
-
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// We've resolved any connection errors. mGoogleApiClient can be used to
 		// access Google APIs on behalf of the user.
 		Toast.makeText(Login.this, "Google+ login successful!",
 				Toast.LENGTH_SHORT).show();
-		
+
 		// TODO
 		// Get user's name and profile picture. Link this to the in-app
-		//	hash (generated later
+		// hash (generated later
 		if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-			Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+			Person currentPerson = Plus.PeopleApi
+					.getCurrentPerson(mGoogleApiClient);
 			String personName = currentPerson.getDisplayName();
 			Image personPhoto = currentPerson.getImage();
 			String personGooglePlusProfile = currentPerson.getUrl();
-			
+
 			Toast.makeText(Login.this, personName, Toast.LENGTH_LONG).show();
 		}
 	}
-
-
-
-
-
-
 
 	@Override
 	public void onConnectionSuspended(int cause) {
 		mGoogleApiClient.connect();
 	}
-	
-	
+
 	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
 		if (requestCode == RC_SIGN_IN) {

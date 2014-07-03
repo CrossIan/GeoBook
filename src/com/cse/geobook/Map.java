@@ -1,23 +1,18 @@
 package com.cse.geobook;
 
+import java.io.File;
 import java.util.ArrayList;
 
-
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -29,12 +24,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.LatLngBoundsCreator;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Map extends FragmentActivity  {
+public class Map extends FragmentActivity {
 	// GoogleMap gMap;
 
 	GoogleMap gMap;
@@ -44,7 +37,7 @@ public class Map extends FragmentActivity  {
 	ArrayList<Marker> markers;
 
 	private final double MAX_DISTANCEFROMCACHE = 25;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,25 +53,20 @@ public class Map extends FragmentActivity  {
 	 * Guarantees {@code caches } != null
 	 */
 	private void getExtras() {
-
 		this.extras = this.getIntent().getExtras();
-
+		MarkerOptions mo = null;
+		int zoom = 11;
 		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
 			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
+			mo = caches.target;
+			zoom = caches.zoom;
 		}
 
-		if (this.caches == null) {
-			DataParser all = new DataParser(getApplicationContext(),
-					Cache.ALL_CACHES);
-			DataParser found = new DataParser(getApplicationContext(),
-					Cache.FOUND_CACHES);
-			caches.allCaches = all.read();
-			all.close();
-			
-			caches.foundCaches = found.read();
-			found.close();
+		this.caches = readInData();
+		if (mo != null) {
+			caches.target = mo;
+			caches.zoom = zoom;
 		}
-
 	}
 
 	/**
@@ -102,45 +90,57 @@ public class Map extends FragmentActivity  {
 	 * @requires {@code caches} != null
 	 */
 	private void setUpMap() {
-		
-		String colorValue = Settings.getColorMarker(this.getApplicationContext());
-		//Default Value
-		BitmapDescriptor colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-		
-		switch (colorValue){
-			case "1":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-				break;
-			case "2":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-				break;
-			case "3":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-				break;
-			case "4":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
-				break;
-			case "5":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-				break;
-			case "6":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
-				break;
-			case "7":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-				break;
-			case "8":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
-				break;
-			case "9":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
-				break;
-			case "10":
-				colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-				break;
+
+		String colorValue = Settings.getColorMarker(this
+				.getApplicationContext());
+		// Default Value
+		BitmapDescriptor colorMarker = BitmapDescriptorFactory
+				.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+
+		switch (colorValue) {
+		case "1":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+			break;
+		case "2":
+
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+			break;
+		case "3":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+			break;
+		case "4":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+			break;
+		case "5":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+			break;
+		case "6":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
+			break;
+		case "7":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+			break;
+		case "8":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+			break;
+		case "9":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
+			break;
+		case "10":
+			colorMarker = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+			break;
 		}
 
-		
 		if (this.gMap == null) {
 			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
@@ -149,16 +149,25 @@ public class Map extends FragmentActivity  {
 		markers = new ArrayList<Marker>();
 		this.setUpActionListeners();
 		this.gMap.setMyLocationEnabled(true);
+
 		/*
 		 * set up markers
 		 */
 
 		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
 				this.caches.target.getPosition(), this.caches.zoom));
-		// set markers
+
+		// set all caches
 		int size = this.caches.allCaches.size();
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i).icon(colorMarker)));
+			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i)));
+		}
+
+		// set found caches
+		size = this.caches.foundCaches.size();
+		for (int i = 0; i < size; i++) {
+			markers.add(this.gMap.addMarker(this.caches.foundCaches.get(i)
+					.icon(colorMarker)));
 		}
 
 	}
@@ -175,15 +184,15 @@ public class Map extends FragmentActivity  {
 	}
 
 	private static double distance(LatLng start, LatLng end) {
-		double xSquared = Math.pow((start.latitude - end.latitude),2);
+		double xSquared = Math.pow((start.latitude - end.latitude), 2);
 		double ySquared = Math.pow((start.longitude - end.longitude), 2);
 		// convert to feet
-		double convertToFeet = (10000/90 * 3280.4);
+		double convertToFeet = (10000 / 90 * 3280.4);
 		xSquared *= convertToFeet;
 		ySquared *= convertToFeet;
-		
-		return Math.sqrt( xSquared + ySquared ); 
-		
+
+		return Math.sqrt(xSquared + ySquared);
+
 	}
 
 	/**
@@ -274,33 +283,35 @@ public class Map extends FragmentActivity  {
 			mo.snippet(marker.getSnippet());
 			mo.position(marker.getPosition());
 
-			
-			
-			Location currentLocation = gMap.getMyLocation();
-			LatLng position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+			Intent cache = new Intent("android.intent.action.CACHE");
+			Bundle extra = new Bundle();
 
+			Map.this.caches.target = mo;
+			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 
-				Intent cache = new Intent("android.intent.action.CACHE");
-				Bundle extra = new Bundle();
+			cache.putExtras(extra);
+			/**
+			 * <pre> doesn't work
+			 * 
+			 * <pre>
+			 * Location currentLocation =
+			 * gMap.getMyLocation();
+			 * 
+			 * LatLng position = new LatLng(currentLocation.getLatitude(),
+			 * currentLocation.getLongitude());
+			 * 
+			 * if (cacheFound(mo)) { Map.this.startActivity(cache);
+			 * 
+			 * } else if (distance(position, mo.getPosition()) <
+			 * MAX_DISTANCEFROMCACHE) {
+			 * 
+			 * Map.this.startActivity(cache);
+			 * 
+			 * } else { // error }
+			 */
+			// remove once above is working
+			Map.this.startActivity(cache);
 
-				Map.this.caches.target = mo;
-				extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-
-				cache.putExtras(extra);
-
-				
-			if(cacheFound(mo)) {
-				Map.this.startActivity(cache);
-
-			} else if (distance(position, mo.getPosition()) < MAX_DISTANCEFROMCACHE){
-
-				Map.this.startActivity(cache);
-
-			} else {
-				//error
-			}
-
-		
 		}
 	}
 
@@ -362,35 +373,58 @@ public class Map extends FragmentActivity  {
 	}
 
 	@Override
-	protected void onPause() {
-
-		super.onPause();
-		// TODO: save state
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
-
-		DataParser all = new DataParser(getApplicationContext(),
-				Cache.ALL_CACHES);
 		this.getExtras();
-		MarkerOptions mo = caches.target;
-		int zoom = caches.zoom;
-		caches.allCaches = all.read();
-
-		DataParser found = new DataParser(getApplicationContext(),
-				Cache.FOUND_CACHES);
-		caches.foundCaches = found.read();
-		
-		all.close();
-		found.close();
-		
-		caches.target = mo;
-		caches.zoom = zoom;
-		
 		this.removeAllMarkers();
 		this.setUpMap();
 
 	}
+
+	private Data readInData() {
+
+		File allCachesfile = getApplicationContext().getFileStreamPath(
+				Cache.ALL_CACHES);
+		File foundCachesfile = getApplicationContext().getFileStreamPath(
+				Cache.FOUND_CACHES);
+		File targetCacheFile = getApplicationContext().getFileStreamPath(
+				Cache.TARGET_CACHE);
+
+		ArrayList<MarkerOptions> ac = null;
+		ArrayList<MarkerOptions> fc = null;
+		ArrayList<MarkerOptions> t = null;
+
+		if (allCachesfile.exists()) {
+			DataParser all = new DataParser(getApplicationContext(),
+					Cache.ALL_CACHES);
+			ac = all.read();
+			all.close();
+		}
+
+		if (foundCachesfile.exists()) {
+			DataParser found = new DataParser(getApplicationContext(),
+					Cache.FOUND_CACHES);
+			fc = found.read();
+			found.close();
+		}
+
+		if (targetCacheFile.exists()) {
+			DataParser target = new DataParser(getApplicationContext(),
+					Cache.TARGET_CACHE);
+			t = target.read();
+			target.close();
+		} else {
+			DataParser target = new DataParser(getApplicationContext(),
+					Cache.TARGET_CACHE);
+			t = new ArrayList<MarkerOptions>();
+			t.add(new MarkerOptions()
+					.position(new LatLng(39.961138, -83.001465)));
+			target.overwriteAll(t);
+
+			target.close();
+		}
+
+		return new Data(fc, ac, t.get(0), 11);
+	}
+
 }

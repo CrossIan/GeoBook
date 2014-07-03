@@ -19,10 +19,10 @@ public class Cache extends Activity {
 	Button save;
 	Data data;
 
-	public static final String ALL_CACHES = "foundCaches.txt";
-	public static final String FOUND_CACHES = "PersistentData.txt";
-	
-	
+	public static final String FOUND_CACHES = "foundCaches.txt";
+	public static final String ALL_CACHES = "PersistentData.txt";
+	public static final String TARGET_CACHE = "Target.txt";
+
 	final Double EPISILON = .00001;
 
 	// PHOTO
@@ -54,6 +54,9 @@ public class Cache extends Activity {
 						temp.title(cacheName.getText().toString());
 						temp.snippet(description.getText().toString());
 						searching = false;
+						// data.foundCaches.add(temp);
+						// data.allCaches.remove(i);
+
 					}
 					i++;
 				}
@@ -62,10 +65,16 @@ public class Cache extends Activity {
 				} else {
 					Log.d("data", "marker not found");
 				}
-				DataParser writer = new DataParser(getApplicationContext(),
-						Cache.FOUND_CACHES);
-				writer.overwriteAll(data.foundCaches);
-				writer.close();
+				/*
+				 * DataParser found = new DataParser(getApplicationContext(),
+				 * Cache.FOUND_CACHES); found.overwriteAll(data.foundCaches);
+				 * found.close();
+				 */
+				DataParser all = new DataParser(getApplicationContext(),
+						Cache.ALL_CACHES);
+				all.overwriteAll(data.allCaches);
+				all.close();
+
 				/*
 				 * Bundle extras_new = new Bundle();
 				 * extras_new.putParcelable(Data.CACHE_DATA, data);
