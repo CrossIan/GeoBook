@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -159,12 +160,14 @@ public class Map extends FragmentActivity {
 
 		// set all caches
 		int size = this.caches.allCaches.size();
+		Log.d("cache", "all -size: " + size);
 		for (int i = 0; i < size; i++) {
 			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i)));
 		}
 
 		// set found caches
 		size = this.caches.foundCaches.size();
+		Log.d("cache", "found - size: " + size);
 		for (int i = 0; i < size; i++) {
 			markers.add(this.gMap.addMarker(this.caches.foundCaches.get(i)
 					.icon(colorMarker)));
@@ -237,12 +240,15 @@ public class Map extends FragmentActivity {
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 						MarkerOptions mo = new MarkerOptions().position(pos);
+						mo.title("default");
+						mo.snippet("");
 						Map.this.caches.allCaches.add(mo);
 						Map.this.gMap.addMarker(mo);
 						// Todo place in hash map
-						DataParser writer = new DataParser(
-								getApplicationContext(), "PersistentData.txt");
-						writer.overwriteAll(Map.this.caches.allCaches);
+						DataParser all = new DataParser(
+								getApplicationContext(), Cache.ALL_CACHES);
+						all.overwriteAll(Map.this.caches.allCaches);
+						all.close();
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
@@ -394,18 +400,18 @@ public class Map extends FragmentActivity {
 		ArrayList<MarkerOptions> fc = null;
 		ArrayList<MarkerOptions> t = null;
 
-		if (allCachesfile.exists()) {
-			DataParser all = new DataParser(getApplicationContext(),
-					Cache.ALL_CACHES);
-			ac = all.read();
-			all.close();
-		}
+		DataParser all = new DataParser(getApplicationContext(),
+				Cache.ALL_CACHES);
+		ac = all.read();
+		all.close();
 
 		if (foundCachesfile.exists()) {
 			DataParser found = new DataParser(getApplicationContext(),
 					Cache.FOUND_CACHES);
 			fc = found.read();
 			found.close();
+		} else {
+			fc = new ArrayList<MarkerOptions>();
 		}
 
 		if (targetCacheFile.exists()) {

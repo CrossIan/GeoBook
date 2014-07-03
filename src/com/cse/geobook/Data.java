@@ -17,7 +17,8 @@ public class Data implements Parcelable {
 
 	public static String CACHE_DATA;
 
-	public Data(ArrayList<MarkerOptions> fc, ArrayList<MarkerOptions> ac, MarkerOptions target, int zoom) {
+	public Data(ArrayList<MarkerOptions> fc, ArrayList<MarkerOptions> ac,
+			MarkerOptions target, int zoom) {
 		this.foundCaches = fc;
 		this.allCaches = ac;
 		this.target = target;
@@ -36,7 +37,7 @@ public class Data implements Parcelable {
 	};
 
 	public Data(Parcel in) {
-		//foundCaches
+		// foundCaches
 		foundCaches = new ArrayList<MarkerOptions>();
 		int size = in.readInt(); // length
 		for (int i = 0; i < size; i++) {
@@ -45,11 +46,10 @@ public class Data implements Parcelable {
 			Double lat = in.readDouble();
 			Double lng = in.readDouble();
 
-			foundCaches.add(new MarkerOptions().title(title).snippet(description)
-					.position(new LatLng(lat, lng)));
+			foundCaches.add(new MarkerOptions().title(title)
+					.snippet(description).position(new LatLng(lat, lng)));
 		}
-		
-		
+
 		// allCaches
 		allCaches = new ArrayList<MarkerOptions>();
 		size = in.readInt(); // length
@@ -62,7 +62,7 @@ public class Data implements Parcelable {
 			allCaches.add(new MarkerOptions().title(title).snippet(description)
 					.position(new LatLng(lat, lng)));
 		}
-		
+
 		// target
 		target = new MarkerOptions().title(in.readString())
 				.snippet(in.readString())
@@ -77,19 +77,19 @@ public class Data implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		//foundCaches
-		int size = allCaches.size();
+		// foundCaches
+		int size = foundCaches.size();
 		dest.writeInt(size); // length
 		for (int i = 0; i < size; i++) {
-			MarkerOptions temp = allCaches.get(i);
+			MarkerOptions temp = foundCaches.get(i);
 			dest.writeString(temp.getTitle()); // title
 			dest.writeString(temp.getSnippet()); // snippit
 			dest.writeDouble(temp.getPosition().latitude);
 			dest.writeDouble(temp.getPosition().longitude);
 
 		}
-		
-		//allCaches
+
+		// allCaches
 		size = allCaches.size();
 		dest.writeInt(size); // length
 		for (int i = 0; i < size; i++) {
@@ -100,8 +100,8 @@ public class Data implements Parcelable {
 			dest.writeDouble(temp.getPosition().longitude);
 
 		}
-		
-		//Target
+
+		// Target
 		dest.writeString(target.getTitle());
 		dest.writeString(target.getSnippet());
 		dest.writeDouble(target.getPosition().latitude);
