@@ -19,10 +19,10 @@ public class Cache extends Activity {
 	Button save;
 	Data data;
 
-	public static final String ALL_CACHES = "foundCaches.txt";
-	public static final String FOUND_CACHES = "PersistentData.txt";
-	
-	
+	public static final String FOUND_CACHES = "foundCaches.txt";
+	public static final String ALL_CACHES = "PersistentData.txt";
+	public static final String TARGET_CACHE = "Target.txt";
+
 	final Double EPISILON = .00001;
 
 	// PHOTO
@@ -54,6 +54,7 @@ public class Cache extends Activity {
 						temp.title(cacheName.getText().toString());
 						temp.snippet(description.getText().toString());
 						searching = false;
+						data.allCaches.remove(i);
 					}
 					i++;
 				}
@@ -65,6 +66,8 @@ public class Cache extends Activity {
 				DataParser writer = new DataParser(getApplicationContext(),
 						Cache.FOUND_CACHES);
 				writer.overwriteAll(data.foundCaches);
+				writer.overwriteAll(data.allCaches);
+
 				writer.close();
 				/*
 				 * Bundle extras_new = new Bundle();
