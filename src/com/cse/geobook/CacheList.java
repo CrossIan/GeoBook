@@ -22,10 +22,10 @@ public class CacheList extends ListActivity {
 
 		getExtras();
 		if (caches != null) {
-			int size = caches.data.size();
+			int size = caches.allCaches.size();
 			titles = new String[size];
 			for (int i = 0; i < size; i++) {
-				String next = caches.data.get(i).getTitle();
+				String next = caches.allCaches.get(i).getTitle();
 				titles[i] = next;
 			}
 
@@ -47,7 +47,7 @@ public class CacheList extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		int zoom = 16;
 
-		Data data = new Data(caches.data, caches.data.get(position), zoom);
+		Data data = new Data(caches.allCaches, caches.allCaches.get(position), zoom, asdf);
 
 		Bundle extras_new = new Bundle();
 		extras_new.putParcelable(Data.CACHE_DATA, data);

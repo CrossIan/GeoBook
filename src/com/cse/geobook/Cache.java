@@ -38,11 +38,11 @@ public class Cache extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				int size = data.data.size();
+				int size = data.allCaches.size();
 				boolean searching = true;
 				int i = 0;
 				while (searching && i < size) {
-					MarkerOptions temp = data.data.get(i);
+					MarkerOptions temp = data.allCaches.get(i);
 					if (Math.abs(temp.getPosition().latitude
 							- data.target.getPosition().latitude) < EPISILON
 							&& Math.abs(temp.getPosition().longitude

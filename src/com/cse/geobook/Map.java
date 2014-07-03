@@ -155,9 +155,9 @@ public class Map extends FragmentActivity  {
 		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
 				this.caches.target.getPosition(), this.caches.zoom));
 		// set markers
-		int size = this.caches.data.size();
+		int size = this.caches.allCaches.size();
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.data.get(i).icon(colorMarker)));
+			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i).icon(colorMarker)));
 		}
 
 	}
@@ -204,7 +204,7 @@ public class Map extends FragmentActivity  {
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 						MarkerOptions mo = new MarkerOptions().position(pos);
-						Map.this.caches.data.add(mo);
+						Map.this.caches.allCaches.add(mo);
 						Map.this.gMap.addMarker(mo);
 						// Todo place in hash map
 						DataParser writer = new DataParser(
@@ -250,13 +250,11 @@ public class Map extends FragmentActivity  {
 			mo.snippet(marker.getSnippet());
 			mo.position(marker.getPosition());
 
-			/* TODO: implements LocationClient correctly
-			LocationClient locationClient = null;//new LocationClient(context, connectionCallbacks, connectionFailedListener)
 			
 			
-			Location currentLocation = locationClient.getLastLocation();
+			Location currentLocation = gMap.getMyLocation();
 			LatLng position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-*/
+
 
 				Intent cache = new Intent("android.intent.action.CACHE");
 				Bundle extra = new Bundle();
@@ -265,16 +263,24 @@ public class Map extends FragmentActivity  {
 				extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 
 				cache.putExtras(extra);
+
+				
+			if(cacheFound(mo)) {
 				Map.this.startActivity(cache);
-				/*
-			if(distance(position, mo.getPosition()) < MAX_DISTANCEFROMCACHE) {
-					//TODO place intent and start activity in here
+
+			} else if (distance(position, mo.getPosition()) < MAX_DISTANCEFROMCACHE){
+
+				Map.this.startActivity(cache);
+
 			} else {
-				// TODO: 
-				// error, too far away to find cache, go in x direction.
+				//error
 			}
 
-		*/
+		
+		}
+
+		private boolean cacheFound(MarkerOptions mo) {
+			return caches.foundCaches.contains(mo);
 		}
 	}
 

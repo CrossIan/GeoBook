@@ -163,7 +163,7 @@ public class DataParser {
 
 		// default target
 
-		Data data = new Data(cache_array, target, 11);
+		Data data = new Data(cache_array, target, 11, asdf);
 
 		return data;
 	}
@@ -176,7 +176,7 @@ public class DataParser {
 
 	public void overwriteAll(Data write) {
 
-		ArrayList<MarkerOptions> data = write.data;
+		ArrayList<MarkerOptions> data = write.allCaches;
 
 		FileOutputStream writer;
 		try {
