@@ -19,6 +19,10 @@ public class Cache extends Activity {
 	Button save;
 	Data data;
 
+	public static final String ALL_CACHES = "foundCaches.txt";
+	public static final String FOUND_CACHES = "PersistentData.txt";
+	
+	
 	final Double EPISILON = .00001;
 
 	// PHOTO
@@ -59,8 +63,8 @@ public class Cache extends Activity {
 					Log.d("data", "marker not found");
 				}
 				DataParser writer = new DataParser(getApplicationContext(),
-						"PersistentData.txt");
-				writer.overwriteAll(data);
+						Cache.FOUND_CACHES);
+				writer.overwriteAll(data.foundCaches);
 				writer.close();
 				/*
 				 * Bundle extras_new = new Bundle();

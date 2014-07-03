@@ -69,9 +69,9 @@ public class Map extends FragmentActivity  {
 
 		if (this.caches == null) {
 			DataParser all = new DataParser(getApplicationContext(),
-					"PersistentData.txt");
+					Cache.ALL_CACHES);
 			DataParser found = new DataParser(getApplicationContext(),
-					"PersistentData.txt");
+					Cache.FOUND_CACHES);
 			caches.allCaches = all.read();
 			all.close();
 			
@@ -376,14 +376,14 @@ public class Map extends FragmentActivity  {
 		super.onResume();
 
 		DataParser all = new DataParser(getApplicationContext(),
-				"PersistentData.txt");
+				Cache.ALL_CACHES);
 		this.getExtras();
 		MarkerOptions mo = caches.target;
 		int zoom = caches.zoom;
 		caches.allCaches = all.read();
 
 		DataParser found = new DataParser(getApplicationContext(),
-				"PersistentData.txt");
+				Cache.FOUND_CACHES);
 		caches.foundCaches = found.read();
 		
 		all.close();
