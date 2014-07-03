@@ -150,22 +150,15 @@ public class DataParser {
 	 * 
 	 * @return
 	 */
-	public Data read() {
+	public ArrayList<MarkerOptions> read() {
 
 		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
-		MarkerOptions target = new MarkerOptions();
-		
-		if (this.ready()) { target = this.readMarker(); }
-		
+
 		while (this.ready()) {
 			cache_array.add(this.readMarker());
 		}
 
-		// default target
-
-		Data data = new Data(cache_array, target, 11, asdf);
-
-		return data;
+		return cache_array;
 	}
 
 	/**
@@ -174,17 +167,16 @@ public class DataParser {
 	 * 
 	 */
 
-	public void overwriteAll(Data write) {
+	public void overwriteAll(ArrayList<MarkerOptions> data) {
 
-		ArrayList<MarkerOptions> data = write.allCaches;
+	
 
 		FileOutputStream writer;
 		try {
 			writer = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			int size = data.size();
 
-			MarkerOptions temp = write.target;
-			writeMarker(temp, writer);
+			MarkerOptions temp = null;
 
 			for (int i = 0; i < size; i++) {
 				temp = data.get(i);

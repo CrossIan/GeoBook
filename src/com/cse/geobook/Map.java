@@ -68,11 +68,15 @@ public class Map extends FragmentActivity  {
 		}
 
 		if (this.caches == null) {
-			DataParser reader = new DataParser(getApplicationContext(),
+			DataParser all = new DataParser(getApplicationContext(),
 					"PersistentData.txt");
-			caches = reader.read();
-
-			reader.close();
+			DataParser found = new DataParser(getApplicationContext(),
+					"PersistentData.txt");
+			caches.allCaches = all.read();
+			all.close();
+			
+			caches.foundCaches = found.read();
+			found.close();
 		}
 
 	}
@@ -371,15 +375,23 @@ public class Map extends FragmentActivity  {
 	protected void onResume() {
 		super.onResume();
 
-		DataParser reader = new DataParser(getApplicationContext(),
+		DataParser all = new DataParser(getApplicationContext(),
 				"PersistentData.txt");
 		this.getExtras();
 		MarkerOptions mo = caches.target;
 		int zoom = caches.zoom;
-		caches = reader.read();
+		caches.allCaches = all.read();
+
+		DataParser found = new DataParser(getApplicationContext(),
+				"PersistentData.txt");
+		caches.foundCaches = found.read();
+		
+		all.close();
+		found.close();
+		
 		caches.target = mo;
 		caches.zoom = zoom;
-		reader.close();
+		
 		this.removeAllMarkers();
 		this.setUpMap();
 
