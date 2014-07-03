@@ -63,7 +63,7 @@ public class DataParser {
 		}
 
 		// DEFAULT FILE
-		if (this.reader == null) {
+		if (this.reader == null && file == Cache.ALL_CACHES) {
 			stream = c.getResources().openRawResource(R.raw.ohio);
 			BufferedReader readr = new BufferedReader(new InputStreamReader(
 					stream));
