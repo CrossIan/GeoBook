@@ -5,5 +5,15 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="/google-play-services_lib"/>
+	<classpathentry kind="lib" path="/home/sul/.eclipse/org.eclipse.platform_3.8_155965261/plugins/android-sdk-linux/platforms/android-19/android.jar" sourcepath="/home/sul/.eclipse/org.eclipse.platform_3.8_155965261/plugins/android-sdk-linux/sources/android-19">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/sul/.eclipse/org.eclipse.platform_3.8_155965261/plugins/android-sdk-linux/docs/reference"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="src" path="/appcompat_v7"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

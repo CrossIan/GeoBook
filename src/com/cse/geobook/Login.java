@@ -2,13 +2,11 @@ package com.cse.geobook;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusShare;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,8 +59,7 @@ public class Login extends Activity implements OnClickListener,
 	// -------------------------------------------------------*
 	private Button facebookButton,
 				   twitterButton,
-				   bypassButton,
-				   googleShareButton;
+				   bypassButton;
 
 	
 	
@@ -74,14 +71,13 @@ public class Login extends Activity implements OnClickListener,
 
 		// Initialize buttons click listeners
 		findViewById(R.id.google_sign_in_button).setOnClickListener(this);
-		facebookButton = (Button) findViewById(R.id.facebook_button);
+		facebookButton = (Button) findViewById(R.id.facebookButton);
 		facebookButton.setOnClickListener(this);
-		twitterButton = (Button) findViewById(R.id.twitter_button);
+		twitterButton = (Button) findViewById(R.id.twitterButton);
 		twitterButton.setOnClickListener(this);
-		bypassButton = (Button) findViewById(R.id.bypass_button);
+		bypassButton = (Button) findViewById(R.id.bypassButton);
 		bypassButton.setOnClickListener(this);
-		googleShareButton = (Button) findViewById(R.id.google_share_button);
-		googleShareButton.setOnClickListener(this);
+		
 		
 		// Initialize Google API client
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -123,15 +119,6 @@ public class Login extends Activity implements OnClickListener,
 					Toast.LENGTH_SHORT).show();
 			// Try to connect...
 			mGoogleApiClient.connect();
-			
-			// Start the map 
-			Intent map = new Intent("android.intent.action.MAP");
-			Bundle extra = new Bundle();
-			map.putExtras(extra);
-			// Finish login activity and move to map view
-			Login.this.startActivity(map);
-			Login.this.finish();
-			finish();
 		}
 		// Try to sign in with Facebook
 		else if (v == facebookButton) {
@@ -155,27 +142,6 @@ public class Login extends Activity implements OnClickListener,
 			Login.this.startActivity(map);
 			Login.this.finish();
 			finish();
-		}
-		
-		else if(v == googleShareButton){
-			PlusShare.Builder builder = new PlusShare.Builder(this);
-
-		      // Set call-to-action metadata.
-		      builder.addCallToAction("CREATE_ITEM",	// Call-to-action button label
-							          Uri.parse("http://plus.google.com/pages/create"),	// Desktop use
-							          "/pages/create");	// Mobile use (512 character limit)
-
-		      // Set the content url (for desktop use).
-		      builder.setContentUrl(Uri.parse("https://plus.google.com/pages/"));
-
-		      // Set the target deep-link ID (for mobile use).
-		      builder.setContentDeepLinkId("/pages/",
-		              null, null, null);
-
-		      // Set the share text.
-		      builder.setText("Sample post using GeoBook!");
-
-		      startActivityForResult(builder.getIntent(), 0);
 		}
 	}
 
@@ -225,6 +191,15 @@ public class Login extends Activity implements OnClickListener,
 			
 			Toast.makeText(Login.this, personName, Toast.LENGTH_LONG).show();
 		}
+		
+		// Start the map 
+		Intent map = new Intent("android.intent.action.MAP");
+		Bundle extra = new Bundle();
+		map.putExtras(extra);
+		// Finish login activity and move to map view
+		Login.this.startActivity(map);
+		Login.this.finish();
+		finish();
 	}
 
 
