@@ -162,6 +162,29 @@ public class Map extends FragmentActivity  {
 
 	}
 
+	private void removeAllMarkers() {
+		int size = markers.size();
+		for (int i = 0; i < size; i++) {
+			markers.get(i).remove();
+		}
+	}
+
+	private boolean cacheFound(MarkerOptions mo) {
+		return caches.foundCaches.contains(mo);
+	}
+
+	private static double distance(LatLng start, LatLng end) {
+		double xSquared = Math.pow((start.latitude - end.latitude),2);
+		double ySquared = Math.pow((start.longitude - end.longitude), 2);
+		// convert to feet
+		double convertToFeet = (10000/90 * 3280.4);
+		xSquared *= convertToFeet;
+		ySquared *= convertToFeet;
+		
+		return Math.sqrt( xSquared + ySquared ); 
+		
+	}
+
 	/**
 	 * class to implement all Listeners
 	 * 
@@ -278,10 +301,6 @@ public class Map extends FragmentActivity  {
 
 		
 		}
-
-		private boolean cacheFound(MarkerOptions mo) {
-			return caches.foundCaches.contains(mo);
-		}
 	}
 
 	/*
@@ -364,24 +383,5 @@ public class Map extends FragmentActivity  {
 		this.removeAllMarkers();
 		this.setUpMap();
 
-	}
-
-	private void removeAllMarkers() {
-		int size = markers.size();
-		for (int i = 0; i < size; i++) {
-			markers.get(i).remove();
-		}
-	}
-	
-	private static double distance(LatLng start, LatLng end) {
-		double xSquared = Math.pow((start.latitude - end.latitude),2);
-		double ySquared = Math.pow((start.longitude - end.longitude), 2);
-		// convert to feet
-		double convertToFeet = (10000/90 * 3280.4);
-		xSquared *= convertToFeet;
-		ySquared *= convertToFeet;
-		
-		return Math.sqrt( xSquared + ySquared ); 
-		
 	}
 }
