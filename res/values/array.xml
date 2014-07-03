@@ -2,7 +2,7 @@
 <resources>
     
     <string-array name="ColorList">
-    <item>Red (Default))</item>
+    <item>Red (Default)</item>
     <item>Azure</item>
     <item>Blue</item>
     <item>Cyan</item>

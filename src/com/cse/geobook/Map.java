@@ -103,11 +103,8 @@ public class Map extends FragmentActivity  {
 	 */
 	private void setUpMap() {
 		
-		//Not sure if the parameter is correct for "Settings" that is supposed to be the preference file. If error occurs look into this.
-		SharedPreferences sharedPref = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-		//Default value in case sharedPref returns nothing for colorValue
-		String defaultValue = "1";
-		String colorValue = sharedPref.getString("pref_pinColor", defaultValue);
+		String colorValue = Settings.getColorMarker(this.getApplicationContext());
+		//Default Value
 		BitmapDescriptor colorMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 		
 		switch (colorValue){
