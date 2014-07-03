@@ -2,6 +2,7 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
+import android.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +14,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -25,11 +29,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.LatLngBoundsCreator;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Map extends FragmentActivity {
-
+public class Map extends FragmentActivity  {
 	// GoogleMap gMap;
 
 	GoogleMap gMap;
@@ -38,6 +43,8 @@ public class Map extends FragmentActivity {
 	Button listView;
 	ArrayList<Marker> markers;
 
+	private final double MAX_DISTANCEFROMCACHE = 25;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -243,70 +250,31 @@ public class Map extends FragmentActivity {
 			mo.snippet(marker.getSnippet());
 			mo.position(marker.getPosition());
 
-			Intent cache = new Intent("android.intent.action.CACHE");
-			Bundle extra = new Bundle();
+			/* TODO: implements LocationClient correctly
+			LocationClient locationClient = null;//new LocationClient(context, connectionCallbacks, connectionFailedListener)
+			
+			
+			Location currentLocation = locationClient.getLastLocation();
+			LatLng position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+*/
 
-			Map.this.caches.target = mo;
-			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+				Intent cache = new Intent("android.intent.action.CACHE");
+				Bundle extra = new Bundle();
 
-			cache.putExtras(extra);
-			Map.this.startActivity(cache);
+				Map.this.caches.target = mo;
+				extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 
-			// /** dialog click listener ONLY for the below alert dialog box */
-			// class dialogClickListener implements
-			// DialogInterface.OnClickListener {
-			//
-			// @Override
-			// public void onClick(DialogInterface dialog, int which) {
-			// MarkerOptions mo = new MarkerOptions();
-			// mo.title(marker.getTitle());
-			// mo.snippet(marker.getSnippet());
-			// mo.position(marker.getPosition());
-			//
-			// Intent cache = new Intent("android.intent.action.CACHE");
-			// Bundle extra = new Bundle();
-			//
-			// Map.this.caches.target = mo;
-			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-			//
-			// cache.putExtras(extra);
-			// Map.this.startActivity(cache);
-			//
-			// // TODO Auto-generated method stub
-			// switch (which) {
-			// case DialogInterface.BUTTON_POSITIVE:
-			// // TODO: goto cache view
-			//
-			// MarkerOptions mo = new MarkerOptions();
-			// mo.title(marker.getTitle());
-			// mo.snippet(marker.getSnippet());
-			// mo.position(marker.getPosition());
-			//
-			// Intent cache = new Intent("android.intent.action.CACHE");
-			// Bundle extra = new Bundle();
-			//
-			// Map.this.caches.target = mo;
-			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-			//
-			// cache.putExtras(extra);
-			// Map.this.startActivity(cache);
-			//
-			// break;
-			// case DialogInterface.BUTTON_NEUTRAL:
-			// break;
-			// }
-			// }
-			// }
-			// dialogClickListener listener = new dialogClickListener();
-			// AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-			// builder.setMessage(R.string.go_to_cache_message_ad)
-			// .setTitle(R.string.view_cache_title_ad)
-			// .setPositiveButton(R.string.cache_option_yes, listener)
-			// .setNegativeButton(R.string.cache_option_no, listener);
-			//
-			// AlertDialog dialog = builder.create();
-			// dialog.show();
+				cache.putExtras(extra);
+				Map.this.startActivity(cache);
+				/*
+			if(distance(position, mo.getPosition()) < MAX_DISTANCEFROMCACHE) {
+					//TODO place intent and start activity in here
+			} else {
+				// TODO: 
+				// error, too far away to find cache, go in x direction.
+			}
 
+		*/
 		}
 	}
 
@@ -397,5 +365,17 @@ public class Map extends FragmentActivity {
 		for (int i = 0; i < size; i++) {
 			markers.get(i).remove();
 		}
+	}
+	
+	private static double distance(LatLng start, LatLng end) {
+		double xSquared = Math.pow((start.latitude - end.latitude),2);
+		double ySquared = Math.pow((start.longitude - end.longitude), 2);
+		// convert to feet
+		double convertToFeet = (10000/90 * 3280.4);
+		xSquared *= convertToFeet;
+		ySquared *= convertToFeet;
+		
+		return Math.sqrt( xSquared + ySquared ); 
+		
 	}
 }
