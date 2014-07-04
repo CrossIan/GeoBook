@@ -154,10 +154,12 @@ public class DataParser {
 
 		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
 
-		while (this.ready()) {
-			cache_array.add(this.readMarker());
-		}
+		if(this.reader != null){
+			while (this.ready()) {
+				cache_array.add(this.readMarker());
+			}
 
+		}
 		return cache_array;
 	}
 

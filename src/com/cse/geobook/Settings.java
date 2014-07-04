@@ -20,9 +20,20 @@ public class Settings extends Activity {
 		
 	}
 	
+	/**
+	 * Returns a string that corresponds to a color that will be used by Map
+	 */
 	public static String getColorMarker(Context context){
 		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_pinColor", "1");
 		
+	}
+	
+	public static String getProfileName(Context context){
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_profileName", "John Doe");
+	}
+	
+	public static String getRadius(Context context){
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_radiusList", "50");
 	}
 
 }
