@@ -67,10 +67,10 @@ public class Login extends Activity implements OnClickListener,
 		bypassButton.setOnClickListener(this);
 		googleShareButton = (Button) findViewById(R.id.google_share_button);
 		googleShareButton.setOnClickListener(this);
+		
 		// Initialize Google API client
-
 		// checks to see if this is being run on an emulator or device
-		if ("google_sdk".equals(Build.PRODUCT)) {
+		if (!"google_sdk".equals(Build.PRODUCT)) {
 			mGoogleApiClient = new GoogleApiClient.Builder(this)
 					.addConnectionCallbacks(this)
 					.addOnConnectionFailedListener(this).addApi(Plus.API, null)
