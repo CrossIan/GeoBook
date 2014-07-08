@@ -62,23 +62,30 @@
     </EditText>
 
     <TextView
-        android:id="@+id/coords"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ratingBar1"
-        android:layout_below="@+id/cacheName"
-        android:layout_marginTop="17dp"
-        android:text="Lat Long"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
         android:id="@+id/datevisited"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/cacheDescription"
-        android:layout_below="@+id/coords"
-        android:layout_marginTop="5dp"
+        android:layout_below="@+id/ivPhoto"
         android:text="date visited"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/cachelat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ratingBar1"
+        android:layout_below="@+id/cacheName"
+        android:text="Lat Long"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/cachelong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cachelat"
+        android:layout_below="@+id/cachelat"
+        android:text="Lat Long"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

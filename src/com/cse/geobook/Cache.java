@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -16,6 +17,9 @@ public class Cache extends Activity {
 	LinearLayout view;
 	EditText cacheName;
 	EditText description;
+	TextView cachelat;
+	TextView cachelong;
+	TextView datevisited;
 	Button save;
 	Data data;
 
@@ -31,31 +35,34 @@ public class Cache extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cache);
-		save = (Button) findViewById(R.id.save);
-		cacheName = (EditText) findViewById(R.id.cacheName);
-		description = (EditText) findViewById(R.id.cacheDescription);
+		this.setContentView(R.layout.cache);
+		this.save = (Button) this.findViewById(R.id.save);
+		this.cacheName = (EditText) this.findViewById(R.id.cacheName);
+		this.description = (EditText) this.findViewById(R.id.cacheDescription);
+		this.cachelat = (TextView) this.findViewById(R.id.cachelat);
+		this.cachelong = (TextView) this.findViewById(R.id.cachelong);
 
-		getExtras();
-		save.setOnClickListener(new OnClickListener() {
+		this.getExtras();
+		this.save.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				int size = data.allCaches.size();
+				int size = Cache.this.data.allCaches.size();
 				boolean searching = true;
 				int i = 0;
 				while (searching && i < size) {
-					MarkerOptions temp = data.allCaches.get(i);
+					MarkerOptions temp = Cache.this.data.allCaches.get(i);
 					if (Math.abs(temp.getPosition().latitude
-							- data.target.getPosition().latitude) < EPISILON
-							&& Math.abs(temp.getPosition().longitude
-									- data.target.getPosition().longitude) < EPISILON) {
-						temp.title(cacheName.getText().toString());
-						temp.snippet(description.getText().toString());
+					        - Cache.this.data.target.getPosition().latitude) < Cache.this.EPISILON
+					        && Math.abs(temp.getPosition().longitude
+					                - Cache.this.data.target.getPosition().longitude) < Cache.this.EPISILON) {
+						temp.title(Cache.this.cacheName.getText().toString());
+						temp.snippet(Cache.this.description.getText()
+						        .toString());
 						searching = false;
-						data.foundCaches.add(temp);
-						data.allCaches.remove(i);
+						Cache.this.data.foundCaches.add(temp);
+						Cache.this.data.allCaches.remove(i);
 
 					}
 					i++;
@@ -66,14 +73,14 @@ public class Cache extends Activity {
 					Log.d("data", "marker not found");
 				}
 
-				DataParser found = new DataParser(getApplicationContext(),
-						Cache.FOUND_CACHES);
-				found.overwriteAll(data.foundCaches);
+				DataParser found = new DataParser(Cache.this
+				        .getApplicationContext(), Cache.FOUND_CACHES);
+				found.overwriteAll(Cache.this.data.foundCaches);
 				found.close();
 
-				DataParser all = new DataParser(getApplicationContext(),
-						Cache.ALL_CACHES);
-				all.overwriteAll(data.allCaches);
+				DataParser all = new DataParser(Cache.this
+				        .getApplicationContext(), Cache.ALL_CACHES);
+				all.overwriteAll(Cache.this.data.allCaches);
 				all.close();
 
 				/*
@@ -83,18 +90,21 @@ public class Cache extends Activity {
 				 * Intent map = new Intent("android.intent.action.MAP");
 				 * map.putExtras(extras_new); startActivity(map);
 				 */
-				finish();
+				Cache.this.finish();
 
 			}
 		});
 	}
 
 	private void getExtras() {
-		Bundle extras = getIntent().getExtras();
-		data = extras.getParcelable(Data.CACHE_DATA);
-		cacheName.setText(data.target.getTitle());
-		description.setText(data.target.getSnippet());
-
+		Bundle extras = this.getIntent().getExtras();
+		this.data = extras.getParcelable(Data.CACHE_DATA);
+		this.cacheName.setText(this.data.target.getTitle());
+		this.description.setText(this.data.target.getSnippet());
+		this.cachelat
+		        .setText(Double.toString(this.data.target.getPosition().latitude));
+		this.cachelong
+		        .setText(Double.toString(this.data.target.getPosition().longitude));
 	}
 
 }
