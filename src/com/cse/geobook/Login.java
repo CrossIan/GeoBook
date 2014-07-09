@@ -48,8 +48,7 @@ public class Login extends Activity implements OnClickListener,
 	// -------------------------------------------------------*
 	// Generic resources
 	// -------------------------------------------------------*
-	private Button facebookButton, twitterButton, bypassButton,
-			googleShareButton;
+	private Button facebookButton, twitterButton, bypassButton;
 
 	// Called when the activity is first created.
 	@Override
@@ -65,8 +64,6 @@ public class Login extends Activity implements OnClickListener,
 		twitterButton.setOnClickListener(this);
 		bypassButton = (Button) findViewById(R.id.bypass_button);
 		bypassButton.setOnClickListener(this);
-		googleShareButton = (Button) findViewById(R.id.google_share_button);
-		googleShareButton.setOnClickListener(this);
 		
 		// Initialize Google API client
 		// checks to see if this is being run on an emulator or device
@@ -138,28 +135,6 @@ public class Login extends Activity implements OnClickListener,
 			Login.this.startActivity(map);
 			Login.this.finish();
 			finish();
-		}
-
-		else if (v == googleShareButton) {
-			PlusShare.Builder builder = new PlusShare.Builder(this);
-
-			// Set call-to-action metadata.
-			builder.addCallToAction("CREATE_ITEM", // Call-to-action button
-													// label
-					Uri.parse("http://plus.google.com/pages/create"), // Desktop
-																		// use
-					"/pages/create"); // Mobile use (512 character limit)
-
-			// Set the content url (for desktop use).
-			builder.setContentUrl(Uri.parse("https://plus.google.com/pages/"));
-
-			// Set the target deep-link ID (for mobile use).
-			builder.setContentDeepLinkId("/pages/", null, null, null);
-
-			// Set the share text.
-			builder.setText("Sample post using GeoBook!");
-
-			startActivityForResult(builder.getIntent(), 0);
 		}
 	}
 

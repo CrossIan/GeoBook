@@ -62,5 +62,6 @@
 
     <!-- STRINGS USED IN ListView -->
     <string name="title_activity_listView">List View</string>
+    <string name="title_activity_test">TestActivity</string>
 
 </resources>
