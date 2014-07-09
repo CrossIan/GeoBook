@@ -107,8 +107,8 @@ public class Login extends Activity implements OnClickListener,
 
 			// Start the map
 			Intent map = new Intent("android.intent.action.MAP");
-			Bundle extra = new Bundle();
-			map.putExtras(extra);
+//			Bundle extra = new Bundle();
+//			map.putExtras(extra);
 			// Finish login activity and move to map view
 			Login.this.startActivity(map);
 			Login.this.finish();
