@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -116,7 +117,33 @@ public class Cache extends Activity implements OnClickListener{
 			Button TwitterShareButton = (Button) shareDialog.findViewById(R.id.twitter_share_button);
 			
 			// Set click actions
-			
+			// Google+
+			GoogleShareButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(Cache.this,
+							"Attempting to post to Google+!",
+							Toast.LENGTH_SHORT).show();
+				}
+			});
+			// Facebook
+			FacebookShareButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(Cache.this,
+							"Attempting to post to Facebook!",
+							Toast.LENGTH_SHORT).show();
+				}
+			});
+			// Twitter actions
+			TwitterShareButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(Cache.this,
+							"Attempting to post to Twitter!",
+							Toast.LENGTH_SHORT).show();
+				}
+			});
 			
 			// Show share dialog
 			shareDialog.show();
