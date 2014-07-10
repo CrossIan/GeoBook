@@ -11,6 +11,7 @@ import android.content.IntentSender.SendIntentException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,9 +59,9 @@ public class Cache extends Activity implements ConnectionCallbacks,
 	LinearLayout view;
 	EditText cacheName;
 	EditText description;
-	TextView cachelat;
-	TextView cachelong;
-	TextView datevisited;
+	TextView cacheLat;
+	TextView cacheLong;
+	TextView dateVisited;
 	Button saveCacheButton,shareCacheButton;
 	Data data;
 
@@ -85,8 +86,8 @@ public class Cache extends Activity implements ConnectionCallbacks,
 		shareCacheButton.setOnClickListener(this);
 		cacheName = (EditText) this.findViewById(R.id.cacheName);
 		description = (EditText) this.findViewById(R.id.cacheDescription);
-		cachelat = (TextView) this.findViewById(R.id.cachelat);
-		cachelong = (TextView) this.findViewById(R.id.cachelong);
+		cacheLat = (TextView) this.findViewById(R.id.cachelat);
+		cacheLong = (TextView) this.findViewById(R.id.cachelong);
 
 		this.getExtras();
 		
@@ -196,13 +197,28 @@ public class Cache extends Activity implements ConnectionCallbacks,
 						e.printStackTrace();
 					}
 					if (mPlusClient.isConnected()) {
-						Intent shareIntent = new PlusShare.Builder(Cache.this)
-				          .setType("text/plain")
-				          .setText("Test post from GeoBook")
-				          .setContentUrl(Uri.parse("https://developers.google.com/+/"))
-				          .getIntent();
+						// Construct share text
+						String shareText = String.format(
+								"Ryan found a new cache using GeoBook!\n"
+										+ "Cache Name:\t%s\n"
+										+ "Coordinates:\t%s, %s\n",
+								cacheName.getText(), cacheLat.getText(),
+								cacheLong.getText());
 
-				      startActivityForResult(shareIntent, 0);
+						// Intent shareIntent = new
+						// PlusShare.Builder(Cache.this)
+						// .setType("text/plain")
+						// .setText(shareText)
+						// .setContentUrl(Uri.parse("https://developers.google.com/+/"))
+						// .getIntent();
+
+						Intent shareIntent = ShareCompat.IntentBuilder.from(Cache.this)
+								   .setText(shareText)
+								   .setType("image/*")
+								   .getIntent()
+								   .setPackage("com.google.android.apps.plus");
+						
+						startActivityForResult(shareIntent, 0);
 					}
 				}
 			});
@@ -242,8 +258,8 @@ public class Cache extends Activity implements ConnectionCallbacks,
 		this.data = extras.getParcelable(Data.CACHE_DATA);
 		this.cacheName.setText(this.data.target.getTitle());
 		this.description.setText(this.data.target.getSnippet());
-		this.cachelat.setText(Double.toString(this.data.target.getPosition().latitude));
-		this.cachelong.setText(Double.toString(this.data.target.getPosition().longitude));
+		this.cacheLat.setText(Double.toString(this.data.target.getPosition().latitude));
+		this.cacheLong.setText(Double.toString(this.data.target.getPosition().longitude));
 	}
 	
 	
