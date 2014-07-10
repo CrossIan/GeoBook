@@ -8,15 +8,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ShareCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,12 +35,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
+import com.google.android.gms.plus.model.people.Person;
 
 public class Cache extends Activity implements ConnectionCallbacks,
 		OnConnectionFailedListener, OnClickListener, OnAccessRevokedListener {
 	
 	//
 	// Start Google+ resources
+	Person currentUser;
+	String userName;
 	private static final String TAG = "Cache";
 	// A magic number we will use to know that our sign-in error
 	// resolution activity has completed.
@@ -57,12 +63,13 @@ public class Cache extends Activity implements ConnectionCallbacks,
 	//
 
 	LinearLayout view;
+	ImageView thumbnail;
 	EditText cacheName;
 	EditText description;
 	TextView cacheLat;
 	TextView cacheLong;
 	TextView dateVisited;
-	Button saveCacheButton,shareCacheButton;
+	Button saveCacheButton,shareCacheButton,captureImageButton;
 	Data data;
 
 	public static final String FOUND_CACHES = "foundCaches.txt";
@@ -79,11 +86,14 @@ public class Cache extends Activity implements ConnectionCallbacks,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cache);
 		
+		thumbnail = (ImageView) this.findViewById(R.id.ivPhoto);
 		
 		saveCacheButton = (Button) this.findViewById(R.id.save_cache_button);
 		saveCacheButton.setOnClickListener(this);
 		shareCacheButton = (Button) this.findViewById(R.id.share_cache_button);
 		shareCacheButton.setOnClickListener(this);
+		captureImageButton = (Button) this.findViewById(R.id.capture_image_button);
+		captureImageButton.setOnClickListener(this);
 		cacheName = (EditText) this.findViewById(R.id.cacheName);
 		description = (EditText) this.findViewById(R.id.cacheDescription);
 		cacheLat = (TextView) this.findViewById(R.id.cachelat);
@@ -199,7 +209,7 @@ public class Cache extends Activity implements ConnectionCallbacks,
 					if (mPlusClient.isConnected()) {
 						// Construct share text
 						String shareText = String.format(
-								"Ryan found a new cache using GeoBook!\n"
+								" found a new cache using GeoBook!\n"
 										+ "Cache Name:\t%s\n"
 										+ "Coordinates:\t%s, %s\n",
 								cacheName.getText(), cacheLat.getText(),
@@ -242,6 +252,16 @@ public class Cache extends Activity implements ConnectionCallbacks,
 			// Show share dialog
 			shareDialog.show();
 		}
+		
+		else if(v.getId() == R.id.capture_image_button){
+			Log.d("Cache", "Tapped capture_image_button in Cache.java");
+			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+		    	Log.d("Cache","Picture intent sent");
+		        startActivityForResult(takePictureIntent, 6969);
+		    }
+
+		}
 	}
 	
 	
@@ -263,6 +283,9 @@ public class Cache extends Activity implements ConnectionCallbacks,
 	}
 	
 	
+	private void getProfileInfo(){
+		
+	}
 	
 	
 	
@@ -327,6 +350,8 @@ public class Cache extends Activity implements ConnectionCallbacks,
 			}
 		};
 		task.execute((Void) null);
+		
+		getProfileInfo();
 	}
 
 	@Override
@@ -353,6 +378,12 @@ public class Cache extends Activity implements ConnectionCallbacks,
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
 		}
+		else if (requestCode == 6969 && responseCode == RESULT_OK) {
+	        Bundle extras = intent.getExtras();
+	        Bitmap imageBitmap = (Bitmap) extras.get("data");
+	        thumbnail.setImageBitmap(imageBitmap);
+	    }
+
 	}
 	
 	@Override

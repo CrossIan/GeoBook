@@ -46,6 +46,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="Share" />
+    
+    <Button
+        android:id="@+id/capture_image_button"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Photo" />
 
     <RatingBar
         android:id="@+id/ratingBar1"
