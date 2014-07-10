@@ -42,7 +42,7 @@ public class Cache extends Activity implements ConnectionCallbacks,
 	
 	//
 	// Start Google+ resources
-	Person currentUser;
+	Person currentPerson;
 	String userName;
 	private static final String TAG = "Cache";
 	// A magic number we will use to know that our sign-in error
@@ -209,11 +209,11 @@ public class Cache extends Activity implements ConnectionCallbacks,
 					if (mPlusClient.isConnected()) {
 						// Construct share text
 						String shareText = String.format(
-								" found a new cache using GeoBook!\n"
+								"%s found a new cache using GeoBook!\n"
 										+ "Cache Name:\t%s\n"
 										+ "Coordinates:\t%s, %s\n",
-								cacheName.getText(), cacheLat.getText(),
-								cacheLong.getText());
+								userName, cacheName.getText(), 
+								cacheLat.getText(),cacheLong.getText());
 
 						// Intent shareIntent = new
 						// PlusShare.Builder(Cache.this)
@@ -284,7 +284,8 @@ public class Cache extends Activity implements ConnectionCallbacks,
 	
 	
 	private void getProfileInfo(){
-		
+		currentPerson = mPlusClient.getCurrentPerson();
+		userName = currentPerson.getDisplayName();
 	}
 	
 	
