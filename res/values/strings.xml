@@ -58,7 +58,7 @@
 
     <!-- STRINGS USED IN Settings -->
     <string name="pin_color">Pin Color</string>
-    <string name="pin_color_dialog">Customize Pin Color</string>
+    <string name="pin_color_dialog">Customize Pin Color for Found Caches</string>
 
     <!-- STRINGS USED IN ListView -->
     <string name="title_activity_listView">List View</string>
