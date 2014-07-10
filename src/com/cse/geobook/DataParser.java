@@ -112,7 +112,8 @@ public class DataParser {
 
 				Double lat = Double.parseDouble(contents[0]);
 				Double lng = Double.parseDouble(contents[1]);
-				String title = contents[2];
+//				String title = contents[2];
+				String title = "Temp Title";
 				String description = "";
 				for (int i = 3; i < contents.length; i++) {
 					description += contents[3];
