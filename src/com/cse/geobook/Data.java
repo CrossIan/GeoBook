@@ -27,9 +27,8 @@ public class Data implements Parcelable {
 	// data[][5] = container
 	// data[][6] = terrain
 	// data[][7] = diff
-	// data[][8] = description
-	// data[][9] = date found
-	
+	// data[][8] = date found
+	// data[][9] = description
 	ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
 	
 	
