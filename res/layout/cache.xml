@@ -32,12 +32,20 @@
         android:width="100dp" />
 
     <Button
-        android:id="@+id/save"
+        android:id="@+id/save_cache_button"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/saveButton" />
+    
+    <Button
+        android:id="@+id/share_cache_button"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Share" />
 
     <RatingBar
         android:id="@+id/ratingBar1"
@@ -76,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/ratingBar1"
         android:layout_below="@+id/cacheName"
-        android:text="Lat Long"
+        android:text="Latitude"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -85,7 +93,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/cachelat"
         android:layout_below="@+id/cachelat"
-        android:text="Lat Long"
+        android:text="Longitude"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    
 
 </RelativeLayout>
