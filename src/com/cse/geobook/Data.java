@@ -1,6 +1,7 @@
 package com.cse.geobook;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import android.os.Parcel;
@@ -31,15 +32,15 @@ public class Data implements Parcelable {
 	// data[][7] = diff
 	// data[][8] = date found
 	// data[][9] = description
-	ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
+	ArrayList<ArrayList<String>> data;
 
 	public static String CACHE_DATA;
 
-	public enum sortBy {
+	public enum SortBy {
 		NAME(0), RATING(3), TYPE(4), CONTAINER(5), DIFFICULTY(7), DATE(8);
 		int SORTING;
 
-		sortBy(int i) {
+		SortBy(int i) {
 			SORTING = i;
 		}
 
@@ -54,7 +55,7 @@ public class Data implements Parcelable {
 
 		primarySort = 0; // name
 		secondarySort = 0;
-
+		data = new ArrayList<ArrayList<String>>();
 	}
 
 	public static final Parcelable.Creator<Data> CREATOR = new Parcelable.Creator<Data>() {
@@ -153,4 +154,15 @@ public class Data implements Parcelable {
 		}
 	};
 
+	public void sort(SortBy primary, SortBy secondary) {
+		this.primarySort = primary.SORTING;
+		this.secondarySort = secondary.SORTING;
+		Collections.sort(data, comparator);
+	}
+
+	public void sort(SortBy ordering) {
+		this.primarySort = ordering.SORTING;
+		this.secondarySort = ordering.SORTING;
+		Collections.sort(data, comparator);
+	}
 }

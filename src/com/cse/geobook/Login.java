@@ -3,7 +3,6 @@ package com.cse.geobook;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusShare;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.Person.Image;
 
@@ -64,10 +62,10 @@ public class Login extends Activity implements OnClickListener,
 		twitterButton.setOnClickListener(this);
 		bypassButton = (Button) findViewById(R.id.bypass_button);
 		bypassButton.setOnClickListener(this);
-		
+
 		// Initialize Google API client
 		// checks to see if this is being run on an emulator or device
-		if (!"google_sdk".equals(Build.PRODUCT)) {
+		if ("google_sdk".equals(Build.PRODUCT)) {
 			mGoogleApiClient = new GoogleApiClient.Builder(this)
 					.addConnectionCallbacks(this)
 					.addOnConnectionFailedListener(this).addApi(Plus.API, null)
@@ -104,8 +102,8 @@ public class Login extends Activity implements OnClickListener,
 
 			// Start the map
 			Intent map = new Intent("android.intent.action.MAP");
-//			Bundle extra = new Bundle();
-//			map.putExtras(extra);
+			// Bundle extra = new Bundle();
+			// map.putExtras(extra);
 			// Finish login activity and move to map view
 			Login.this.startActivity(map);
 			Login.this.finish();
