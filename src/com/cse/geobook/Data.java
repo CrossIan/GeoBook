@@ -1,8 +1,7 @@
 package com.cse.geobook;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.TreeSet;
+import java.util.Comparator;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,8 +16,11 @@ public class Data implements Parcelable {
 	MarkerOptions target;
 	int zoom;
 
+	/* Indices for the below values */
+	int primarySort;
+	int secondarySort;
 	// can remove all caches
-	
+
 	// data[][0] = name
 	// data[][1] = latitude
 	// data[][2] = longitude
@@ -30,10 +32,18 @@ public class Data implements Parcelable {
 	// data[][8] = date found
 	// data[][9] = description
 	ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
-	
-	
 
 	public static String CACHE_DATA;
+
+	public enum sortBy {
+		NAME(0), RATING(3), TYPE(4), CONTAINER(5), DIFFICULTY(7), DATE(8);
+		int SORTING;
+
+		sortBy(int i) {
+			SORTING = i;
+		}
+
+	};
 
 	public Data(ArrayList<MarkerOptions> fc, ArrayList<MarkerOptions> ac,
 			MarkerOptions target, int zoom) {
@@ -42,6 +52,8 @@ public class Data implements Parcelable {
 		this.target = target;
 		this.zoom = zoom;
 
+		primarySort = 0; // name
+		secondarySort = 0;
 
 	}
 
@@ -117,7 +129,6 @@ public class Data implements Parcelable {
 			dest.writeString(temp.getSnippet()); // snippit
 			dest.writeDouble(temp.getPosition().latitude);
 			dest.writeDouble(temp.getPosition().longitude);
-
 		}
 
 		// Target
@@ -128,4 +139,18 @@ public class Data implements Parcelable {
 
 		dest.writeInt(zoom);
 	}
+
+	Comparator<ArrayList<String>> comparator = new Comparator<ArrayList<String>>() {
+
+		@Override
+		public int compare(ArrayList<String> lhs, ArrayList<String> rhs) {
+			int result = lhs.get(primarySort).compareTo(rhs.get(primarySort));
+			if (result == 0) {
+				result = lhs.get(secondarySort).compareTo(
+						rhs.get(secondarySort));
+			}
+			return result;
+		}
+	};
+
 }
