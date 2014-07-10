@@ -20,9 +20,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    
 
     <!-- End developer.google.com -->
+    
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -30,12 +32,14 @@
         android:label="@string/app_name"
         android:logo="@drawable/earth"
         android:theme="@style/AppTheme" >
-        
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-        
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
-            android:name="com.cse.geobook.SplashScreen"
+            android:name=".SplashScreen"
             android:label="@string/app_name" >
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cse.geobook.Map"
+            android:name=".Map"
             android:label="@string/title_activity_map" >
             <intent-filter>
                 <action android:name="android.intent.action.MAP" />
@@ -52,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cse.geobook.Photo"
+            android:name=".Photo"
             android:label="@string/title_activity_photo"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -62,7 +66,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cse.geobook.Cache"
+            android:name=".Cache"
             android:label="@string/title_activity_cache"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -72,7 +76,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cse.geobook.Settings"
+            android:name=".Settings"
             android:label="@string/menu_map_settings"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -82,7 +86,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cse.geobook.CacheList"
+            android:name=".CacheList"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.CACHE_LIST" />
@@ -91,11 +95,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cse.geobook.Login"
+            android:name=".Login"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name="com.cse.geobook.Profile"
+            android:name=".Profile"
             android:label="@string/title_activity_profile" >
         </activity>
 
@@ -110,8 +114,12 @@
             android:value="AIzaSyBSynp55necy7jJdmJ4w3dYOI2nfVPE2k8" />
 
         <activity
-            android:name="com.cse.geobook.CacheList_Activity"
+            android:name=".CacheList_Activity"
             android:label="@string/title_activity_listView" >
+        </activity>
+        <activity
+            android:name=".TestActivity"
+            android:label="@string/title_activity_test" >
         </activity>
     </application>
 

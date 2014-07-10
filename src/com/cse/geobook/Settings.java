@@ -24,6 +24,7 @@ public class Settings extends Activity {
 	 * Returns a string that corresponds to a color that will be used by Map
 	 */
 	public static String getColorMarker(Context context){
+		//Default value of 1, which corresponds to the default color value of "azure" to contrast with the red
 		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_pinColor", "1");
 		
 	}
@@ -35,5 +36,7 @@ public class Settings extends Activity {
 	public static String getRadius(Context context){
 		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_radiusList", "50");
 	}
+	
+	//Implement delete all caches
 
 }

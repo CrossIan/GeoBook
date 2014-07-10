@@ -102,7 +102,8 @@ public class DataParser {
 		String line;
 		try {
 			line = this.reader.readLine();
-			String[] contents = line.split(",");
+			String[] contents = line.split("[,]");
+//			Log.d("RW", Integer.toString(contents.length));
 
 			// if line matches required format
 			String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -112,6 +113,7 @@ public class DataParser {
 				Double lat = Double.parseDouble(contents[0]);
 				Double lng = Double.parseDouble(contents[1]);
 				String title = contents[2];
+//			d	String title = "Temp Title";
 				String description = "";
 				for (int i = 3; i < contents.length; i++) {
 					description += contents[3];

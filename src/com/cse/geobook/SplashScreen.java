@@ -27,7 +27,7 @@ public class SplashScreen extends Activity {
 					/*
 					 * This section periodically checks if time has run out. It
 					 * checks every 100ms to save resources. The splash screen
-					 * is terminated when time runs out of the user taps the
+					 * is terminated when time runs out or the user taps the
 					 * screen.
 					 */
 					int elapsedTime = 0;

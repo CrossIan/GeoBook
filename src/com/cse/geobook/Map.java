@@ -96,17 +96,16 @@ public class Map extends FragmentActivity {
 				.getApplicationContext());
 		// Default Value
 		BitmapDescriptor colorMarker = BitmapDescriptorFactory
-				.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+				.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
 		switch (colorValue) {
 		case "1":
 			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+			.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 			break;
 		case "2":
-
 			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+			.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 			break;
 		case "3":
 			colorMarker = BitmapDescriptorFactory

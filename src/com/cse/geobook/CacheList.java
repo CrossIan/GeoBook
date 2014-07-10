@@ -20,25 +20,25 @@ public class CacheList extends ListActivity {
 		super.onCreate(savedInstanceState);
 		Log.d(this.getClass().toString(), "getting extras");
 
-		getExtras();
-		if (caches != null) {
-			int size = caches.allCaches.size();
-			titles = new String[size];
+		this.getExtras();
+		if (this.caches != null) {
+			int size = this.caches.foundCaches.size();
+			this.titles = new String[size];
 			for (int i = 0; i < size; i++) {
-				String next = caches.allCaches.get(i).getTitle();
-				titles[i] = next;
+				String next = this.caches.foundCaches.get(i).getTitle();
+				this.titles[i] = next;
 			}
 
 			// initialize menu
-			setListAdapter(new ArrayAdapter<String>(CacheList.this,
-					android.R.layout.simple_list_item_1, titles));
+			this.setListAdapter(new ArrayAdapter<String>(CacheList.this,
+			        android.R.layout.simple_list_item_1, this.titles));
 
 		}
 	}
 
 	private void getExtras() {
 		this.extras = this.getIntent().getExtras();
-		caches = extras.getParcelable(Data.CACHE_DATA);
+		this.caches = this.extras.getParcelable(Data.CACHE_DATA);
 	}
 
 	@Override
@@ -47,15 +47,16 @@ public class CacheList extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		int zoom = 16;
 
-		Data data = new Data(caches.foundCaches, caches.allCaches, caches.allCaches.get(position), zoom);
+		Data data = new Data(this.caches.foundCaches, this.caches.foundCaches,
+		        this.caches.foundCaches.get(position), zoom);
 
 		Bundle extras_new = new Bundle();
 		extras_new.putParcelable(Data.CACHE_DATA, data);
 
 		Intent map = new Intent("android.intent.action.MAP");
 		map.putExtras(extras_new);
-		startActivity(map);
-		finish();
+		this.startActivity(map);
+		this.finish();
 
 	}
 }
