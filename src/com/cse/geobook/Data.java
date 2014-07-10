@@ -1,6 +1,8 @@
 package com.cse.geobook;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.TreeSet;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,6 +17,20 @@ public class Data implements Parcelable {
 	MarkerOptions target;
 	int zoom;
 
+	// data[][0] = name
+	// data[][1] = latitude
+	// data[][2] = longitude
+	// data[][3] = rating
+	// data[][4] = type
+	// data[][5] = container
+	// data[][6] = terrain
+	// data[][7] = diff
+	// data[][8] = description
+	
+	ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
+	
+	
+
 	public static String CACHE_DATA;
 
 	public Data(ArrayList<MarkerOptions> fc, ArrayList<MarkerOptions> ac,
@@ -23,6 +39,7 @@ public class Data implements Parcelable {
 		this.allCaches = ac;
 		this.target = target;
 		this.zoom = zoom;
+
 
 	}
 
