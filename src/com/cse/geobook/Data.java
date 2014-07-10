@@ -17,6 +17,8 @@ public class Data implements Parcelable {
 	MarkerOptions target;
 	int zoom;
 
+	// can remove all caches
+	
 	// data[][0] = name
 	// data[][1] = latitude
 	// data[][2] = longitude
@@ -26,6 +28,7 @@ public class Data implements Parcelable {
 	// data[][6] = terrain
 	// data[][7] = diff
 	// data[][8] = description
+	// data[][9] = date found
 	
 	ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
 	
