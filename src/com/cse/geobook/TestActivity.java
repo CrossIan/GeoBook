@@ -33,17 +33,13 @@ public class TestActivity extends Activity implements
 		OnAccessRevokedListener {
 
 	private static final String TAG = "SignInTestActivity";
-
 	// A magic number we will use to know that our sign-in error
 	// resolution activity has completed.
 	private static final int OUR_REQUEST_CODE = 49404;
-
 	// The core Google+ client.
 	private PlusClient mPlusClient;
-
 	// A flag to stop multiple dialogues appearing for the user.
 	private boolean mResolveOnFail;
-
 	// We can store the connection result from a failed connect()
 	// attempt in order to make the application feel a bit more
 	// responsive for the user.
