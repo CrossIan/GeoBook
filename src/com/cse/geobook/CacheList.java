@@ -2,18 +2,23 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
+import android.R.anim;
+import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.cse.geobook.Data.SortBy;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CacheList extends ListActivity {
+public class CacheList extends Activity implements OnItemClickListener {
 	static int startCacheNameID = 900;
 
 	Data caches;
@@ -25,6 +30,8 @@ public class CacheList extends ListActivity {
 		super.onCreate(savedInstanceState);
 		Log.d(this.getClass().toString(), "getting extras");
 		
+		setContentView(R.layout.cache_list);
+		ListView lv = (ListView) findViewById(R.id.ListView01);
 
 		this.getExtras();
 		if (this.caches != null) {
@@ -53,8 +60,12 @@ public class CacheList extends ListActivity {
 
 			// initialize menu
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-					R.layout.cache_list, R.id.label, titles);
-			setListAdapter(adapter);
+					android.R.layout.simple_list_item_1, titles);
+//			setListAdapter(adapter);
+			
+			
+			lv.setAdapter(adapter);
+			lv.setOnItemClickListener(this);
 
 		}
 	}
@@ -64,10 +75,25 @@ public class CacheList extends ListActivity {
 		this.caches = this.extras.getParcelable(Data.CACHE_DATA);
 	}
 
+
+
+	
+
+	// this method is not needed for final
+	// only used for testing before data is completed
+	private void setUpTemporaryDataForSorting() {
+		caches.data = new ArrayList<ArrayList<String>>();
+		for (int i = 0; i < this.caches.allCaches.size(); i++) {
+			ArrayList<String> temp = new ArrayList<String>();
+			MarkerOptions mo = caches.allCaches.get(i);
+			temp.add(mo.getTitle());
+			this.caches.data.add(temp);
+		}
+	}
+
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
-		super.onListItemClick(l, v, position, id);
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
 		int zoom = 16;
 
 		Data data = new Data(this.caches.foundCaches, this.caches.foundCaches,
@@ -80,18 +106,5 @@ public class CacheList extends ListActivity {
 		map.putExtras(extras_new);
 		this.startActivity(map);
 		this.finish();
-
-	}
-
-	// this method is not needed for final
-	// only used for testing before data is completed
-	private void setUpTemporaryDataForSorting() {
-		caches.data = new ArrayList<ArrayList<String>>();
-		for (int i = 0; i < this.caches.allCaches.size(); i++) {
-			ArrayList<String> temp = new ArrayList<String>();
-			MarkerOptions mo = caches.allCaches.get(i);
-			temp.add(mo.getTitle());
-			this.caches.data.add(temp);
-		}
 	}
 }

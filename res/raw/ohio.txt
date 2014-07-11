@@ -668,7 +668,7 @@
 39.59246700,-84.0133170,Sign of the Past
 39.53301700,-83.9725830,Hail to Caesar Creek State Park - Campground Trail
 39.51381700,-83.9765500,4) Olympus Mons - CesrCrk S Ward Rd Mnt Bike Trail
-39.38896700,-84.2340000,"Corn, Corn, Corn!"
+39.38896700,-84.2340000,"Corn Corn Corn!"
 39.28388300,-84.7307000,Name That Cache - Shaker Trace Trail
 39.28090000,-84.7302000,Y.A.B.T.C.   - Shaker Trace Bike Trail
 39.28531700,-84.7453830,Enjoy Don't Destroy - Shaker Trace Bike Trail

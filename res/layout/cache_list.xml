@@ -1,44 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal" >
 
-        <CheckBox
-            android:id="@+id/show_found_check"
+        <Button
+            android:id="@+id/moreButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="Found" />
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:text="Text"
+            android:paddingRight="20dp" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/Linear1"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_weight="0.1"
+        android:orientation="horizontal" >
 
-        <CheckBox
-            android:id="@+id/show_not_found_check"
-            android:layout_width="wrap_content"
+        <ListView
+            android:id="@+id/ListView01"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/show_found_check"
-            android:text="Not Found" />
+            android:dividerHeight="2dp" >
+        </ListView>
+    </LinearLayout>
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="22px"
-            android:layout_height="22px"
-            android:layout_marginLeft="4px"
-            android:layout_marginRight="10px"
-            android:layout_marginTop="4px"
-            android:src="@drawable/earth" >
-        </ImageView>
-
-        <TextView
-            android:id="@+id/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@+id/label"
-            android:textSize="20px" >
-        </TextView>
-    </RelativeLayout>
+    
 
 </LinearLayout>
