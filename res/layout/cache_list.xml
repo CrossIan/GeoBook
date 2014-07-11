@@ -3,21 +3,36 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/moreButton"
+        <CheckBox
+            android:id="@+id/show_found_check"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:text="Text"
-            android:paddingRight="20dp" />
-    </LinearLayout>
-    
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Found" />
+
+        <CheckBox
+            android:id="@+id/show_not_found_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/show_found_check"
+            android:text="Not Found" />
+
+        <Spinner
+            android:id="@+id/sort_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/show_not_found_check" />
+        
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/Linear1"
         android:layout_width="fill_parent"
@@ -32,7 +47,5 @@
             android:dividerHeight="2dp" >
         </ListView>
     </LinearLayout>
-
-    
 
 </LinearLayout>

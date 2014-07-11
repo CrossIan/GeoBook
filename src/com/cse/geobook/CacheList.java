@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.cse.geobook.Data.SortBy;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -22,21 +23,32 @@ public class CacheList extends Activity implements OnItemClickListener {
 	static int startCacheNameID = 900;
 
 	Data caches;
-	String[] titles;
+	String[] titles, sortOptions;
 	Bundle extras;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(this.getClass().toString(), "getting extras");
-		
+
 		setContentView(R.layout.cache_list);
 		ListView lv = (ListView) findViewById(R.id.ListView01);
+
+		// Add options to sort spinner
+		sortOptions = new String[5];
+		sortOptions[0] = "Name";
+		sortOptions[1] = "Rating";
+		sortOptions[2] = "Size";
+		sortOptions[3] = "Difficulty";
+		sortOptions[4] = "Terrain";
+		Spinner sortSpinner = (Spinner) findViewById(R.id.sort_spinner);
+		ArrayAdapter spinnerAdapter = new ArrayAdapter(this,
+				android.R.layout.simple_spinner_item, sortOptions);
+		sortSpinner.setAdapter(spinnerAdapter);
 
 		this.getExtras();
 		if (this.caches != null) {
 
-			//
 			this.setUpTemporaryDataForSorting();
 			caches.sort(SortBy.NAME);
 
@@ -59,12 +71,11 @@ public class CacheList extends Activity implements OnItemClickListener {
 			}
 
 			// initialize menu
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+			ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,
 					android.R.layout.simple_list_item_1, titles);
-//			setListAdapter(adapter);
-			
-			
-			lv.setAdapter(adapter);
+			// setListAdapter(adapter);
+
+			lv.setAdapter(listAdapter);
 			lv.setOnItemClickListener(this);
 
 		}
@@ -74,10 +85,6 @@ public class CacheList extends Activity implements OnItemClickListener {
 		this.extras = this.getIntent().getExtras();
 		this.caches = this.extras.getParcelable(Data.CACHE_DATA);
 	}
-
-
-
-	
 
 	// this method is not needed for final
 	// only used for testing before data is completed
