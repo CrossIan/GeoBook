@@ -24,6 +24,7 @@ public class CacheList extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(this.getClass().toString(), "getting extras");
+		
 
 		this.getExtras();
 		if (this.caches != null) {
@@ -51,8 +52,9 @@ public class CacheList extends ListActivity {
 			}
 
 			// initialize menu
-			this.setListAdapter(new ArrayAdapter<String>(CacheList.this,
-					android.R.layout.simple_list_item_1, this.titles));
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+					R.layout.cache_list, R.id.label, titles);
+			setListAdapter(adapter);
 
 		}
 	}
