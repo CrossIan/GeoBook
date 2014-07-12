@@ -35,6 +35,12 @@ public class Data implements Parcelable {
 
 	// edit SortBy to match indicies
 	public enum SortBy {
+		// Available sorting options
+//		sortOptions[0]="Name";
+//		sortOptions[1]="Rating";
+//		sortOptions[2]="Size";
+//		sortOptions[3]="Difficulty";
+//		sortOptions[4]="Terrain";
 		NAME(0), RATING(3), TYPE(4), CONTAINER(5), DIFFICULTY(7), DATE(8);
 		int SORTING;
 

@@ -59,14 +59,14 @@ public class Map extends FragmentActivity {
 		int zoom = 11;
 		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
 			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
-			mo = caches.target;
+			mo = createMarkerOptions(caches.target);
 			zoom = caches.zoom;
 		}
 
 		this.caches = readInData();
 		if (mo != null) {
-			caches.target = mo;
-			caches.zoom = zoom;
+			// caches.target = mo;
+			// caches.zoom = zoom;
 		}
 	}
 
@@ -154,22 +154,24 @@ public class Map extends FragmentActivity {
 		 * set up markers
 		 */
 
-		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-				this.caches.target.getPosition(), this.caches.zoom));
+		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+				this.caches.target.getLat(), this.caches.target.getLng()),
+				this.caches.zoom));
 
 		// set all caches
 		int size = this.caches.allCaches.size();
 		Log.d("cache", "all -size: " + size);
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i)));
+			markers.add(this.gMap
+					.addMarker(createMarkerOptions(this.caches.allCaches.get(i))));
 		}
 
 		// set found caches
 		size = this.caches.foundCaches.size();
 		Log.d("cache", "found - size: " + size);
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.foundCaches.get(i)
-					.icon(colorMarker)));
+			markers.add(this.gMap.addMarker(createMarkerOptions(
+					this.caches.foundCaches.get(i)).icon(colorMarker)));
 		}
 
 	}
@@ -238,11 +240,13 @@ public class Map extends FragmentActivity {
 					// TODO Auto-generated method stub
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
-						MarkerOptions mo = new MarkerOptions().position(pos);
-						mo.title("default");
-						mo.snippet("");
-						Map.this.caches.allCaches.add(mo);
-						Map.this.gMap.addMarker(mo);
+						Cache cache = new Cache();
+						cache.lat(String.valueOf(pos.latitude));
+						cache.lng(String.valueOf(pos.longitude));
+						cache.name("default");
+						cache.description("");
+						Map.this.caches.allCaches.add(cache);
+						Map.this.gMap.addMarker(createMarkerOptions(cache));
 						// Todo place in hash map
 						DataParser all = new DataParser(
 								getApplicationContext(), Cache.ALL_CACHES);
@@ -283,18 +287,19 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onInfoWindowClick(final Marker marker) {
-			MarkerOptions mo = new MarkerOptions();
-			mo.title(marker.getTitle());
-			mo.snippet(marker.getSnippet());
-			mo.position(marker.getPosition());
+			Cache cache = new Cache();
+			cache.name(marker.getTitle());
+			cache.description(marker.getSnippet());
+			cache.lat(String.valueOf(marker.getPosition().latitude));
+			cache.lng(String.valueOf(marker.getPosition().longitude));
 
-			Intent cache = new Intent("android.intent.action.CACHE");
+			Intent cacheView = new Intent("android.intent.action.CACHE");
 			Bundle extra = new Bundle();
 
-			Map.this.caches.target = mo;
+			Map.this.caches.target = cache;
 			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 
-			cache.putExtras(extra);
+			cacheView.putExtras(extra);
 			/**
 			 * <pre> doesn't work
 			 * 
@@ -315,7 +320,7 @@ public class Map extends FragmentActivity {
 			 * } else { // error }
 			 */
 			// remove once above is working
-			Map.this.startActivity(cache);
+			Map.this.startActivity(cacheView);
 
 		}
 	}
@@ -395,9 +400,9 @@ public class Map extends FragmentActivity {
 		File targetCacheFile = getApplicationContext().getFileStreamPath(
 				Cache.TARGET_CACHE);
 
-		ArrayList<MarkerOptions> ac = null;
-		ArrayList<MarkerOptions> fc = null;
-		ArrayList<MarkerOptions> t = null;
+		ArrayList<Cache> ac = null;
+		ArrayList<Cache> fc = null;
+		ArrayList<Cache> t = null;
 
 		DataParser all = new DataParser(getApplicationContext(),
 				Cache.ALL_CACHES);
@@ -410,7 +415,7 @@ public class Map extends FragmentActivity {
 			fc = found.read();
 			found.close();
 		} else {
-			fc = new ArrayList<MarkerOptions>();
+			fc = new ArrayList<Cache>();
 		}
 
 		if (targetCacheFile.exists()) {
@@ -421,9 +426,12 @@ public class Map extends FragmentActivity {
 		} else {
 			DataParser target = new DataParser(getApplicationContext(),
 					Cache.TARGET_CACHE);
-			t = new ArrayList<MarkerOptions>();
-			t.add(new MarkerOptions()
-					.position(new LatLng(39.961138, -83.001465)));
+			t = new ArrayList<Cache>();
+			Cache cache = new Cache();
+			cache.name("defaultTarget");
+			cache.lat("39.961138");
+			cache.lng("-83.001465");
+			t.add(cache);
 			target.overwriteAll(t);
 
 			target.close();
@@ -433,7 +441,11 @@ public class Map extends FragmentActivity {
 	}
 
 	private MarkerOptions createMarkerOptions(Cache cache) {
-		return null;
+		MarkerOptions result = new MarkerOptions();
+		result.title(cache.getName());
+		result.snippet(cache.getDescription());
+		result.position(new LatLng(cache.getLat(), cache.getLng()));
 
+		return result;
 	}
 }
