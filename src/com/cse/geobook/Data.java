@@ -7,14 +7,11 @@ import java.util.Comparator;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 public class Data implements Parcelable {
 	@SuppressWarnings("hiding")
-	ArrayList<MarkerOptions> foundCaches;
-	ArrayList<MarkerOptions> allCaches;
-	MarkerOptions target;
+	ArrayList<Cache> foundCaches;
+	ArrayList<Cache> allCaches;
+	Cache target;
 	int zoom;
 
 	/* Indices for the below values */
@@ -25,17 +22,18 @@ public class Data implements Parcelable {
 	// data[][0] = name
 	// data[][1] = latitude
 	// data[][2] = longitude
-	// data[][3] = rating
-	// data[][4] = type
-	// data[][5] = container
-	// data[][6] = terrain
-	// data[][7] = diff
+	// data[][3] = creator
+	// data[][4] = diff
+	// data[][5] = terrain
+	// data[][6] = awesomeness
+	// data[][7] = container
 	// data[][8] = date found
 	// data[][9] = description
-	ArrayList<ArrayList<String>> data;
+	public static final int numberOfdescriptors = 10;
 
 	public static String CACHE_DATA;
 
+	// edit SortBy to match indicies
 	public enum SortBy {
 		NAME(0), RATING(3), TYPE(4), CONTAINER(5), DIFFICULTY(7), DATE(8);
 		int SORTING;
@@ -43,19 +41,17 @@ public class Data implements Parcelable {
 		SortBy(int i) {
 			SORTING = i;
 		}
-
 	};
 
-	public Data(ArrayList<MarkerOptions> fc, ArrayList<MarkerOptions> ac,
-			MarkerOptions target, int zoom) {
-		this.foundCaches = fc;
-		this.allCaches = ac;
+	public Data(ArrayList<Cache> found, ArrayList<Cache> all, Cache target,
+			int zoom) {
+		this.foundCaches = found;
+		this.allCaches = all;
 		this.target = target;
 		this.zoom = zoom;
 
 		primarySort = 0; // name
 		secondarySort = 0;
-		data = new ArrayList<ArrayList<String>>();
 	}
 
 	public static final Parcelable.Creator<Data> CREATOR = new Parcelable.Creator<Data>() {
@@ -68,37 +64,40 @@ public class Data implements Parcelable {
 		}
 	};
 
+	/**
+	 * Reads a single cache from the parcel, a cache is equivalent to a single
+	 * line from the data parcer
+	 * 
+	 * @param in
+	 * @return
+	 */
+	private Cache getNextCache(Parcel in) {
+		ArrayList<String> temp = new ArrayList<String>();
+		for (int i = 0; i < numberOfdescriptors; i++) {
+			String descriptor = in.readString(); // snippit
+			temp.add(descriptor);
+		}
+		return new Cache(temp);
+	}
+
 	public Data(Parcel in) {
 		// foundCaches
-		foundCaches = new ArrayList<MarkerOptions>();
+		foundCaches = new ArrayList<Cache>();
 		int size = in.readInt(); // length
 		for (int i = 0; i < size; i++) {
-			String title = in.readString(); // title
-			String description = in.readString(); // snippit
-			Double lat = in.readDouble();
-			Double lng = in.readDouble();
-
-			foundCaches.add(new MarkerOptions().title(title)
-					.snippet(description).position(new LatLng(lat, lng)));
+			Cache cache = getNextCache(in);
+			foundCaches.add(cache);
 		}
 
 		// allCaches
-		allCaches = new ArrayList<MarkerOptions>();
+		allCaches = new ArrayList<Cache>();
 		size = in.readInt(); // length
 		for (int i = 0; i < size; i++) {
-			String title = in.readString(); // title
-			String description = in.readString(); // snippit
-			Double lat = in.readDouble();
-			Double lng = in.readDouble();
-
-			allCaches.add(new MarkerOptions().title(title).snippet(description)
-					.position(new LatLng(lat, lng)));
+			Cache cache = getNextCache(in);
+			foundCaches.add(cache);
 		}
-
 		// target
-		target = new MarkerOptions().title(in.readString())
-				.snippet(in.readString())
-				.position(new LatLng(in.readDouble(), in.readDouble()));
+		target = getNextCache(in);
 		zoom = in.readInt();
 	}
 
@@ -107,44 +106,50 @@ public class Data implements Parcelable {
 		return 0;
 	}
 
+	/**
+	 * Writes a singe cache to the parcel, a cache is equivalent to a comma
+	 * separated line in the dataparser
+	 * 
+	 * @param dest
+	 * @param cache
+	 */
+	private void writeNextCache(Parcel dest, Cache cache) {
+		for (int i = 0; i < numberOfdescriptors; i++) {
+			String descriptor = cache.get(i);
+			dest.writeString(descriptor);
+		}
+	}
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		// foundCaches
 		int size = foundCaches.size();
 		dest.writeInt(size); // length
-		for (int i = 0; i < size; i++) {
-			MarkerOptions temp = foundCaches.get(i);
-			dest.writeString(temp.getTitle()); // title
-			dest.writeString(temp.getSnippet()); // snippit
-			dest.writeDouble(temp.getPosition().latitude);
-			dest.writeDouble(temp.getPosition().longitude);
 
+		for (int i = 0; i < size; i++) {
+			Cache cache = foundCaches.get(i);
+			writeNextCache(dest, cache);
 		}
 
 		// allCaches
 		size = allCaches.size();
 		dest.writeInt(size); // length
 		for (int i = 0; i < size; i++) {
-			MarkerOptions temp = allCaches.get(i);
-			dest.writeString(temp.getTitle()); // title
-			dest.writeString(temp.getSnippet()); // snippit
-			dest.writeDouble(temp.getPosition().latitude);
-			dest.writeDouble(temp.getPosition().longitude);
+			Cache cache = allCaches.get(i);
+			writeNextCache(dest, cache);
 		}
 
 		// Target
-		dest.writeString(target.getTitle());
-		dest.writeString(target.getSnippet());
-		dest.writeDouble(target.getPosition().latitude);
-		dest.writeDouble(target.getPosition().longitude);
+		writeNextCache(dest, target);
 
+		// zoom
 		dest.writeInt(zoom);
 	}
 
-	Comparator<ArrayList<String>> comparator = new Comparator<ArrayList<String>>() {
+	Comparator<Cache> comparator = new Comparator<Cache>() {
 
 		@Override
-		public int compare(ArrayList<String> lhs, ArrayList<String> rhs) {
+		public int compare(Cache lhs, Cache rhs) {
 			int result = lhs.get(primarySort).compareTo(rhs.get(primarySort));
 			if (result == 0) {
 				result = lhs.get(secondarySort).compareTo(
@@ -157,12 +162,15 @@ public class Data implements Parcelable {
 	public void sort(SortBy primary, SortBy secondary) {
 		this.primarySort = primary.SORTING;
 		this.secondarySort = secondary.SORTING;
-		Collections.sort(data, comparator);
+		Collections.sort(allCaches, comparator);
+		Collections.sort(foundCaches, comparator);
 	}
 
 	public void sort(SortBy ordering) {
 		this.primarySort = ordering.SORTING;
 		this.secondarySort = ordering.SORTING;
-		Collections.sort(data, comparator);
+		Collections.sort(allCaches, comparator);
+		Collections.sort(foundCaches, comparator);
 	}
+
 }

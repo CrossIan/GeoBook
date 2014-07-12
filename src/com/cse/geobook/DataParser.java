@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 /**
  * <pre>
  * Reads in a file where each line is of the format:
@@ -79,10 +76,13 @@ public class DataParser {
 	 * @param mo
 	 * @param stream
 	 */
-	private void writeMarker(MarkerOptions mo, FileOutputStream stream) {
-		String line = String.valueOf(mo.getPosition().latitude) + ","
-				+ mo.getPosition().longitude + "," + mo.getTitle() + ","
-				+ mo.getSnippet() + "\n";
+	private void writeMarker(Cache cache, FileOutputStream stream) {
+		String line = "";
+		for (int i = 0; i < Data.numberOfdescriptors - 1; i++) {
+			line += cache.get(i) + ",";
+		}
+		line += cache.get(Data.numberOfdescriptors - 1);
+
 		try {
 			stream.write(line.getBytes());
 		} catch (IOException e) {
@@ -96,30 +96,29 @@ public class DataParser {
 	 * 
 	 * @return
 	 */
-	private MarkerOptions readMarker() {
-		MarkerOptions marker = null;
+	private Cache readMarker() {
+		ArrayList<String> result = new ArrayList<String>();
 
 		String line;
 		try {
 			line = this.reader.readLine();
 			String[] contents = line.split("[,]");
-//			Log.d("RW", Integer.toString(contents.length));
+			// Log.d("RW", Integer.toString(contents.length));
 
 			// if line matches required format
 			String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
-			if (contents[0].matches(matchDouble)
-					&& contents[1].matches(matchDouble)) {
+			if (contents[1].matches(matchDouble)
+					&& contents[2].matches(matchDouble)) {
 
-				Double lat = Double.parseDouble(contents[0]);
-				Double lng = Double.parseDouble(contents[1]);
-				String title = contents[2];
-//			d	String title = "Temp Title";
-				String description = "";
-				for (int i = 3; i < contents.length; i++) {
-					description += contents[3];
+				for (int i = 0; i < Data.numberOfdescriptors - 2; i++) {
+					result.add(contents[i]);
 				}
-				marker = new MarkerOptions().position(new LatLng(lat, lng))
-						.title(title).snippet(description);
+
+				String description = "";
+				for (int i = Data.numberOfdescriptors - 1; i < contents.length; i++) {
+					description += contents[i];
+				}
+				result.add(description);
 
 			}
 		} catch (IOException e) {
@@ -127,7 +126,7 @@ public class DataParser {
 			e.printStackTrace();
 		}
 
-		return marker;
+		return new Cache(result);
 	}
 
 	/**
@@ -152,59 +151,40 @@ public class DataParser {
 	 * 
 	 * @return
 	 */
-	public ArrayList<MarkerOptions> read() {
+	public ArrayList<Cache> read() {
 
-		ArrayList<MarkerOptions> cache_array = new ArrayList<MarkerOptions>();
+		ArrayList<Cache> cache_array = new ArrayList<Cache>();
 
-		if(this.reader != null){
+		if (this.reader != null) {
 			while (this.ready()) {
 				cache_array.add(this.readMarker());
 			}
-
 		}
 		return cache_array;
 	}
 
 	/**
-	 * Completely overwritest the file contained in this
+	 * Completely overwrites the file contained in this
 	 * 
 	 * 
 	 */
 
-	public void overwriteAll(ArrayList<MarkerOptions> data) {
+	public void overwriteAll(ArrayList<Cache> data) {
 
 		FileOutputStream writer;
 		try {
 			writer = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			int size = data.size();
 
-			MarkerOptions temp = null;
+			Cache cache = new Cache();
 
 			for (int i = 0; i < size; i++) {
-				temp = data.get(i);
-				writeMarker(temp, writer);
+				cache = data.get(i);
+				writeMarker(cache, writer);
 			}
 			writer.close();
 
 			Log.d("data", "data has been saved");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	// NOT WORKING
-	public void append(MarkerOptions mo, Context c) {
-
-		FileOutputStream writer;
-		try {
-
-			writer = c.openFileOutput(FILENAME, Context.MODE_APPEND);
-			writeMarker(mo, writer);
-			writer.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
