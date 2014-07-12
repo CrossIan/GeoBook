@@ -103,14 +103,21 @@ public class DataParser {
 		try {
 			line = this.reader.readLine();
 			String[] contents = line.split("[,]");
-			// Log.d("RW", Integer.toString(contents.length));
+
+			// Log.d("Length",
+			// "Length of array: " + Integer.toString(contents.length));
 
 			// if line matches required format
 			String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 			if (contents[1].matches(matchDouble)
 					&& contents[2].matches(matchDouble)) {
 
-				for (int i = 0; i < Data.numberOfdescriptors - 2; i++) {
+				/*
+				 * for (int i = 0; i < Data.numberOfdescriptors - 2; i++) {
+				 * result.add(contents[i]); }
+				 */
+				for (int i = 0; i < contents.length; i++) {
+					// Log.d("values", "Contents " + i + ":" + contents[i]);
 					result.add(contents[i]);
 				}
 

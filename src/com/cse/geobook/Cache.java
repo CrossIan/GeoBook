@@ -3,7 +3,7 @@ package com.cse.geobook;
 import java.util.ArrayList;
 
 public class Cache {
-	public static final int numberOfdescriptors = 10;
+	public static final int numberOfdescriptors = 8;
 	ArrayList<String> cache;
 
 	public static final String FOUND_CACHES = "foundCaches.txt";
@@ -78,56 +78,47 @@ public class Cache {
 
 	public void name(String name) {
 		int index = DESCRIPTOR.NAME.INDEX;
-		cache.remove(index);
-		cache.add(index, name);
+		cache.set(index, name);
 	}
 
 	public void lat(String lat) {
 		int index = DESCRIPTOR.LAT.INDEX;
-		cache.remove(index);
-		cache.add(index, lat);
+		cache.set(index, lat);
 	}
 
 	public void lng(String lng) {
 		int index = DESCRIPTOR.LAT.INDEX;
-		cache.remove(index);
-		cache.add(index, lng);
+		cache.set(index, lng);
 	}
 
 	public void creator(String creator) {
 		int index = DESCRIPTOR.CREATOR.INDEX;
-		cache.remove(index);
-		cache.add(index, creator);
+		cache.set(index, creator);
 	}
 
 	public void difficulty(String difficulty) {
 		int index = DESCRIPTOR.DIFFICULTY.INDEX;
-		cache.remove(index);
-		cache.add(index, difficulty);
+		cache.set(index, difficulty);
 	}
 
 	public void terrain(String terrain) {
 		int index = DESCRIPTOR.TERRAIN.INDEX;
-		cache.remove(index);
-		cache.add(index, terrain);
+		cache.set(index, terrain);
 	}
 
 	public void container(String container) {
 		int index = DESCRIPTOR.CONTAINER.INDEX;
-		cache.remove(index);
-		cache.add(index, container);
+		cache.set(index, container);
 	}
 
 	public void date(String date) {
 		int index = DESCRIPTOR.DATE.INDEX;
-		cache.remove(index);
-		cache.add(index, date);
+		cache.set(index, date);
 	}
 
 	public void description(String description) {
 		int index = DESCRIPTOR.DESCRIPTION.INDEX;
-		cache.remove(index);
-		cache.add(index, description);
+		cache.set(index, description);
 	}
 
 	public String get(int i) {
