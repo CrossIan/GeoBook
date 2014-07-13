@@ -57,17 +57,15 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	// End Google+ resources
 	//
 	
-	
+	// Data for this cache
 	Person currentPerson;
-	String userName;
+	String userName,cacheName,cachePlacedBy;
+	Double cacheLat,cacheLng;
 	
 	// Layout widgets
-	ImageView thumbnail;
-	TextView cacheName;
-	EditText description;
-	TextView cacheLat;
-	TextView cacheLong;
-	TextView dateVisited;
+	ImageView cacheThumbnail;
+	TextView cacheNameText, cachePlacedByText, dateVisited,cacheDateFoundText,
+			cacheDifficultyText,cacheTerrainText,cacheAwesomenessText,cacheSizeText;
 	Button saveCacheButton, shareCacheButton, captureImageButton;
 	Data data;
 
@@ -81,19 +79,21 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cache);
 
-		thumbnail = (ImageView) this.findViewById(R.id.ivPhoto);
-
+		// Link widgets
+		cacheThumbnail = (ImageView) this.findViewById(R.id.cache_thumbnail);
 		saveCacheButton = (Button) this.findViewById(R.id.save_cache_button);
 		saveCacheButton.setOnClickListener(this);
 		shareCacheButton = (Button) this.findViewById(R.id.share_cache_button);
 		shareCacheButton.setOnClickListener(this);
-		captureImageButton = (Button) this
-				.findViewById(R.id.capture_image_button);
+		captureImageButton = (Button) this.findViewById(R.id.capture_image_button);
 		captureImageButton.setOnClickListener(this);
-		cacheName = (EditText) this.findViewById(R.id.cacheName);
-		description = (EditText) this.findViewById(R.id.cacheDescription);
-		cacheLat = (TextView) this.findViewById(R.id.cachelat);
-		cacheLong = (TextView) this.findViewById(R.id.cachelong);
+		cacheNameText = (TextView) this.findViewById(R.id.cache_name);
+		cachePlacedByText = (TextView) this.findViewById(R.id.cache_placed_by);
+		cacheDateFoundText = (TextView) this.findViewById(R.id.date_found);
+		cacheDifficultyText = (TextView) this.findViewById(R.id.cache_difficulty);
+		cacheTerrainText = (TextView) this.findViewById(R.id.cache_terrain);
+		cacheAwesomenessText = (TextView) this.findViewById(R.id.cache_awesomeness);
+		cacheSizeText = (TextView) this.findViewById(R.id.cache_size);
 		this.getExtras();
 
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
@@ -206,10 +206,14 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// this.description.setText(this.data.target.getDescription());
 		// this.cacheLat.setText(Double.toString(this.data.target.getLat()));
 		// this.cacheLong.setText(Double.toString(this.data.target.getLng()));
-		cacheName.setText(extras.getString("NAME"));
-		description.setText(extras.getString("PLACEDBY"));
-		cacheLat.setText(Double.toString(extras.getDouble("LAT")));
-		cacheLong.setText(Double.toString(extras.getDouble("LNG")));
+		cacheName = extras.getString("NAME");
+		cachePlacedBy = extras.getString("PLACEDBY");
+		cacheLat = extras.getDouble("LAT");
+		cacheLng = extras.getDouble("LNG");
+		
+		// Set widget text
+		cacheNameText.setText(cacheName);
+		cachePlacedByText.setText(cachePlacedBy);
 	}
 
 	private void getProfileInfo() {
@@ -281,9 +285,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		String shareText = String.format(
 				"%s found a new cache using GeoBook!\n"
 						+ "Cache Name:\t%s\n"
-						+ "Coordinates:\t%s, %s\n", userName,
-				cacheName.getText(), cacheLat.getText(),
-				cacheLong.getText());
+						+ "Placed By:\t%s\n"
+						+ "Coordinates:\t%s, %s\n", 
+						userName,cacheName,cachePlacedBy,
+						cacheLat,cacheLng);
 
 		Intent shareIntent = ShareCompat.IntentBuilder
 				.from(CacheView.this)
@@ -321,7 +326,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		} else if (requestCode == 6969 && responseCode == RESULT_OK) {
 			Bundle extras = intent.getExtras();
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
-			thumbnail.setImageBitmap(imageBitmap);
+			cacheThumbnail.setImageBitmap(imageBitmap);
 		}
 
 	}
