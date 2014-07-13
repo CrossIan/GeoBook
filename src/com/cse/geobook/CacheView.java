@@ -1,6 +1,9 @@
 package com.cse.geobook;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,6 +14,7 @@ import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ShareCompat;
 import android.util.Log;
@@ -37,49 +41,50 @@ import com.google.android.gms.plus.model.people.Person;
 public class CacheView extends Activity implements ConnectionCallbacks,
 		OnConnectionFailedListener, OnClickListener, OnAccessRevokedListener {
 
+	private static final String TAG = "CacheView.java";
+	
 	//
 	// Start Google+ resources
-	private static final String TAG = "CacheView.java";
-	// A magic number we will use to know that our sign-in error
-	// resolution activity has completed.
-	private static final int OUR_REQUEST_CODE = 49404;
-	// The core Google+ client.
-	private PlusClient mPlusClient;
-	// A flag to stop multiple dialogues appearing for the user.
-	private boolean mResolveOnFail;
-	// We can store the connection result from a failed connect()
-	// attempt in order to make the application feel a bit more
-	// responsive for the user.
-	private ConnectionResult mConnectionResult;
-	// A progress dialog to display when the user is connecting in
-	// case there is a delay in any of the dialogs being ready.
-	private ProgressDialog mConnectionProgressDialog;
+	private static final int GOOGLE_REQUEST_CODE = 49404;	// What to listen for in onActivityResult
+	private PlusClient mPlusClient;	// The core Google+ client.
+	private boolean mResolveOnFail;	// A flag to stop multiple dialogues appearing for the user.
+	private ConnectionResult mConnectionResult;	// Store the result of a failed connect()
+	private ProgressDialog mConnectionProgressDialog;	// Sign in progress dialog
 	// End Google+ resources
 	//
 	
+	//
+	// Resources for photo functionality
+	private static final int PHOTO_REQUEST_CODE = 6969;
+
+	//
 	// Data for this cache
 	Person currentPerson;
 	String userName,cacheName,cachePlacedBy,dateFound,userDescription;
 	Double cacheLat,cacheLng,cacheDifficulty,
 			cacheTerrain,cacheAwesomeness,cacheSize;
+	String mCurrentPhotoPath;	// The absolute path to the caches photo (if any)
+	Data data;
 	
+	
+	//
 	// Layout widgets
 	ImageView cacheThumbnail;
 	TextView cacheNameText, cachePlacedByText, dateVisited,cacheDateFoundText,
 			cacheDifficultyText,cacheTerrainText,cacheAwesomenessText,cacheSizeText;
 	EditText userDescriptionText;
 	Button saveCacheButton, shareCacheButton, captureImageButton;
-	Data data;
+	
 
 	final Double EPISILON = .00001;
-
-	// PHOTO
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cache);
+		Log.d(TAG,"onCreate");
 
 		// Link widgets
 		cacheThumbnail = (ImageView) this.findViewById(R.id.cache_thumbnail);
@@ -97,15 +102,25 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheAwesomenessText = (TextView) this.findViewById(R.id.cache_awesomeness);
 		cacheSizeText = (TextView) this.findViewById(R.id.cache_size);
 		userDescriptionText = (EditText) this.findViewById(R.id.user_description);
+		
+		// Get extras from originating activity
 		this.getExtras();
-
+		
+		// Initialize the Google+ client
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
 				"http://schemas.google.com/BuyActivity").build();
 	}
 
+	
+	
+	
 	@Override
 	public void onClick(View v) {
+		/*
+		 * Save users changes and return to Map
+		 */
 		if (v.getId() == R.id.save_cache_button) {
+			Log.d(TAG,"Tapped save_cache_button");
 			// int size = CacheView.this.data.allCaches.size();
 			// boolean searching = true;
 			// int i = 0;
@@ -155,9 +170,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		 */
 		else if (v.getId() == R.id.share_cache_button) {
 			// Create the share dialog
-			Log.d("CacheView.java", "Tapped share_cache_button");
+			Log.d(TAG, "Tapped share_cache_button");
 
-			
+			// Show the sign-in dialog
 			mConnectionProgressDialog = new ProgressDialog(CacheView.this);
 			mConnectionProgressDialog.setMessage("Signing in with Google+...");
 
@@ -182,26 +197,24 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 					mPlusClient.connect();
 				}
 			}
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
-
+		/*
+		 * Take a picture of this cache
+		 */
 		else if (v.getId() == R.id.capture_image_button) {
-			Log.d("Cache", "Tapped capture_image_button in Cache.java");
+			Log.d(TAG, "Tapped capture_image_button in Cache.java");
 			Intent takePictureIntent = new Intent(
 					MediaStore.ACTION_IMAGE_CAPTURE);
 			if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-				Log.d("Cache", "Picture intent sent");
 				startActivityForResult(takePictureIntent, 6969);
 			}
 
 		}
 	}
 
+	/*
+	 * Load extras from parent activity
+	 */
 	private void getExtras() {
 		Bundle extras = this.getIntent().getExtras();
 		// this.data = extras.getParcelable(Data.CACHE_DATA);
@@ -229,6 +242,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheSizeText.setText(Double.toString(cacheSize));
 	}
 
+	
+	/*
+	 * Gets user Google+ profile info
+	 */
 	private void getProfileInfo() {
 		currentPerson = mPlusClient.getCurrentPerson();
 		userName = currentPerson.getDisplayName();
@@ -255,10 +272,15 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		}
 	}
 
+	/*
+	 * When connected, get the oAuth 2.0 token, then 
+	 */
 	@Override
 	public void onConnected(Bundle bundle) {
 		// Yay! We can get the oAuth 2.0 access token we are using.
 		Log.v(TAG, "Connected to Google+");
+		Toast.makeText(this, "Signed in to Google+", Toast.LENGTH_SHORT)
+			.show();
 
 		// Turn off the flag, so if the user signs out they'll have to
 		// tap to sign in again.
@@ -293,6 +315,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		};
 		task.execute((Void) null);
 
+		// Load profile info
 		getProfileInfo();
 		// Construct share text
 		userDescription = userDescriptionText.getText().toString();
@@ -312,6 +335,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 						cacheTerrain,cacheAwesomeness,
 						cacheSize,userDescription);
 
+		// Build the share intent
 		Intent shareIntent = ShareCompat.IntentBuilder
 				.from(CacheView.this)
 				.setText(shareText)
@@ -319,6 +343,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 				.getIntent()
 				.setPackage("com.google.android.apps.plus");
 
+		// Start Google+ with share intent
 		startActivityForResult(shareIntent, 0);
 	}
 
@@ -328,10 +353,14 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		Log.v(TAG, "Disconnected from Google+");
 	}
 
+	
+	/*
+	 * Perform actions according to which activity is returning a result.
+	 */
 	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
 		Log.v(TAG, "ActivityResult: " + requestCode);
-		if (requestCode == OUR_REQUEST_CODE && responseCode == RESULT_OK) {
+		if (requestCode == GOOGLE_REQUEST_CODE && responseCode == RESULT_OK) {
 			// If we have a successful result, we will want to be able to
 			// resolve any further errors, so turn on resolution with our
 			// flag.
@@ -340,12 +369,12 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// there are any more errors to resolve we'll get our
 			// onConnectionFailed, but if not, we'll get onConnected.
 			mPlusClient.connect();
-		} else if (requestCode == OUR_REQUEST_CODE && responseCode != RESULT_OK) {
+		} else if (requestCode == GOOGLE_REQUEST_CODE && responseCode != RESULT_OK) {
 			// If we've got an error we can't resolve, we're no
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
-		} else if (requestCode == 6969 && responseCode == RESULT_OK) {
+		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
 			Bundle extras = intent.getExtras();
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
 			cacheThumbnail.setImageBitmap(imageBitmap);
@@ -363,7 +392,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mPlusClient.connect();
 	}
 
-	/**
+	/*
 	 * A helper method to flip the mResolveOnFail flag and start the resolution
 	 * of the ConnenctionResult from the failed connect() call.
 	 */
@@ -376,11 +405,34 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// and pass it an integer tag we can use to track. This means
 			// that when we get the onActivityResult callback we'll know
 			// its from being started here.
-			mConnectionResult.startResolutionForResult(this, OUR_REQUEST_CODE);
+			mConnectionResult.startResolutionForResult(this, GOOGLE_REQUEST_CODE);
 		} catch (SendIntentException e) {
 			// Any problems, just try to connect() again so we get a new
 			// ConnectionResult.
 			mPlusClient.connect();
 		}
+	}
+	
+	/**
+	 * A helper method to create a unique file name for the 
+	 * current photo.
+	 * @return image- a file that contains the image.
+	 * @throws IOException
+	 */
+	private File createImageFile() throws IOException {
+	    // Create an image file name
+	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	    String imageFileName = "JPEG_" + timeStamp + "_";
+	    File storageDir = Environment.getExternalStoragePublicDirectory(
+	            Environment.DIRECTORY_PICTURES);
+	    File image = File.createTempFile(
+	        imageFileName,  /* prefix */
+	        ".jpg",         /* suffix */
+	        storageDir      /* directory */
+	    );
+
+	    // Save a file: path for use with ACTION_VIEW intents
+	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+	    return image;
 	}
 }
