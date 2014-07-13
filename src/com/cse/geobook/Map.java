@@ -63,7 +63,7 @@ public class Map extends FragmentActivity {
 						Log.d("Map.java",
 								"Starting location: " + lastLocation.toString());
 						if(!startUp){
-							gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 10));
+							gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 11));
 						}
 					}
 				});
@@ -71,6 +71,11 @@ public class Map extends FragmentActivity {
 			}
 		}
 		startUp = false;
+		
+		gMap.addMarker(new MarkerOptions()
+        				.position(new LatLng(39.948846, -83.850573))
+        				.title("Fricker's")
+                        .snippet("Population: Beer"));
 	}
 
 	/**
@@ -322,18 +327,21 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onInfoWindowClick(final Marker marker) {
-			Cache cache = new Cache();
-			cache.name(marker.getTitle());
-			cache.description(marker.getSnippet());
-			cache.lat(String.valueOf(marker.getPosition().latitude));
-			cache.lng(String.valueOf(marker.getPosition().longitude));
+//			Cache cache = new Cache();
+//			cache.name(marker.getTitle());
+//			cache.description(marker.getSnippet());
+//			cache.lat(String.valueOf(marker.getPosition().latitude));
+//			cache.lng(String.valueOf(marker.getPosition().longitude));
 
-			Intent cacheView = new Intent("android.intent.action.CACHE");
+			Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 			Bundle extra = new Bundle();
 
-			Map.this.caches.target = cache;
-			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-
+//			Map.this.caches.target = cache;
+//			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			extra.putDouble("LAT", marker.getPosition().latitude);
+			extra.putDouble("LNG", marker.getPosition().longitude);
+			extra.putString("NAME", marker.getTitle());
+			extra.putString("PLACEBY", marker.getSnippet());
 			cacheView.putExtras(extra);
 			/**
 			 * <pre> doesn't work

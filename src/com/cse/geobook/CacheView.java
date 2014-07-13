@@ -39,9 +39,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	//
 	// Start Google+ resources
-	Person currentPerson;
-	String userName;
-	private static final String TAG = "Cache";
+	private static final String TAG = "CacheView.java";
 	// A magic number we will use to know that our sign-in error
 	// resolution activity has completed.
 	private static final int OUR_REQUEST_CODE = 49404;
@@ -58,10 +56,14 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	private ProgressDialog mConnectionProgressDialog;
 	// End Google+ resources
 	//
-
-	LinearLayout view;
+	
+	
+	Person currentPerson;
+	String userName;
+	
+	// Layout widgets
 	ImageView thumbnail;
-	EditText cacheName;
+	TextView cacheName;
 	EditText description;
 	TextView cacheLat;
 	TextView cacheLong;
@@ -101,150 +103,88 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.save_cache_button) {
-			int size = CacheView.this.data.allCaches.size();
-			boolean searching = true;
-			int i = 0;
-			while (searching && i < size) {
-				Cache cache = CacheView.this.data.allCaches.get(i);
-				if (Math.abs(cache.getLat() - data.target.getLat()) < CacheView.this.EPISILON
-						&& Math.abs(cache.getLat() - data.target.getLat()) < CacheView.this.EPISILON) {
-					cache.name(CacheView.this.cacheName.getText().toString());
-					cache.description(CacheView.this.description.getText()
-							.toString());
-					searching = false;
-					CacheView.this.data.foundCaches.add(cache);
-					CacheView.this.data.allCaches.remove(i);
-
-				}
-				i++;
-			}
-			if (!searching) {
-				Log.d("data", "marker found");
-			} else {
-				Log.d("data", "marker not found");
-			}
-
-			DataParser found = new DataParser(
-					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-			found.overwriteAll(CacheView.this.data.foundCaches);
-			found.close();
-
-			DataParser all = new DataParser(
-					CacheView.this.getApplicationContext(), Cache.ALL_CACHES);
-			all.overwriteAll(CacheView.this.data.allCaches);
-			all.close();
-
-			/*
-			 * Bundle extras_new = new Bundle();
-			 * extras_new.putParcelable(Data.CACHE_DATA, data);
-			 * 
-			 * Intent map = new Intent("android.intent.action.MAP");
-			 * map.putExtras(extras_new); startActivity(map);
-			 */
-			CacheView.this.finish();
+			// int size = CacheView.this.data.allCaches.size();
+			// boolean searching = true;
+			// int i = 0;
+			// while (searching && i < size) {
+			// Cache cache = CacheView.this.data.allCaches.get(i);
+			// if (Math.abs(cache.getLat() - data.target.getLat()) <
+			// CacheView.this.EPISILON
+			// && Math.abs(cache.getLat() - data.target.getLat()) <
+			// CacheView.this.EPISILON) {
+			// cache.name(CacheView.this.cacheName.getText().toString());
+			// cache.description(CacheView.this.description.getText()
+			// .toString());
+			// searching = false;
+			// CacheView.this.data.foundCaches.add(cache);
+			// CacheView.this.data.allCaches.remove(i);
+			//
+			// }
+			// i++;
+			// }
+			// if (!searching) {
+			// Log.d("data", "marker found");
+			// } else {
+			// Log.d("data", "marker not found");
+			// }
+			//
+			// DataParser found = new DataParser(
+			// CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
+			// found.overwriteAll(CacheView.this.data.foundCaches);
+			// found.close();
+			//
+			// DataParser all = new DataParser(
+			// CacheView.this.getApplicationContext(), Cache.ALL_CACHES);
+			// all.overwriteAll(CacheView.this.data.allCaches);
+			// all.close();
+			//
+			// /*
+			// * Bundle extras_new = new Bundle();
+			// * extras_new.putParcelable(Data.CACHE_DATA, data);
+			// *
+			// * Intent map = new Intent("android.intent.action.MAP");
+			// * map.putExtras(extras_new); startActivity(map);
+			// */
+			// CacheView.this.finish();
 		}
 		/*
 		 * Share on social media
 		 */
 		else if (v.getId() == R.id.share_cache_button) {
 			// Create the share dialog
-			Log.d("Cache", "Tapped share_cache_button in Cache.java");
-			final Dialog shareDialog = new Dialog(this);
-			shareDialog.setTitle("Share with:");
-			shareDialog.setContentView(R.layout.share_dialog);
+			Log.d("CacheView.java", "Tapped share_cache_button");
 
-			// Link widgets
-			Button GoogleShareButton = (Button) shareDialog
-					.findViewById(R.id.google_share_button);
-			Button FacebookShareButton = (Button) shareDialog
-					.findViewById(R.id.facebook_share_button);
-			Button TwitterShareButton = (Button) shareDialog
-					.findViewById(R.id.twitter_share_button);
+			
+			mConnectionProgressDialog = new ProgressDialog(CacheView.this);
+			mConnectionProgressDialog.setMessage("Signing in with Google+...");
 
-			// Set click actions
-			// Google+
-			GoogleShareButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					shareDialog.dismiss();
-					// Toast.makeText(Cache.this, "Tapped Google+ share",
-					// Toast.LENGTH_SHORT).show();
-					mConnectionProgressDialog = new ProgressDialog(
-							CacheView.this);
-					mConnectionProgressDialog
-							.setMessage("Signing in with Google+...");
-
-					if (!mPlusClient.isConnected()) {
-						// Show the dialog as we are now signing in.
-						mConnectionProgressDialog.show();
-						// Make sure that we will start the resolution (e.g.
-						// fire the
-						// intent and pop up a dialog for the user) for any
-						// errors
-						// that come in.
-						mResolveOnFail = true;
-						// We should always have a connection result ready to
-						// resolve,
-						// so we can start that process.
-						if (mConnectionResult != null) {
-							startResolution();
-						} else {
-							// If we don't have one though, we can start connect
-							// in
-							// order to retrieve one.
-							mPlusClient.connect();
-						}
-					}
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if (mPlusClient.isConnected()) {
-						// Construct share text
-						String shareText = String.format(
-								"%s found a new cache using GeoBook!\n"
-										+ "Cache Name:\t%s\n"
-										+ "Coordinates:\t%s, %s\n", userName,
-								cacheName.getText(), cacheLat.getText(),
-								cacheLong.getText());
-
-						// Intent shareIntent = new
-						// PlusShare.Builder(Cache.this)
-						// .setType("text/plain")
-						// .setText(shareText)
-						// .setContentUrl(Uri.parse("https://developers.google.com/+/"))
-						// .getIntent();
-
-						Intent shareIntent = ShareCompat.IntentBuilder
-								.from(CacheView.this).setText(shareText)
-								.setType("image/*").getIntent()
-								.setPackage("com.google.android.apps.plus");
-
-						startActivityForResult(shareIntent, 0);
-					}
+			if (!mPlusClient.isConnected()) {
+				// Show the dialog as we are now signing in.
+				mConnectionProgressDialog.show();
+				// Make sure that we will start the resolution (e.g.
+				// fire the
+				// intent and pop up a dialog for the user) for any
+				// errors
+				// that come in.
+				mResolveOnFail = true;
+				// We should always have a connection result ready to
+				// resolve,
+				// so we can start that process.
+				if (mConnectionResult != null) {
+					startResolution();
+				} else {
+					// If we don't have one though, we can start connect
+					// in
+					// order to retrieve one.
+					mPlusClient.connect();
 				}
-			});
-			// Facebook
-			FacebookShareButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Toast.makeText(CacheView.this, "Tapped Facebook share",
-							Toast.LENGTH_SHORT).show();
-				}
-			});
-			// Twitter actions
-			TwitterShareButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Toast.makeText(CacheView.this, "Tapped Twitter share",
-							Toast.LENGTH_SHORT).show();
-				}
-			});
-
-			// Show share dialog
-			shareDialog.show();
+			}
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		else if (v.getId() == R.id.capture_image_button) {
@@ -261,11 +201,15 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	private void getExtras() {
 		Bundle extras = this.getIntent().getExtras();
-		this.data = extras.getParcelable(Data.CACHE_DATA);
-		this.cacheName.setText(this.data.target.getName());
-		this.description.setText(this.data.target.getDescription());
-		this.cacheLat.setText(Double.toString(this.data.target.getLat()));
-		this.cacheLong.setText(Double.toString(this.data.target.getLng()));
+		// this.data = extras.getParcelable(Data.CACHE_DATA);
+		// this.cacheName.setText(this.data.target.getName());
+		// this.description.setText(this.data.target.getDescription());
+		// this.cacheLat.setText(Double.toString(this.data.target.getLat()));
+		// this.cacheLong.setText(Double.toString(this.data.target.getLng()));
+		cacheName.setText(extras.getString("NAME"));
+		description.setText(extras.getString("PLACEDBY"));
+		cacheLat.setText(Double.toString(extras.getDouble("LAT")));
+		cacheLong.setText(Double.toString(extras.getDouble("LNG")));
 	}
 
 	private void getProfileInfo() {
@@ -333,6 +277,22 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		task.execute((Void) null);
 
 		getProfileInfo();
+		// Construct share text
+		String shareText = String.format(
+				"%s found a new cache using GeoBook!\n"
+						+ "Cache Name:\t%s\n"
+						+ "Coordinates:\t%s, %s\n", userName,
+				cacheName.getText(), cacheLat.getText(),
+				cacheLong.getText());
+
+		Intent shareIntent = ShareCompat.IntentBuilder
+				.from(CacheView.this)
+				.setText(shareText)
+				.setType("image/*")
+				.getIntent()
+				.setPackage("com.google.android.apps.plus");
+
+		startActivityForResult(shareIntent, 0);
 	}
 
 	@Override

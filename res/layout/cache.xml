@@ -19,7 +19,7 @@
         android:contentDescription="@string/cachePicture"
         android:src="@drawable/earth_logo" />
 
-    <EditText
+    <TextView
         android:id="@+id/cacheName"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/cacheDescription"
         android:layout_below="@+id/ivPhoto"
-        android:text="date visited"
+        android:text="Date Visited: Not found...yet"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
