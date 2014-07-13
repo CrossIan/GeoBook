@@ -37,6 +37,7 @@ public class Map extends FragmentActivity {
 	Button listView;
 	LatLng lastLocation;
 	ArrayList<Marker> markers;
+	private static boolean startUp = true;
 
 	// private final double MAX_DISTANCEFROMCACHE = 25;
 
@@ -57,22 +58,19 @@ public class Map extends FragmentActivity {
 				gMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
 					@Override
 					public void onMyLocationChange(Location arg0) {
-						lastLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
-						Log.d("Map.java","Starting location: " + lastLocation.toString());
+						lastLocation = new LatLng(arg0.getLatitude(), arg0
+								.getLongitude());
+						Log.d("Map.java",
+								"Starting location: " + lastLocation.toString());
+						if(!startUp){
+							gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 10));
+						}
 					}
 				});
+				setUpActionListeners();
 			}
 		}
-
-		// setUpActionListeners();
-		// Location myloc = Map.this.gMap.getMyLocation();
-		// Log.d("RW", myloc.toString());
-		// if (myloc != null) {
-		// Log.d("RW","Location NOT null");
-		// Map.this.gMap.animateCamera(CameraUpdateFactory
-		// .newLatLng(new LatLng(myloc.getLatitude(), myloc
-		// .getLongitude())));
-		// }
+		startUp = false;
 	}
 
 	/**
@@ -215,15 +213,24 @@ public class Map extends FragmentActivity {
 	}
 
 	private static double distance(LatLng start, LatLng end) {
-		double xSquared = Math.pow((start.latitude - end.latitude), 2);
-		double ySquared = Math.pow((start.longitude - end.longitude), 2);
-		// convert to feet
-		double convertToFeet = (10000 / 90 * 3280.4);
-		xSquared *= convertToFeet;
-		ySquared *= convertToFeet;
+		double lat1 = start.latitude;
+		double lon1 = start.longitude;
+		double lat2 = end.latitude;
+		double lon2 = end.longitude;
 
-		return Math.sqrt(xSquared + ySquared);
+		double R = 6371; // km
+		double phi1 = Math.toRadians(lat1);
+		double phi2 = Math.toRadians(lat2);
+		double dphi = Math.toRadians(lat2 - lat1);
+		double dlamb = Math.toRadians(lon2 - lon1);
 
+		double a = Math.sin(dphi / 2) * Math.sin(dphi / 2) + Math.cos(phi1)
+				* Math.cos(phi2) * Math.sin(dlamb / 2) * Math.sin(dlamb / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+		double d = R * c; // Distance in km
+
+		return d * 1000; // Distance in m
 	}
 
 	/**
@@ -243,6 +250,7 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public boolean onMyLocationButtonClick() {
+			Log.d("Map.java", "Tapped MyLocation button");
 			if (Map.this.gMap != null) {
 				Map.this.gMap.stopAnimation();
 				Location myloc = Map.this.gMap.getMyLocation();
@@ -413,6 +421,7 @@ public class Map extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		this.getExtras();
+		// TODO why do we have to remove markers?
 		// this.removeAllMarkers();
 		// this.setUpMap();
 
