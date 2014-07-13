@@ -27,7 +27,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:ems="10"
+        android:textSize="20sp"
         android:text="Cache Name"
         android:textColor="#FFFFFF" />
 
@@ -38,7 +38,7 @@
         android:layout_below="@+id/cache_name"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
-        android:ems="10"
+        android:textSize="15sp"
         android:text="Placed by: "
         android:textColor="#FFFFFF" />
 
@@ -49,7 +49,7 @@
         android:layout_below="@+id/cache_placed_by"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
-        android:ems="10"
+        android:textSize="15sp"
         android:text="Date Found:"
         android:textColor="#FFFFFF" />
 

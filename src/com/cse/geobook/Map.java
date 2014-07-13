@@ -341,7 +341,12 @@ public class Map extends FragmentActivity {
 			extra.putDouble("LAT", marker.getPosition().latitude);
 			extra.putDouble("LNG", marker.getPosition().longitude);
 			extra.putString("NAME", marker.getTitle());
-			extra.putString("PLACEBY", marker.getSnippet());
+			extra.putString("PLACEDBY", marker.getSnippet());
+			extra.putString("DATE", "13 July 2014");
+			extra.putDouble("DIFF", 0.5);
+			extra.putDouble("TERR", 1.1);
+			extra.putDouble("AWES", 5.0);
+			extra.putDouble("SIZE", 3.9);
 			cacheView.putExtras(extra);
 			/**
 			 * <pre> doesn't work

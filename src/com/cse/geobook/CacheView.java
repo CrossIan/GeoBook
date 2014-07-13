@@ -59,13 +59,15 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	
 	// Data for this cache
 	Person currentPerson;
-	String userName,cacheName,cachePlacedBy;
-	Double cacheLat,cacheLng;
+	String userName,cacheName,cachePlacedBy,dateFound,userDescription;
+	Double cacheLat,cacheLng,cacheDifficulty,
+			cacheTerrain,cacheAwesomeness,cacheSize;
 	
 	// Layout widgets
 	ImageView cacheThumbnail;
 	TextView cacheNameText, cachePlacedByText, dateVisited,cacheDateFoundText,
 			cacheDifficultyText,cacheTerrainText,cacheAwesomenessText,cacheSizeText;
+	EditText userDescriptionText;
 	Button saveCacheButton, shareCacheButton, captureImageButton;
 	Data data;
 
@@ -94,6 +96,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheTerrainText = (TextView) this.findViewById(R.id.cache_terrain);
 		cacheAwesomenessText = (TextView) this.findViewById(R.id.cache_awesomeness);
 		cacheSizeText = (TextView) this.findViewById(R.id.cache_size);
+		userDescriptionText = (EditText) this.findViewById(R.id.user_description);
 		this.getExtras();
 
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
@@ -208,12 +211,22 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// this.cacheLong.setText(Double.toString(this.data.target.getLng()));
 		cacheName = extras.getString("NAME");
 		cachePlacedBy = extras.getString("PLACEDBY");
+		dateFound = extras.getString("DATE");
 		cacheLat = extras.getDouble("LAT");
 		cacheLng = extras.getDouble("LNG");
+		cacheDifficulty = extras.getDouble("DIFF");
+		cacheTerrain = extras.getDouble("TERR");
+		cacheAwesomeness = extras.getDouble("AWES");
+		cacheSize = extras.getDouble("SIZE");
 		
 		// Set widget text
 		cacheNameText.setText(cacheName);
-		cachePlacedByText.setText(cachePlacedBy);
+		cachePlacedByText.setText("Placed by: \"" + cachePlacedBy + "\"");
+		cacheDateFoundText.setText("Date found: " + dateFound);
+		cacheDifficultyText.setText(Double.toString(cacheDifficulty));
+		cacheTerrainText.setText(Double.toString(cacheTerrain));
+		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
+		cacheSizeText.setText(Double.toString(cacheSize));
 	}
 
 	private void getProfileInfo() {
@@ -282,13 +295,22 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		getProfileInfo();
 		// Construct share text
+		userDescription = userDescriptionText.getText().toString();
+		Log.d("CacheView.java",userDescription);
 		String shareText = String.format(
-				"%s found a new cache using GeoBook!\n"
-						+ "Cache Name:\t%s\n"
-						+ "Placed By:\t%s\n"
-						+ "Coordinates:\t%s, %s\n", 
+				"%s found a new cache using GeoBook!\n\n"
+						+ "Cache Name:  %s\n"
+						+ "Placed By:  %s\n"
+						+ "Coordinates:  %2.6f, %2.6f\n\n"
+						+ "Difficulty:  %1.1f\n"
+						+ "Terrain:  %1.1f\n"
+						+ "Awesomeness:  %1.1f\n"
+						+ "Size:  %1.1f\n\n"
+						+ "User notes:  %s\n",
 						userName,cacheName,cachePlacedBy,
-						cacheLat,cacheLng);
+						cacheLat,cacheLng,cacheDifficulty,
+						cacheTerrain,cacheAwesomeness,
+						cacheSize,userDescription);
 
 		Intent shareIntent = ShareCompat.IntentBuilder
 				.from(CacheView.this)
