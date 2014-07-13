@@ -109,9 +109,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data
+        <meta-data 
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBSynp55necy7jJdmJ4w3dYOI2nfVPE2k8" />
+            android:value="AIzaSyCsU0jj9o4Ui7j96hOL3_958JPZZW0g13I"/>
 
         <activity
             android:name=".CacheList_Activity"

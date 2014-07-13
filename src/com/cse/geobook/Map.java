@@ -35,16 +35,44 @@ public class Map extends FragmentActivity {
 	Bundle extras;
 	Data caches;
 	Button listView;
+	LatLng lastLocation;
 	ArrayList<Marker> markers;
 
-	private final double MAX_DISTANCEFROMCACHE = 25;
+	// private final double MAX_DISTANCEFROMCACHE = 25;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.map);
-		this.getExtras();
-		this.setUpMap();
+		// this.getExtras();
+		// this.setUpMap();
+
+		// TODO for testing only: remove later
+		// TODO keep this segment of code that gets location
+		if (gMap == null) {
+			gMap = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
+			gMap.setMyLocationEnabled(true);
+			if (gMap != null) {
+				gMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+					@Override
+					public void onMyLocationChange(Location arg0) {
+						lastLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
+						Log.d("Map.java","Starting location: " + lastLocation.toString());
+					}
+				});
+			}
+		}
+
+		// setUpActionListeners();
+		// Location myloc = Map.this.gMap.getMyLocation();
+		// Log.d("RW", myloc.toString());
+		// if (myloc != null) {
+		// Log.d("RW","Location NOT null");
+		// Map.this.gMap.animateCamera(CameraUpdateFactory
+		// .newLatLng(new LatLng(myloc.getLatitude(), myloc
+		// .getLongitude())));
+		// }
 	}
 
 	/**
@@ -144,7 +172,6 @@ public class Map extends FragmentActivity {
 		if (this.gMap == null) {
 			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
-
 		}
 		markers = new ArrayList<Marker>();
 		this.setUpActionListeners();
@@ -176,12 +203,12 @@ public class Map extends FragmentActivity {
 
 	}
 
-	private void removeAllMarkers() {
-		int size = markers.size();
-		for (int i = 0; i < size; i++) {
-			markers.get(i).remove();
-		}
-	}
+	// private void removeAllMarkers() {
+	// int size = markers.size();
+	// for (int i = 0; i < size; i++) {
+	// markers.get(i).remove();
+	// }
+	// }
 
 	private boolean cacheFound(MarkerOptions mo) {
 		return caches.foundCaches.contains(mo);
@@ -386,8 +413,8 @@ public class Map extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		this.getExtras();
-		this.removeAllMarkers();
-		this.setUpMap();
+		// this.removeAllMarkers();
+		// this.setUpMap();
 
 	}
 
