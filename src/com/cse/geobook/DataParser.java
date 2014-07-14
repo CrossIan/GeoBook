@@ -78,10 +78,10 @@ public class DataParser {
 	 */
 	private void writeMarker(Cache cache, FileOutputStream stream) {
 		String line = "";
-		for (int i = 0; i < Data.numberOfdescriptors - 1; i++) {
+		for (int i = 0; i < Cache.numberOfdescriptors - 1; i++) {
 			line += cache.get(i) + ",";
 		}
-		line += cache.get(Data.numberOfdescriptors - 1);
+		line += cache.get(Cache.numberOfdescriptors - 1);
 
 		try {
 			stream.write(line.getBytes());
@@ -97,7 +97,7 @@ public class DataParser {
 	 * @return
 	 */
 	private Cache readMarker() {
-		ArrayList<String> result = new ArrayList<String>();
+		Cache result = new Cache();
 
 		String line;
 		try {
@@ -116,16 +116,21 @@ public class DataParser {
 				 * for (int i = 0; i < Data.numberOfdescriptors - 2; i++) {
 				 * result.add(contents[i]); }
 				 */
-				for (int i = 0; i < contents.length; i++) {
+				int size = contents.length;
+				for (int i = 0; i < Cache.numberOfdescriptors - 1; i++) {
 					// Log.d("values", "Contents " + i + ":" + contents[i]);
-					result.add(contents[i]);
+					if (i < size && contents[i] != null) {
+						result.set(i, contents[i]);
+					} else {
+						result.set(i, "");
+					}
 				}
 
 				String description = "";
-				for (int i = Data.numberOfdescriptors - 1; i < contents.length; i++) {
+				for (int i = Cache.numberOfdescriptors - 1; i < size; i++) {
 					description += contents[i];
 				}
-				result.add(description);
+				result.set(Cache.numberOfdescriptors - 1, description);
 
 			}
 		} catch (IOException e) {
@@ -133,7 +138,7 @@ public class DataParser {
 			e.printStackTrace();
 		}
 
-		return new Cache(result);
+		return result;
 	}
 
 	/**

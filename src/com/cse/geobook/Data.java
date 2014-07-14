@@ -19,28 +19,16 @@ public class Data implements Parcelable {
 	int secondarySort;
 	// can remove all caches
 
-	// data[][0] = name
-	// data[][1] = latitude
-	// data[][2] = longitude
-	// data[][3] = creator
-	// data[][4] = diff
-	// data[][5] = terrain
-	// data[][6] = awesomeness
-	// data[][7] = container
-	// data[][8] = date found
-	// data[][9] = description
-	public static final int numberOfdescriptors = 10;
-
 	public static String CACHE_DATA;
 
 	// edit SortBy to match indicies
 	public enum SortBy {
 		// Available sorting options
-//		sortOptions[0]="Name";
-//		sortOptions[1]="Rating";
-//		sortOptions[2]="Size";
-//		sortOptions[3]="Difficulty";
-//		sortOptions[4]="Terrain";
+		// sortOptions[0]="Name";
+		// sortOptions[1]="Rating";
+		// sortOptions[2]="Size";
+		// sortOptions[3]="Difficulty";
+		// sortOptions[4]="Terrain";
 		NAME(0), RATING(3), TYPE(4), CONTAINER(5), DIFFICULTY(7), DATE(8);
 		int SORTING;
 
@@ -78,12 +66,12 @@ public class Data implements Parcelable {
 	 * @return
 	 */
 	private Cache getNextCache(Parcel in) {
-		ArrayList<String> temp = new ArrayList<String>();
-		for (int i = 0; i < numberOfdescriptors; i++) {
+		Cache result = new Cache();
+		for (int i = 0; i < Cache.numberOfdescriptors; i++) {
 			String descriptor = in.readString(); // snippit
-			temp.add(descriptor);
+			result.set(i, descriptor);
 		}
-		return new Cache(temp);
+		return result;
 	}
 
 	public Data(Parcel in) {
@@ -120,7 +108,7 @@ public class Data implements Parcelable {
 	 * @param cache
 	 */
 	private void writeNextCache(Parcel dest, Cache cache) {
-		for (int i = 0; i < numberOfdescriptors; i++) {
+		for (int i = 0; i < Cache.numberOfdescriptors; i++) {
 			String descriptor = cache.get(i);
 			dest.writeString(descriptor);
 		}

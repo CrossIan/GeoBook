@@ -2,28 +2,30 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class Cache {
-	public static final int numberOfdescriptors = 8;
+	public static final int numberOfdescriptors = 9;
 	ArrayList<String> cache;
+	int size;
 
 	public static final String FOUND_CACHES = "foundCaches.txt";
 	public static final String ALL_CACHES = "PersistentData.txt";
 	public static final String TARGET_CACHE = "Target.txt";
 
 	// data[][0] = name
-	// data[][1] = latitude
-	// data[][2] = longitude
+	// data[][2] = latitude
+	// data[][1] = longitude
 	// data[][3] = creator
 	// data[][4] = diff
 	// data[][5] = terrain
 	// data[][6] = awesomeness
 	// data[][7] = container
-	// data[][8] = date found
-	// data[][9] = description
+	// data[][8] = description
 
 	private enum DESCRIPTOR {
-		NAME(0), LAT(1), LNG(2), CREATOR(3), DIFFICULTY(4), TERRAIN(5), RATING(
-				6), CONTAINER(7), DATE(8), DESCRIPTION(9);
+		NAME(0), LAT(2), LNG(1), CREATOR(3), DIFFICULTY(4), TERRAIN(5), RATING(
+				6), CONTAINER(7), DESCRIPTION(8);
 		int INDEX;
 
 		DESCRIPTOR(int i) {
@@ -32,12 +34,13 @@ public class Cache {
 
 	};
 
-	Cache(ArrayList<String> cache) {
-		this.cache = cache;
-	}
-
 	Cache() {
 		this.cache = new ArrayList<String>();
+		size = 0;
+		for (int i = 0; i < Cache.numberOfdescriptors; i++) {
+			cache.add("");
+			size++;
+		}
 	}
 
 	public String getName() {
@@ -45,10 +48,12 @@ public class Cache {
 	}
 
 	public Double getLat() {
+		Log.d("double", cache.get(DESCRIPTOR.LAT.INDEX));
 		return Double.parseDouble(cache.get(DESCRIPTOR.LAT.INDEX));
 	}
 
 	public Double getLng() {
+		Log.d("double", cache.get(DESCRIPTOR.LNG.INDEX));
 		return Double.parseDouble(cache.get(DESCRIPTOR.LNG.INDEX));
 	}
 
@@ -68,10 +73,6 @@ public class Cache {
 		return cache.get(DESCRIPTOR.CONTAINER.INDEX);
 	}
 
-	public String getDate() {
-		return cache.get(DESCRIPTOR.DATE.INDEX);
-	}
-
 	public String getDescription() {
 		return cache.get(DESCRIPTOR.DESCRIPTION.INDEX);
 	}
@@ -87,7 +88,7 @@ public class Cache {
 	}
 
 	public void lng(String lng) {
-		int index = DESCRIPTOR.LAT.INDEX;
+		int index = DESCRIPTOR.LNG.INDEX;
 		cache.set(index, lng);
 	}
 
@@ -111,11 +112,6 @@ public class Cache {
 		cache.set(index, container);
 	}
 
-	public void date(String date) {
-		int index = DESCRIPTOR.DATE.INDEX;
-		cache.set(index, date);
-	}
-
 	public void description(String description) {
 		int index = DESCRIPTOR.DESCRIPTION.INDEX;
 		cache.set(index, description);
@@ -126,7 +122,21 @@ public class Cache {
 
 	}
 
+	public void set(int index, String value) {
+		cache.set(index, value);
+	}
+
 	public int size() {
-		return this.cache.size();
+		return size;
+	}
+
+	public String toString() {
+		String result = "";
+
+		if (this.cache != null) {
+			result = cache.get(0);
+		}
+		return result;
+
 	}
 }

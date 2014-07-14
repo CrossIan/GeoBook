@@ -47,6 +47,7 @@ public class Map extends FragmentActivity {
 	LatLng lastLocation;
 	String currentCity, currentState;
 	ArrayList<Marker> markers;
+	BitmapDescriptor colorMarker;
 	private static boolean startUp;
 	private static final String TAG = "Map.java";
 
@@ -56,9 +57,10 @@ public class Map extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.map);
-		 this.getExtras();
-		// this.setUpMap();
-		 startUp = true;
+		this.getExtras();
+		this.setMarkerColor();
+		this.setUpMap();
+		startUp = true;
 
 		// TODO for testing only: remove later
 		// TODO keep this segment of code that gets location
@@ -68,31 +70,36 @@ public class Map extends FragmentActivity {
 			gMap.setMyLocationEnabled(true);
 			if (gMap != null) {
 				gMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
 					@Override
 					public void onMyLocationChange(Location arg0) {
 						lastLocation = new LatLng(arg0.getLatitude(), arg0
 								.getLongitude());
 						Log.d("Map.java",
 								"Starting location: " + lastLocation.toString());
-						if(startUp){
-							gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 11));
+						if (startUp) {
+							gMap.animateCamera(CameraUpdateFactory
+									.newLatLngZoom(lastLocation, 11));
 							startUp = false;
-							
-							// Set local variables to current city/state based on location
+
+							// Set local variables to current city/state based
+							// // on location
 							setCurrentCityState(lastLocation);
 						}
 					}
 				});
 				setUpActionListeners();
 			}
+
 		}
-		
+
 		gMap.addMarker(new MarkerOptions()
 				.position(new LatLng(39.948846, -83.850573)).title("Fricker's")
 				.snippet("Cold beer here!"));
 		gMap.addMarker(new MarkerOptions()
-				.position(new LatLng(39.985029, -83.864287)).title("Test point 1")
-				.snippet("This place..."));
+				.position(new LatLng(39.985029, -83.864287))
+				.title("Test point 1").snippet("This place..."));
+
 	}
 
 	/**
@@ -103,26 +110,29 @@ public class Map extends FragmentActivity {
 	 */
 	private void getExtras() {
 		this.extras = this.getIntent().getExtras();
-		
+
 		currentPerson = extras.getParcelable("USER");
-//		if(currentPerson != null)
-//			Toast.makeText(this, currentPerson.getName().getGivenName(), Toast.LENGTH_SHORT).show();
-//		else
-//			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
-		
-//		MarkerOptions mo = null;
-//		int zoom = 11;
-//		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
-//			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
-//			mo = createMarkerOptions(caches.target);
-//			zoom = caches.zoom;
-//		}
-//
-//		this.caches = readInData();
-//		if (mo != null) {
-//			// caches.target = mo;
-//			// caches.zoom = zoom;
-//		}
+		if (currentPerson != null)
+			Toast.makeText(this, currentPerson.getName().getGivenName(),
+					Toast.LENGTH_SHORT).show();
+		else
+			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
+
+		Cache tempTarget = null;
+		int zoom = 11;
+		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
+			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
+			tempTarget = caches.target;
+			zoom = caches.zoom;
+		}
+
+		this.caches = readInData();
+
+		// if target is null, use the target set by readInData
+		if (tempTarget != null) {
+			caches.target = tempTarget;
+			caches.zoom = zoom;
+		}
 	}
 
 	/**
@@ -136,21 +146,12 @@ public class Map extends FragmentActivity {
 		this.gMap.setOnInfoWindowClickListener(listener);
 	}
 
-	/**
-	 * <pre>
-	 * Initialzes {@code this.gMap} 
-	 * Adds all markers to {@code gMap}
-	 * 
-	 * </pre>
-	 * 
-	 * @requires {@code caches} != null
-	 */
-	private void setUpMap() {
+	private void setMarkerColor() {
 
 		String colorValue = Settings.getColorMarker(this
 				.getApplicationContext());
 		// Default Value
-		BitmapDescriptor colorMarker = BitmapDescriptorFactory
+		colorMarker = BitmapDescriptorFactory
 				.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
 		switch (colorValue) {
@@ -196,6 +197,18 @@ public class Map extends FragmentActivity {
 			break;
 		}
 
+	}
+
+	/**
+	 * <pre>
+	 * Initialzes {@code this.gMap} 
+	 * Adds all markers to {@code gMap}
+	 * 
+	 * </pre>
+	 * 
+	 * @requires {@code caches} != null
+	 */
+	private void setUpMap() {
 		if (this.gMap == null) {
 			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
@@ -215,9 +228,12 @@ public class Map extends FragmentActivity {
 		// set all caches
 		int size = this.caches.allCaches.size();
 		Log.d("cache", "all -size: " + size);
+		int line = 1;
 		for (int i = 0; i < size; i++) {
+			Log.d("cache", "line: " + line);
 			markers.add(this.gMap
 					.addMarker(createMarkerOptions(this.caches.allCaches.get(i))));
+			line++;
 		}
 
 		// set found caches
@@ -230,15 +246,15 @@ public class Map extends FragmentActivity {
 
 	}
 
-	// private void removeAllMarkers() {
-	// int size = markers.size();
-	// for (int i = 0; i < size; i++) {
-	// markers.get(i).remove();
-	// }
-	// }
+	private void removeAllMarkers() {
+		int size = markers.size();
+		for (int i = 0; i < size; i++) {
+			markers.get(i).remove();
+		}
+	}
 
-	private boolean cacheFound(MarkerOptions mo) {
-		return caches.foundCaches.contains(mo);
+	private boolean cacheFound(Cache c) {
+		return caches.foundCaches.contains(c);
 	}
 
 	private static double distance(LatLng start, LatLng end) {
@@ -301,7 +317,6 @@ public class Map extends FragmentActivity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
 						Cache cache = new Cache();
@@ -309,13 +324,13 @@ public class Map extends FragmentActivity {
 						cache.lng(String.valueOf(pos.longitude));
 						cache.name("default");
 						cache.description("");
-						Map.this.caches.allCaches.add(cache);
+						Map.this.caches.foundCaches.add(cache);
 						Map.this.gMap.addMarker(createMarkerOptions(cache));
 						// Todo place in hash map
-						DataParser all = new DataParser(
-								getApplicationContext(), Cache.ALL_CACHES);
-						all.overwriteAll(Map.this.caches.allCaches);
-						all.close();
+						DataParser found = new DataParser(
+								getApplicationContext(), Cache.FOUND_CACHES);
+						found.overwriteAll(Map.this.caches.foundCaches);
+						found.close();
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
@@ -340,7 +355,6 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public boolean onMarkerClick(Marker marker) {
-			// TODO Auto-generated method stub
 			if (marker.isInfoWindowShown()) {
 				marker.hideInfoWindow();
 			} else {
@@ -351,17 +365,17 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onInfoWindowClick(final Marker marker) {
-//			Cache cache = new Cache();
-//			cache.name(marker.getTitle());
-//			cache.description(marker.getSnippet());
-//			cache.lat(String.valueOf(marker.getPosition().latitude));
-//			cache.lng(String.valueOf(marker.getPosition().longitude));
+			// Cache cache = new Cache();
+			// cache.name(marker.getTitle());
+			// cache.description(marker.getSnippet());
+			// cache.lat(String.valueOf(marker.getPosition().latitude));
+			// cache.lng(String.valueOf(marker.getPosition().longitude));
 
 			Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 			Bundle extra = new Bundle();
 
-//			Map.this.caches.target = cache;
-//			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			// Map.this.caches.target = cache;
+			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 			extra.putDouble("LAT", marker.getPosition().latitude);
 			extra.putDouble("LNG", marker.getPosition().longitude);
 			extra.putString("NAME", marker.getTitle());
@@ -372,7 +386,7 @@ public class Map extends FragmentActivity {
 			extra.putDouble("AWES", 5.0);
 			extra.putDouble("SIZE", 3.9);
 			extra.putParcelable("USER", (Parcelable) currentPerson);
-			double distanceFrom = distance(lastLocation,marker.getPosition());
+			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
 			cacheView.putExtras(extra);
 			/**
@@ -462,15 +476,15 @@ public class Map extends FragmentActivity {
 		super.onResume();
 		this.getExtras();
 		// TODO why do we have to remove markers?
-		// this.removeAllMarkers();
-		// this.setUpMap();
+		// only have to remove target from map -> to show updated made in caches
+		// in time will change to only remove target and not every marker
+		this.removeAllMarkers();
+		this.setUpMap();
 
 	}
 
 	private Data readInData() {
 
-		File allCachesfile = getApplicationContext().getFileStreamPath(
-				Cache.ALL_CACHES);
 		File foundCachesfile = getApplicationContext().getFileStreamPath(
 				Cache.FOUND_CACHES);
 		File targetCacheFile = getApplicationContext().getFileStreamPath(
@@ -524,10 +538,10 @@ public class Map extends FragmentActivity {
 
 		return result;
 	}
-	
+
 	/*
-	 * This method sets the class variables currentCity and currentState
-	 * based on a Geocoder object.
+	 * This method sets the class variables currentCity and currentState based
+	 * on a Geocoder object.
 	 */
 	private void setCurrentCityState(LatLng loc) {
 		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
@@ -535,14 +549,13 @@ public class Map extends FragmentActivity {
 		try {
 			addresses = gcd.getFromLocation(loc.latitude, loc.longitude, 1);
 			if (addresses.size() > 0) {
-				String[] addressLine = addresses.get(0).getAddressLine(1).split(",");
+				String[] addressLine = addresses.get(0).getAddressLine(1)
+						.split(",");
 				currentCity = addressLine[0];
 				currentState = addressLine[1].substring(1, 3);
-				Log.d(TAG,currentCity + ", " + currentState);
-			    Toast.makeText(Map.this, 
-			    		currentCity + ", "
-			    		+ currentState
-			    		, Toast.LENGTH_SHORT).show();
+				Log.d(TAG, currentCity + ", " + currentState);
+				Toast.makeText(Map.this, currentCity + ", " + currentState,
+						Toast.LENGTH_SHORT).show();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
