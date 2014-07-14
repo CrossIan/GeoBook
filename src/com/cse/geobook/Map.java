@@ -62,15 +62,15 @@ public class Map extends FragmentActivity {
 								.getLongitude());
 						Log.d("Map.java",
 								"Starting location: " + lastLocation.toString());
-						if(!startUp){
+						if(startUp){
 							gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 11));
+							startUp = false;
 						}
 					}
 				});
 				setUpActionListeners();
 			}
 		}
-		startUp = false;
 		
 		gMap.addMarker(new MarkerOptions()
         				.position(new LatLng(39.948846, -83.850573))
