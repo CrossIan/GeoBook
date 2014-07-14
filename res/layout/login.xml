@@ -8,54 +8,63 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/signin_text"
+            android:id="@+id/login_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="26dp"
-            android:text="@string/signin"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#1919BA" />
-        
+            android:layout_marginTop="30dp"
+            android:text="Geobook"
+            android:textColor="#1919BA"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sign_in_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="Sign in to get started"
+            android:textColor="#1919BA"
+            android:textSize="20dp"
+            android:textStyle="italic" />
+
         <com.google.android.gms.common.SignInButton
-		    android:id="@+id/google_sign_in_button"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_below="@+id/signin_text" 
+            android:id="@+id/google_sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sign_in_hint"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp" />
-		
-		<Button
-		    android:id="@+id/sign_out_button"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_below="@+id/google_sign_in_button"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="40dp"
-		    android:text="Sign out"
-		    android:textColor="#1919BA" />
+
+        <Button
+            android:id="@+id/sign_out_button"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="Sign out" />
 
         <Button
             android:id="@+id/revoke_access_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/sign_out_button"
-            android:layout_centerHorizontal="true"
-            android:text="Revoke access"
-            android:textColor="#1919BA" />
-        
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/google_sign_in_button"
+            android:layout_marginTop="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="Revoke Access"
+            android:layout_weight = "1.0" />
+
         <Button
             android:id="@+id/bypass_button"
-            android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-		    android:layout_below="@+id/revoke_access_button" 
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/google_sign_in_button"
             android:layout_centerHorizontal="true"
-            android:text="Bypass login (testing)"
-            android:textColor="#1919BA" />
-
-        
-
-	</RelativeLayout>
+            android:text="Bypass" />
+    </RelativeLayout>
 
 </ScrollView>

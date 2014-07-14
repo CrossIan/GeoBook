@@ -50,14 +50,7 @@ public class Login extends Activity implements ConnectionCallbacks,
 	// case there is a delay in any of the dialogs being ready.
 	private ProgressDialog mConnectionProgressDialog;
 
-	// -------------------------------------------------------*
-	// Facebook login resources
-	// -------------------------------------------------------*
-
-	// -------------------------------------------------------*
-	// Twitter login resources
-	// -------------------------------------------------------*
-
+	
 	// -------------------------------------------------------*
 	// Generic resources
 	// -------------------------------------------------------*

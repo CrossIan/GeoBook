@@ -1,11 +1,16 @@
 package com.cse.geobook;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,8 +42,10 @@ public class Map extends FragmentActivity {
 	Data caches;
 	Button listView;
 	LatLng lastLocation;
+	String currentCity, currentState;
 	ArrayList<Marker> markers;
 	private static boolean startUp = true;
+	private static final String TAG = "Map.java";
 
 	// private final double MAX_DISTANCEFROMCACHE = 25;
 
@@ -65,6 +73,9 @@ public class Map extends FragmentActivity {
 						if(startUp){
 							gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 11));
 							startUp = false;
+							
+							// Set local variables to current city/state based on location
+							setCurrentCityState(lastLocation);
 						}
 					}
 				});
@@ -496,5 +507,30 @@ public class Map extends FragmentActivity {
 		result.position(new LatLng(cache.getLat(), cache.getLng()));
 
 		return result;
+	}
+	
+	/*
+	 * This method sets the class variables currentCity and currentState
+	 * based on a Geocoder object.
+	 */
+	private void setCurrentCityState(LatLng loc) {
+		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+		List<Address> addresses;
+		try {
+			addresses = gcd.getFromLocation(loc.latitude, loc.longitude, 1);
+			if (addresses.size() > 0) {
+				String[] addressLine = addresses.get(0).getAddressLine(1).split(",");
+				currentCity = addressLine[0];
+				currentState = addressLine[1].substring(1, 3);
+				Log.d(TAG,currentCity + ", " + currentState);
+			    Toast.makeText(Map.this, 
+			    		currentCity + ", "
+			    		+ currentState
+			    		, Toast.LENGTH_SHORT).show();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
