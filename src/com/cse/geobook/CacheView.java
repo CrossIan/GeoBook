@@ -248,13 +248,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheSizeText.setText(Double.toString(cacheSize));
 	}
 
-	/*
-	 * Gets user Google+ profile info
-	 */
-	private void getProfileInfo() {
-		currentPerson = mPlusClient.getCurrentPerson();
-		userName = currentPerson.getDisplayName();
-	}
+	
 
 	/*
 	 * Google+ callback methods
@@ -318,9 +312,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			}
 		};
 		task.execute((Void) null);
-
-		// Load profile info
-		getProfileInfo();
+		
 		// Construct share text
 		shareCacheToGoogle();
 		// Disconnect when finished sharing

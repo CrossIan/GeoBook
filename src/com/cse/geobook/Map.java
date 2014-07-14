@@ -33,18 +33,20 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.plus.model.people.Person;
 
 public class Map extends FragmentActivity {
 	// GoogleMap gMap;
 
 	GoogleMap gMap;
+	private Person currentPerson;
 	Bundle extras;
 	Data caches;
 	Button listView;
 	LatLng lastLocation;
 	String currentCity, currentState;
 	ArrayList<Marker> markers;
-	private static boolean startUp = true;
+	private static boolean startUp;
 	private static final String TAG = "Map.java";
 
 	// private final double MAX_DISTANCEFROMCACHE = 25;
@@ -53,8 +55,9 @@ public class Map extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.map);
-		// this.getExtras();
+		 this.getExtras();
 		// this.setUpMap();
+		 startUp = true;
 
 		// TODO for testing only: remove later
 		// TODO keep this segment of code that gets location
@@ -97,19 +100,26 @@ public class Map extends FragmentActivity {
 	 */
 	private void getExtras() {
 		this.extras = this.getIntent().getExtras();
-		MarkerOptions mo = null;
-		int zoom = 11;
-		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
-			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
-			mo = createMarkerOptions(caches.target);
-			zoom = caches.zoom;
-		}
-
-		this.caches = readInData();
-		if (mo != null) {
-			// caches.target = mo;
-			// caches.zoom = zoom;
-		}
+		
+		currentPerson = extras.getParcelable("USER");
+		if(currentPerson != null)
+			Toast.makeText(this, currentPerson.getName().toString(), Toast.LENGTH_SHORT).show();
+		else
+			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
+		
+//		MarkerOptions mo = null;
+//		int zoom = 11;
+//		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
+//			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
+//			mo = createMarkerOptions(caches.target);
+//			zoom = caches.zoom;
+//		}
+//
+//		this.caches = readInData();
+//		if (mo != null) {
+//			// caches.target = mo;
+//			// caches.zoom = zoom;
+//		}
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.cse.geobook;
 
+import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -11,6 +12,8 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +30,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.PlusShare;
+import com.google.android.gms.plus.model.people.Person;
 
 public class Login extends Activity implements ConnectionCallbacks,
 		OnConnectionFailedListener, OnClickListener, OnAccessRevokedListener {
@@ -54,8 +58,9 @@ public class Login extends Activity implements ConnectionCallbacks,
 	// -------------------------------------------------------*
 	// Generic resources
 	// -------------------------------------------------------*
-	private Button facebookButton, twitterButton, bypassButton, signoutButton,
-			revokeAccessButton;
+	private Button bypassButton, signoutButton,revokeAccessButton;
+	private Person currentPerson;
+	private String currentUserName;
 
 	// Called when the activity is first created.
 	@Override
@@ -88,6 +93,18 @@ public class Login extends Activity implements ConnectionCallbacks,
 		if (mPlusClient.isConnected())
 			mPlusClient.disconnect();
 	}
+	
+	/*
+	 * Gets user Google+ profile info
+	 */
+	private void retrieveProfileInfo() {
+		currentPerson = mPlusClient.getCurrentPerson();
+		if(currentPerson.getName().hasGivenName())
+			currentUserName = currentPerson.getName().getGivenName();
+		else
+			currentUserName = "Teddy Tester";
+	}
+	
 
 	// Define click behavior
 	@Override
@@ -149,6 +166,11 @@ public class Login extends Activity implements ConnectionCallbacks,
 					.show();
 			Intent map = new Intent("android.intent.action.MAP");
 			Bundle extra = new Bundle();
+			if(currentPerson != null)
+				extra.putParcelable("USER", (Parcelable) currentPerson);
+			else
+				extra.putParcelable("USER", null);
+			
 			map.putExtras(extra);
 			// Finish login activity and move to map view
 			Login.this.startActivity(map);
@@ -215,6 +237,10 @@ public class Login extends Activity implements ConnectionCallbacks,
 			}
 		};
 		task.execute((Void) null);
+		
+		retrieveProfileInfo();
+		Toast.makeText(this, "Welcome " + currentUserName + "!",
+				Toast.LENGTH_SHORT).show();
 		
 //		// Start the map
 //		Intent map = new Intent("android.intent.action.MAP");
