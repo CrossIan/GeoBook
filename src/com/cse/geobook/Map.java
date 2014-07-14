@@ -13,6 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -87,9 +88,11 @@ public class Map extends FragmentActivity {
 		}
 		
 		gMap.addMarker(new MarkerOptions()
-        				.position(new LatLng(39.948846, -83.850573))
-        				.title("Fricker's")
-                        .snippet("Population: Beer"));
+				.position(new LatLng(39.948846, -83.850573)).title("Fricker's")
+				.snippet("Cold beer here!"));
+		gMap.addMarker(new MarkerOptions()
+				.position(new LatLng(39.985029, -83.864287)).title("Test point 1")
+				.snippet("This place..."));
 	}
 
 	/**
@@ -103,7 +106,7 @@ public class Map extends FragmentActivity {
 		
 		currentPerson = extras.getParcelable("USER");
 		if(currentPerson != null)
-			Toast.makeText(this, currentPerson.getName().toString(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, currentPerson.getName().getGivenName(), Toast.LENGTH_SHORT).show();
 		else
 			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
 		
@@ -368,6 +371,9 @@ public class Map extends FragmentActivity {
 			extra.putDouble("TERR", 1.1);
 			extra.putDouble("AWES", 5.0);
 			extra.putDouble("SIZE", 3.9);
+			extra.putParcelable("USER", (Parcelable) currentPerson);
+			double distanceFrom = distance(lastLocation,marker.getPosition());
+			extra.putDouble("DISTANCE", distanceFrom);
 			cacheView.putExtras(extra);
 			/**
 			 * <pre> doesn't work

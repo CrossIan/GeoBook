@@ -171,9 +171,15 @@
         android:ems="10"
         android:hint="User comments"
         android:inputType="textMultiLine"
-        android:maxLines="4"
+        android:maxLines="3"
         android:textColor="#FFFFFF" />
 
+    <Button
+        android:id="@+id/found_cache_button"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/save_cache_button"
+        android:text="Found it!" />
     <Button
         android:id="@+id/save_cache_button"
         android:layout_width="110dp"

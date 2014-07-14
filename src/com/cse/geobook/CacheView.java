@@ -66,10 +66,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Data for this cache
 	public Person currentPerson;
-	public String userName, cacheName, cachePlacedBy, dateFound,
+	public String userName,cacheName, cachePlacedBy, dateFound,
 			userDescription;
 	public Double cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
-			cacheAwesomeness, cacheSize;
+			cacheAwesomeness, cacheSize, distanceFrom;
 	public String mCurrentPhotoPath; // The absolute path to the caches photo
 	public File mCurrentPhoto;
 	public Data data;
@@ -81,7 +81,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheDifficultyText, cacheTerrainText, cacheAwesomenessText,
 			cacheSizeText;
 	EditText userDescriptionText;
-	Button saveCacheButton, shareCacheButton, captureImageButton;
+	Button saveCacheButton, shareCacheButton, captureImageButton,foundCacheButton;
 
 	final Double EPISILON = .00001;
 
@@ -101,6 +101,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		captureImageButton = (Button) this
 				.findViewById(R.id.capture_image_button);
 		captureImageButton.setOnClickListener(this);
+		foundCacheButton = (Button) this.findViewById(R.id.found_cache_button);
+		foundCacheButton.setOnClickListener(this);
 		cacheNameText = (TextView) this.findViewById(R.id.cache_name);
 		cachePlacedByText = (TextView) this.findViewById(R.id.cache_placed_by);
 		cacheDateFoundText = (TextView) this.findViewById(R.id.date_found);
@@ -116,7 +118,13 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// Get extras from originating activity
 		this.getExtras();
 		mCurrentPhotoPath = "";
-
+		
+		// Determine if we're close enough to have found the cache
+		// Threshold is 30 meters
+		if(distanceFrom <= 30)
+			foundCacheButton.setVisibility(View.VISIBLE);
+		else
+			foundCacheButton.setVisibility(View.INVISIBLE);
 		// Initialize the Google+ client
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
 				"http://schemas.google.com/BuyActivity").build();
@@ -206,7 +214,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		 * Take a picture of this cache
 		 */
 		else if (v.getId() == R.id.capture_image_button) {
-			Log.d(TAG, "Tapped capture_image_button in Cache.java");
+			Log.d(TAG, "Tapped capture_image_button");
 			Intent takePictureIntent = new Intent(
 					MediaStore.ACTION_IMAGE_CAPTURE);
 			// Ensure that there's a camera activity to handle the intent
@@ -215,6 +223,12 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 				startActivityForResult(intent, PHOTO_REQUEST_CODE);
 			}
+		}
+		/*
+		 * Found the cache
+		 */
+		else if (v.getId() == R.id.found_cache_button){
+			Log.d(TAG, "Tapped found_cache_button");
 		}
 	}
 
@@ -237,6 +251,13 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheTerrain = extras.getDouble("TERR");
 		cacheAwesomeness = extras.getDouble("AWES");
 		cacheSize = extras.getDouble("SIZE");
+		currentPerson = extras.getParcelable("USER");
+		if(currentPerson != null)
+			userName = currentPerson.getName().getGivenName();
+		else
+			userName = "Teddy Tester";
+		distanceFrom = extras.getDouble("DISTANCE");
+		
 
 		// Set widget text
 		cacheNameText.setText(cacheName);
