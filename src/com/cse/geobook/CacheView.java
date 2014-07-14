@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ShareCompat;
 import android.util.Log;
@@ -62,6 +63,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Resources for photo functionality
 	private static final int PHOTO_REQUEST_CODE = 6969;
+	private boolean waitOnCamera = false;
 
 	//
 	// Data for this cache
@@ -73,6 +75,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	public String mCurrentPhotoPath; // The absolute path to the caches photo
 	public File mCurrentPhoto;
 	public Data data;
+	public Double distThreshold = 20.0;	// 20 meters
 
 	//
 	// Layout widgets
@@ -120,8 +123,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mCurrentPhotoPath = "";
 		
 		// Determine if we're close enough to have found the cache
-		// Threshold is 30 meters
-		if(distanceFrom <= 30)
+		if(distanceFrom <= distThreshold)
 			foundCacheButton.setVisibility(View.VISIBLE);
 		else
 			foundCacheButton.setVisibility(View.INVISIBLE);
@@ -229,6 +231,18 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		 */
 		else if (v.getId() == R.id.found_cache_button){
 			Log.d(TAG, "Tapped found_cache_button");
+			Toast.makeText(this, "Found cache!", Toast.LENGTH_SHORT).show();
+			
+			// Take picture
+			Intent takePictureIntent = new Intent(
+					MediaStore.ACTION_IMAGE_CAPTURE);
+			// Ensure that there's a camera activity to handle the intent
+			if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+				Intent intent = new Intent(
+						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				waitOnCamera = true;
+				startActivityForResult(intent, PHOTO_REQUEST_CODE+1000);
+			}
 		}
 	}
 
@@ -372,6 +386,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			Log.d(TAG, "Share activity returned OK.");
 		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
+			
 			// Change thumbnail
 			Bundle extras = intent.getExtras();
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -403,6 +418,64 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			}
 			// On success, record the file name to this cache
 			mCurrentPhoto = file;
+		}else if (requestCode == PHOTO_REQUEST_CODE+1000 && responseCode == RESULT_OK){
+			Log.d(TAG, "Photo activity returned OK.");
+			
+			// Change thumbnail
+			Bundle extras = intent.getExtras();
+			Bitmap imageBitmap = (Bitmap) extras.get("data");
+			cacheThumbnail.setImageBitmap(imageBitmap);
+
+			//
+			// Save picture to our directory
+			//
+			// Get path to our picture folder. Create Geobook directory
+			// if necessary
+			File path = new File(Environment.getExternalStoragePublicDirectory(
+		            Environment.DIRECTORY_PICTURES), "Geobook/");
+			if (!path.mkdirs()) {
+		        Log.e(TAG, "Directory not created");
+		    }
+			
+			// Get the new photos name and add to path
+			String fileName = getPhotoName();
+			File file = new File(path,fileName);
+			Log.d(TAG, file.getAbsolutePath());
+			// Write image to file
+			try {
+				FileOutputStream fOut = new FileOutputStream(file);
+				imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+				fOut.flush();
+				fOut.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// On success, record the file name to this cache
+			mCurrentPhoto = file;
+			
+			
+			// Post to Google+
+			// Show the sign-in dialog
+			mConnectionProgressDialog = new ProgressDialog(CacheView.this);
+			mConnectionProgressDialog.setMessage("Signing in with Google+...");
+
+			if (!mPlusClient.isConnected()) {
+				// Show the dialog as we are now signing in.
+				mConnectionProgressDialog.show();
+				// Make sure that we will start the resolution (e.g. fire
+				// the intent and pop up a dialog for the user) for any
+				// errors the come in.
+				mResolveOnFail = true;
+				// We should always have a connection result ready to
+				// resolve, so we can start that process.
+				if (mConnectionResult != null) {
+					startResolution();
+				} else {
+					// If we don't have one though, we can start connect
+					// in order to retrieve one.
+					mPlusClient.connect();
+				}
+			}
 		}
 
 	}

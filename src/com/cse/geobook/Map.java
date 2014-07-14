@@ -105,10 +105,10 @@ public class Map extends FragmentActivity {
 		this.extras = this.getIntent().getExtras();
 		
 		currentPerson = extras.getParcelable("USER");
-		if(currentPerson != null)
-			Toast.makeText(this, currentPerson.getName().getGivenName(), Toast.LENGTH_SHORT).show();
-		else
-			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
+//		if(currentPerson != null)
+//			Toast.makeText(this, currentPerson.getName().getGivenName(), Toast.LENGTH_SHORT).show();
+//		else
+//			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
 		
 //		MarkerOptions mo = null;
 //		int zoom = 11;
