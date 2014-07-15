@@ -403,6 +403,7 @@ public class Map extends FragmentActivity {
 			extra.putParcelable("USER", (Parcelable) currentPerson);
 			extra.putString("CITY",currentCity);
 			extra.putString("STATE", currentState);
+			profileIntent.putExtras(extra);
 			
 			// Start profile activity
 			this.startActivity(profileIntent);
