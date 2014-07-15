@@ -12,12 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ShareCompat;
 import android.util.Log;
@@ -138,7 +136,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		/*
 		 * Save users changes and return to Map
 		 */
-		if (v.getId() == R.id.save_cache_button) {contains
+		if (v.getId() == R.id.save_cache_button) {
 			Log.d(TAG, "Tapped save_cache_button");
 			// int size = CacheView.this.data.allCaches.size();
 			// boolean searching = true;
@@ -230,10 +228,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		/*
 		 * Found the cache
 		 */
-		else if (v.getId() == R.id.found_cache_button){
+		else if (v.getId() == R.id.found_cache_button) {
 			Log.d(TAG, "Tapped found_cache_button");
 			Toast.makeText(this, "Found cache!", Toast.LENGTH_SHORT).show();
-			
+
 			// Take picture
 			Intent takePictureIntent = new Intent(
 					MediaStore.ACTION_IMAGE_CAPTURE);
@@ -242,7 +240,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 				Intent intent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 				waitOnCamera = true;
-				startActivityForResult(intent, PHOTO_REQUEST_CODE+1000);
+				startActivityForResult(intent, PHOTO_REQUEST_CODE + 1000);
 			}
 		}
 	}

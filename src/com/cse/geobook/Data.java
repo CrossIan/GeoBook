@@ -157,9 +157,15 @@ public class Data implements Parcelable {
 
 	public Cache getCache(Marker m) {
 		int i = 0;
-		int size = this.allCaches.size();
 		Cache result = null;
+		int size = foundCaches.size();
 		boolean searching = true;
+		while (searching && i < size) {
+			if (this.foundCaches.get(i).equals(m)) {
+				result = this.allCaches.get(i);
+			}
+		}
+		size = this.allCaches.size();
 		while (searching && i < size) {
 			if (this.allCaches.get(i).equals(m)) {
 				result = this.allCaches.get(i);
