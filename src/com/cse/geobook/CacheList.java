@@ -11,8 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.cse.geobook.Data.SortBy;
-
 public class CacheList extends Activity implements OnItemClickListener {
 	static int startCacheNameID = 900;
 
@@ -45,7 +43,7 @@ public class CacheList extends Activity implements OnItemClickListener {
 		this.getExtras();
 		if (this.caches != null) {
 
-			caches.sort(SortBy.NAME);
+			caches.sort(Cache.DESCRIPTOR.NAME);
 
 			/**
 			 * <pre>

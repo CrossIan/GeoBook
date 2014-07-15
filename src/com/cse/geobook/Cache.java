@@ -2,8 +2,6 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public class Cache {
 	ArrayList<String> cache;
 	int size;
@@ -25,7 +23,7 @@ public class Cache {
 
 	public static final int numberOfdescriptors = 10;
 
-	private enum DESCRIPTOR {
+	public enum DESCRIPTOR {
 		NAME(0), LAT(2), LNG(1), CREATOR(3), PHOTO(4), DIFFICULTY(5), TERRAIN(6), RATING(
 				7), CONTAINER(8), DESCRIPTION(9);
 		int INDEX;
