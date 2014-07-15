@@ -102,6 +102,11 @@
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile" >
+            <intent-filter>
+                <action android:name="android.intent.action.PROFILE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <!-- required by maps -->
