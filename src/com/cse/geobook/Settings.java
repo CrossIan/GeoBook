@@ -32,11 +32,5 @@ public class Settings extends Activity {
 	public static String getProfileName(Context context){
 		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_profileName", "John Doe");
 	}
-	
-	public static String getRadius(Context context){
-		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_radiusList", "50");
-	}
-	
-	//Implement delete all caches
 
 }

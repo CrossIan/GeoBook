@@ -8,13 +8,6 @@
         android:entryValues="@array/ColorListValues"
         android:defaultValue="1" >
     </ListPreference>
-    <ListPreference
-        android:key="pref_radiusList"
-        android:title="Cache Radius"
-        android:dialogTitle="Adjust the range that caches are shown"
-        android:entries="@array/RadiusList"
-        android:entryValues="@array/RadiusListValues" >
-    </ListPreference>
     <EditTextPreference 
         android:key="pref_profileName"
         android:title="Edit Profile Name"
