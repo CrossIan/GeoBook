@@ -63,7 +63,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Resources for photo functionality
 	private static final int PHOTO_REQUEST_CODE = 6969;
-	private boolean waitOnCamera = false;
 
 	//
 	// Data for this cache
@@ -240,7 +239,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 				Intent intent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				waitOnCamera = true;
 				startActivityForResult(intent, PHOTO_REQUEST_CODE+1000);
 			}
 		}
