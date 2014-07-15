@@ -18,9 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Profile extends Activity {
-	
+
 	private static final String TAG = "Profile.java";
-	
+
 	ProgressBar progressBar;
 	private Bundle extra;
 	private Person currentPerson;
@@ -29,13 +29,13 @@ public class Profile extends Activity {
 	private ImageView profilePicView,cachePicView;
 	private String profilePicUrl;
 	private TextView userNameText,locationText;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
 		this.getExtras();
-		
+
 		// Link widgets
 		progressBar = (ProgressBar) findViewById(R.id.cache_progress_bar);
 		profilePicView = (ImageView) findViewById(R.id.profile_pic);
@@ -46,7 +46,7 @@ public class Profile extends Activity {
 		// Set widget values
 		userNameText.setText(userName);
 		locationText.setText(currentCity + ", " + this.currentState);
-		
+
 		profilePicUrl = profilePicUrl.substring(0,
 				profilePicUrl.length() - 2)
                 + 400;
@@ -54,9 +54,9 @@ public class Profile extends Activity {
         new LoadProfileImage(profilePicView).execute(profilePicUrl);
 //		profilePicView.setImageURI(profilePicImage.);
 		this.setProgress(35, 100);
-		
+
 	}
-	
+
 	private void getExtras() {
 		this.extra = this.getIntent().getExtras();
 		currentPerson = extra.getParcelable("USER");
@@ -66,12 +66,12 @@ public class Profile extends Activity {
 
 		profilePicUrl = currentPerson.getImage().getUrl();
 	}
-	
+
 	private void setProgress(int progress, int max) {
 		this.progressBar.setProgress(progress);
 		this.progressBar.setMax(max);
 	}
-	
+
 	private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
 		ImageView bmImage;
 
