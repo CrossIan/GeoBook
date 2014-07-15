@@ -336,36 +336,28 @@ public class Map extends FragmentActivity {
 
 			Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 			Bundle extra = new Bundle();
+			
+			Cache target = caches.getCache(marker);
 
 			// Map.this.caches.target = cache;
 			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-
-			Cache target = caches.getCache(marker);
+			extra.putDouble("LAT", target.getLat());
+			extra.putDouble("LNG", target.getLng());
+			extra.putString("NAME", target.getName());
+			extra.putString("PLACEDBY", target.getCreator());
+			extra.putString("DATE", "");
+			extra.putDouble("DIFF", target.getDifficulty());
+			extra.putDouble("TERR", target.getTerrain());
+			extra.putDouble("AWES", target.getRating());
+			extra.putDouble("SIZE", target.getContainer());
+			extra.putParcelable("USER", (Parcelable) currentPerson);
+			
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
 			cacheView.putExtras(extra);
-			/**
-			 * <pre> doesn't work
-			 * 
-			 * <pre>
-			 * Location currentLocation =
-			 * gMap.getMyLocation();
-			 * 
-			 * LatLng position = new LatLng(currentLocation.getLatitude(),
-			 * currentLocation.getLongitude());
-			 * 
-			 * if (cacheFound(mo)) { Map.this.startActivity(cache);
-			 * 
-			 * } else if (distance(position, mo.getPosition()) <
-			 * MAX_DISTANCEFROMCACHE) {
-			 * 
-			 * Map.this.startActivity(cache);
-			 * 
-			 * } else { // error }
-			 */
+			
 			// remove once above is working
 			Map.this.startActivity(cacheView);
-
 		}
 	}
 
