@@ -196,12 +196,10 @@ public class Map extends FragmentActivity {
 		// set all caches
 		int size = this.caches.allCaches.size();
 		Log.d("cache", "all -size: " + size);
-		int line = 1;
+
 		for (int i = 0; i < size; i++) {
-			// Log.d("cache", "line: " + line);
 			markers.add(this.gMap
 					.addMarker(createMarkerOptions(this.caches.allCaches.get(i))));
-			line++;
 		}
 
 		// set found caches
@@ -336,7 +334,7 @@ public class Map extends FragmentActivity {
 
 			Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 			Bundle extra = new Bundle();
-			
+
 			Cache target = caches.getCache(marker);
 
 			// Map.this.caches.target = cache;
@@ -351,11 +349,11 @@ public class Map extends FragmentActivity {
 			extra.putDouble("AWES", target.getRating());
 			extra.putDouble("SIZE", target.getContainer());
 			extra.putParcelable("USER", (Parcelable) currentPerson);
-			
+
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
 			cacheView.putExtras(extra);
-			
+
 			// remove once above is working
 			Map.this.startActivity(cacheView);
 		}

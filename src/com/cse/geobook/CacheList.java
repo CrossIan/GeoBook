@@ -20,13 +20,17 @@ public class CacheList extends Activity implements OnItemClickListener {
 	String[] titles, sortOptions;
 	Bundle extras;
 
+	ListView lv;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(this.getClass().toString(), "getting extras");
+		this.getExtras();
 
 		setContentView(R.layout.cache_list);
-		ListView lv = (ListView) findViewById(R.id.ListView01);
+
+		lv = (ListView) findViewById(R.id.ListView01);
 
 		// Add options to sort spinner
 		sortOptions = new String[5];
@@ -40,7 +44,6 @@ public class CacheList extends Activity implements OnItemClickListener {
 				android.R.layout.simple_spinner_item, sortOptions);
 		sortSpinner.setAdapter(spinnerAdapter);
 
-		this.getExtras();
 		if (this.caches != null) {
 
 			caches.sort(Cache.DESCRIPTOR.NAME);
@@ -56,18 +59,21 @@ public class CacheList extends Activity implements OnItemClickListener {
 			 * </pre>
 			 */
 
-			int size = this.caches.foundCaches.size();
-			this.found_titles = new String[size];
-			for (int i = 0; i < size; i++) {
+			int size_found = this.caches.foundCaches.size();
+			int size_all = this.caches.allCaches.size();
+			titles = new String[size_found + size_all];
+			this.found_titles = new String[size_found];
+			for (int i = 0; i < size_found; i++) {
 				Cache ALi = this.caches.foundCaches.get(i);
-				found_titles[i] = ALi.get(0);
+				titles[i] = found_titles[i] = ALi.get(0);
+
 			}
 
-			size = this.caches.allCaches.size();
-			this.all_titles = new String[size];
-			for (int i = 0; i < size; i++) {
+			this.all_titles = new String[size_all];
+			for (int i = 0; i < size_all; i++) {
 				Cache ALi = this.caches.allCaches.get(i);
-				all_titles[i] = ALi.get(0);
+				titles[i + size_found] = all_titles[i] = ALi.get(0);
+
 			}
 
 			// initialize menu
