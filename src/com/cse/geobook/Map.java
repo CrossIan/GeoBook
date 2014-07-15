@@ -522,14 +522,21 @@ public class Map extends FragmentActivity {
 				String[] addressLine = addresses.get(0).getAddressLine(1)
 						.split(",");
 				currentCity = addressLine[0];
-				currentState = addressLine[1].substring(1, 3);
-				Log.d(TAG, currentCity + ", " + currentState);
-				Toast.makeText(Map.this, currentCity + ", " + currentState,
-						Toast.LENGTH_SHORT).show();
+				if(addressLine.length > 1)
+					currentState = addressLine[1].substring(1, 3);
+				else
+					currentState = "";
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(currentState.length() > 1)
+			Toast.makeText(Map.this, currentCity + ", " + currentState,
+					Toast.LENGTH_SHORT).show();
+		else
+			Toast.makeText(Map.this, currentCity,
+					Toast.LENGTH_SHORT).show();
 	}
 }
