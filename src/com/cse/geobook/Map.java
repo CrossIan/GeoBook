@@ -398,7 +398,15 @@ public class Map extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		if (item.getItemId() == R.id.menu_map_profile) {
-			this.startActivity(new Intent(Map.this, Profile.class));
+			Intent profileIntent = new Intent("android.intent.action.PROFILE");
+			Bundle extra = new Bundle();
+			extra.putParcelable("USER", (Parcelable) currentPerson);
+			extra.putString("CITY",currentCity);
+			extra.putString("STATE", currentState);
+			profileIntent.putExtras(extra);
+			
+			// Start profile activity
+			this.startActivity(profileIntent);
 			return true;
 		} else if (item.getItemId() == R.id.menu_map_settings) {
 			this.startActivity(new Intent(Map.this, Settings.class));
