@@ -7,6 +7,8 @@ import java.util.Comparator;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.Marker;
+
 public class Data implements Parcelable {
 	ArrayList<Cache> foundCaches;
 	ArrayList<Cache> allCaches;
@@ -28,7 +30,7 @@ public class Data implements Parcelable {
 		this.zoom = zoom;
 
 		primarySort = 0; // name
-		secondarySort = 0;
+		secondarySort = 0; // name
 	}
 
 	public static final Parcelable.Creator<Data> CREATOR = new Parcelable.Creator<Data>() {
@@ -57,6 +59,20 @@ public class Data implements Parcelable {
 		return result;
 	}
 
+	/**
+	 * Writes a singe cache to the parcel, a cache is equivalent to a comma
+	 * separated line in the dataparser
+	 * 
+	 * @param dest
+	 * @param cache
+	 */
+	private void writeNextCache(Parcel dest, Cache cache) {
+		for (int i = 0; i < Cache.numberOfdescriptors; i++) {
+			String descriptor = cache.get(i);
+			dest.writeString(descriptor);
+		}
+	}
+
 	public Data(Parcel in) {
 		// foundCaches
 		foundCaches = new ArrayList<Cache>();
@@ -75,26 +91,14 @@ public class Data implements Parcelable {
 		}
 		// target
 		target = getNextCache(in);
+
+		// zoom
 		zoom = in.readInt();
 	}
 
 	@Override
 	public int describeContents() {
 		return 0;
-	}
-
-	/**
-	 * Writes a singe cache to the parcel, a cache is equivalent to a comma
-	 * separated line in the dataparser
-	 * 
-	 * @param dest
-	 * @param cache
-	 */
-	private void writeNextCache(Parcel dest, Cache cache) {
-		for (int i = 0; i < Cache.numberOfdescriptors; i++) {
-			String descriptor = cache.get(i);
-			dest.writeString(descriptor);
-		}
 	}
 
 	@Override
@@ -145,10 +149,23 @@ public class Data implements Parcelable {
 
 	public void sort(Cache.DESCRIPTOR ordering) {
 		this.primarySort = ordering.INDEX;
-		this.secondarySort = ordering.INDEX;
+		this.secondarySort = Cache.DESCRIPTOR.NAME.INDEX; // sort by name after
+															// ordering
 		Collections.sort(allCaches, comparator);
 		Collections.sort(foundCaches, comparator);
-
 	}
 
+	public Cache getCache(Marker m) {
+		int i = 0;
+		int size = this.allCaches.size();
+		Cache result = null;
+		boolean searching = true;
+		while (searching && i < size) {
+			if (this.allCaches.get(i).equals(m)) {
+				result = this.allCaches.get(i);
+			}
+			i++;
+		}
+		return result;
+	}
 }
