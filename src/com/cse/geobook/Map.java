@@ -61,45 +61,6 @@ public class Map extends FragmentActivity {
 		this.setMarkerColor();
 		this.setUpMap();
 		startUp = true;
-
-		// TODO for testing only: remove later
-		// TODO keep this segment of code that gets location
-		if (gMap == null) {
-			gMap = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-			gMap.setMyLocationEnabled(true);
-			if (gMap != null) {
-				gMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-
-					@Override
-					public void onMyLocationChange(Location arg0) {
-						lastLocation = new LatLng(arg0.getLatitude(), arg0
-								.getLongitude());
-						Log.d("Map.java",
-								"Starting location: " + lastLocation.toString());
-						if (startUp) {
-							gMap.animateCamera(CameraUpdateFactory
-									.newLatLngZoom(lastLocation, 11));
-							startUp = false;
-
-							// Set local variables to current city/state based
-							// // on location
-							setCurrentCityState(lastLocation);
-						}
-					}
-				});
-				setUpActionListeners();
-			}
-
-		}
-
-		gMap.addMarker(new MarkerOptions()
-				.position(new LatLng(39.948846, -83.850573)).title("Fricker's")
-				.snippet("Cold beer here!"));
-		gMap.addMarker(new MarkerOptions()
-				.position(new LatLng(39.985029, -83.864287))
-				.title("Test point 1").snippet("This place..."));
-
 	}
 
 	/**
@@ -112,11 +73,6 @@ public class Map extends FragmentActivity {
 		this.extras = this.getIntent().getExtras();
 
 		currentPerson = extras.getParcelable("USER");
-		if (currentPerson != null)
-			Toast.makeText(this, currentPerson.getName().getGivenName(),
-					Toast.LENGTH_SHORT).show();
-		else
-			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
 
 		Cache tempTarget = null;
 		int zoom = 11;
@@ -209,28 +165,42 @@ public class Map extends FragmentActivity {
 	 * @requires {@code caches} != null
 	 */
 	private void setUpMap() {
-		if (this.gMap == null) {
-			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
+		gMap = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.map)).getMap();
+		gMap.setMyLocationEnabled(true);
+		if (gMap != null) {
+			gMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+				@Override
+				public void onMyLocationChange(Location arg0) {
+					lastLocation = new LatLng(arg0.getLatitude(), arg0
+							.getLongitude());
+					Log.d("Map.java",
+							"Starting location: " + lastLocation.toString());
+					if (startUp) {
+						gMap.animateCamera(CameraUpdateFactory
+								.newLatLngZoom(lastLocation, 11));
+						startUp = false;
+
+						// Set local variables to current city/state based
+						// on location
+						setCurrentCityState(lastLocation);
+					}
+				}
+			});
 		}
+		
+		
 		markers = new ArrayList<Marker>();
 		this.setUpActionListeners();
 		this.gMap.setMyLocationEnabled(true);
 
-		/*
-		 * set up markers
-		 */
-
-		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-				this.caches.target.getLat(), this.caches.target.getLng()),
-				this.caches.zoom));
 
 		// set all caches
 		int size = this.caches.allCaches.size();
 		Log.d("cache", "all -size: " + size);
 		int line = 1;
 		for (int i = 0; i < size; i++) {
-			Log.d("cache", "line: " + line);
+//			Log.d("cache", "line: " + line);
 			markers.add(this.gMap
 					.addMarker(createMarkerOptions(this.caches.allCaches.get(i))));
 			line++;

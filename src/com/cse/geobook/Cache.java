@@ -50,12 +50,10 @@ public class Cache {
 	}
 
 	public Double getLat() {
-		Log.d("double", cache.get(DESCRIPTOR.LAT.INDEX));
 		return Double.parseDouble(cache.get(DESCRIPTOR.LAT.INDEX));
 	}
 
 	public Double getLng() {
-		Log.d("double", cache.get(DESCRIPTOR.LNG.INDEX));
 		return Double.parseDouble(cache.get(DESCRIPTOR.LNG.INDEX));
 	}
 
