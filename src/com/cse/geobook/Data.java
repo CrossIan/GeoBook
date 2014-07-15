@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.Marker;
 
@@ -163,12 +164,14 @@ public class Data implements Parcelable {
 		while (searching && i < size) {
 			if (this.foundCaches.get(i).getName().equals(m.getTitle())) {
 				result = this.allCaches.get(i);
+				searching = false;
 			}
 		}
 		size = this.allCaches.size();
 		while (searching && i < size) {
 			if (this.allCaches.get(i).getName().equals(m.getTitle())) {
 				result = this.allCaches.get(i);
+				searching = false;
 			}
 			i++;
 		}
