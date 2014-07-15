@@ -203,58 +203,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:text="Photo" />
-<<<<<<< HEAD
-
-    <RatingBar
-        android:id="@+id/ratingBar1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPhoto"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp" />
-
-    <EditText
-        android:id="@+id/cacheDescription"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ratingBar1"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:maxLines="6"
-        android:textColor="#FFFFFF" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/cachelat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ratingBar1"
-        android:layout_below="@+id/cacheName"
-        android:text="Latitude"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/cachelong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/cachelat"
-        android:layout_below="@+id/cachelat"
-        android:text="Longitude"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/datevisited"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/cacheDescription"
-        android:layout_below="@+id/cachelong"
-        android:text="date visited"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
-=======
-</RelativeLayout>
->>>>>>> FETCH_HEAD
+
