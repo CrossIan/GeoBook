@@ -66,20 +66,20 @@ public class Cache {
 		return cache.get(DESCRIPTOR.PHOTO.INDEX);
 	}
 
-	public String getDifficulty() {
-		return cache.get(DESCRIPTOR.DIFFICULTY.INDEX);
+	public double getDifficulty() {
+		return Double.parseDouble(cache.get(DESCRIPTOR.DIFFICULTY.INDEX));
 	}
 
-	public String getTerrain() {
-		return cache.get(DESCRIPTOR.TERRAIN.INDEX);
+	public double getTerrain() {
+		return Double.parseDouble(cache.get(DESCRIPTOR.TERRAIN.INDEX));
 	}
 
 	public double getRating() {
 		return Double.parseDouble(cache.get(DESCRIPTOR.RATING.INDEX));
 	}
 
-	public String getContainer() {
-		return cache.get(DESCRIPTOR.CONTAINER.INDEX);
+	public double getContainer() {
+		return Double.parseDouble(cache.get(DESCRIPTOR.CONTAINER.INDEX));
 	}
 
 	public String getDescription() {

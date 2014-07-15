@@ -177,8 +177,8 @@ public class Map extends FragmentActivity {
 					Log.d("Map.java",
 							"Starting location: " + lastLocation.toString());
 					if (startUp) {
-						gMap.animateCamera(CameraUpdateFactory
-								.newLatLngZoom(lastLocation, 11));
+						gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+								lastLocation, 11));
 						startUp = false;
 
 						// Set local variables to current city/state based
@@ -188,19 +188,17 @@ public class Map extends FragmentActivity {
 				}
 			});
 		}
-		
-		
+
 		markers = new ArrayList<Marker>();
 		this.setUpActionListeners();
 		this.gMap.setMyLocationEnabled(true);
-
 
 		// set all caches
 		int size = this.caches.allCaches.size();
 		Log.d("cache", "all -size: " + size);
 		int line = 1;
 		for (int i = 0; i < size; i++) {
-//			Log.d("cache", "line: " + line);
+			// Log.d("cache", "line: " + line);
 			markers.add(this.gMap
 					.addMarker(createMarkerOptions(this.caches.allCaches.get(i))));
 			line++;
@@ -341,17 +339,8 @@ public class Map extends FragmentActivity {
 
 			// Map.this.caches.target = cache;
 			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-			extra.putDouble("LAT", marker.getPosition().latitude);
-			extra.putDouble("LNG", marker.getPosition().longitude);
-			extra.putString("NAME", marker.getTitle());
-			extra.putString("PLACEDBY", marker.getSnippet());
-			extra.putString("DATE", "");
-			extra.putDouble("DIFF", 0.5);
-			extra.putDouble("TERR", 1.1);
-			extra.putDouble("AWES", 5.0);
-			extra.putDouble("SIZE", 3.9);
-			extra.putParcelable("USER", (Parcelable) currentPerson);
-			
+
+			Cache target = caches.getCache(marker);
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
 			cacheView.putExtras(extra);
@@ -401,10 +390,10 @@ public class Map extends FragmentActivity {
 			Intent profileIntent = new Intent("android.intent.action.PROFILE");
 			Bundle extra = new Bundle();
 			extra.putParcelable("USER", (Parcelable) currentPerson);
-			extra.putString("CITY",currentCity);
+			extra.putString("CITY", currentCity);
 			extra.putString("STATE", currentState);
 			profileIntent.putExtras(extra);
-			
+
 			// Start profile activity
 			this.startActivity(profileIntent);
 			return true;
@@ -526,7 +515,7 @@ public class Map extends FragmentActivity {
 				String[] addressLine = addresses.get(0).getAddressLine(1)
 						.split(",");
 				currentCity = addressLine[0];
-				if(addressLine.length > 1)
+				if (addressLine.length > 1)
 					currentState = addressLine[1].substring(1, 3);
 				else
 					currentState = "";
@@ -535,12 +524,11 @@ public class Map extends FragmentActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if(currentState.length() > 1)
+
+		if (currentState.length() > 1)
 			Toast.makeText(Map.this, currentCity + ", " + currentState,
 					Toast.LENGTH_SHORT).show();
 		else
-			Toast.makeText(Map.this, currentCity,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(Map.this, currentCity, Toast.LENGTH_SHORT).show();
 	}
 }
