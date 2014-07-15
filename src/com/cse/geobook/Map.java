@@ -335,11 +335,6 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onInfoWindowClick(final Marker marker) {
-			// Cache cache = new Cache();
-			// cache.name(marker.getTitle());
-			// cache.description(marker.getSnippet());
-			// cache.lat(String.valueOf(marker.getPosition().latitude));
-			// cache.lng(String.valueOf(marker.getPosition().longitude));
 
 			Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 			Bundle extra = new Bundle();
@@ -350,12 +345,13 @@ public class Map extends FragmentActivity {
 			extra.putDouble("LNG", marker.getPosition().longitude);
 			extra.putString("NAME", marker.getTitle());
 			extra.putString("PLACEDBY", marker.getSnippet());
-			extra.putString("DATE", "13 July 2014");
+			extra.putString("DATE", "");
 			extra.putDouble("DIFF", 0.5);
 			extra.putDouble("TERR", 1.1);
 			extra.putDouble("AWES", 5.0);
 			extra.putDouble("SIZE", 3.9);
 			extra.putParcelable("USER", (Parcelable) currentPerson);
+			
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
 			cacheView.putExtras(extra);

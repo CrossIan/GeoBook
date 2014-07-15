@@ -12,12 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ShareCompat;
 import android.util.Log;
@@ -68,14 +66,14 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Data for this cache
 	public Person currentPerson;
-	public String userName,cacheName, cachePlacedBy, dateFound,
+	public String userName, cacheName, cachePlacedBy, dateFound,
 			userDescription;
 	public Double cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
 			cacheAwesomeness, cacheSize, distanceFrom;
 	public String mCurrentPhotoPath; // The absolute path to the caches photo
 	public File mCurrentPhoto;
 	public Data data;
-	public Double distThreshold = 20.0;	// 20 meters
+	public Double distThreshold = 20.0; // 20 meters
 
 	//
 	// Layout widgets
@@ -84,7 +82,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheDifficultyText, cacheTerrainText, cacheAwesomenessText,
 			cacheSizeText;
 	EditText userDescriptionText;
-	Button saveCacheButton, shareCacheButton, captureImageButton,foundCacheButton;
+	Button saveCacheButton, shareCacheButton, captureImageButton,
+			foundCacheButton;
 
 	final Double EPISILON = .00001;
 
@@ -121,9 +120,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// Get extras from originating activity
 		this.getExtras();
 		mCurrentPhotoPath = "";
-		
+
 		// Determine if we're close enough to have found the cache
-		if(distanceFrom <= distThreshold)
+		if (distanceFrom <= distThreshold)
 			foundCacheButton.setVisibility(View.VISIBLE);
 		else
 			foundCacheButton.setVisibility(View.INVISIBLE);
@@ -229,10 +228,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		/*
 		 * Found the cache
 		 */
-		else if (v.getId() == R.id.found_cache_button){
+		else if (v.getId() == R.id.found_cache_button) {
 			Log.d(TAG, "Tapped found_cache_button");
 			Toast.makeText(this, "Found cache!", Toast.LENGTH_SHORT).show();
-			
+
 			// Take picture
 			Intent takePictureIntent = new Intent(
 					MediaStore.ACTION_IMAGE_CAPTURE);
@@ -241,7 +240,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 				Intent intent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 				waitOnCamera = true;
-				startActivityForResult(intent, PHOTO_REQUEST_CODE+1000);
+				startActivityForResult(intent, PHOTO_REQUEST_CODE + 1000);
 			}
 		}
 	}
@@ -266,12 +265,11 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheAwesomeness = extras.getDouble("AWES");
 		cacheSize = extras.getDouble("SIZE");
 		currentPerson = extras.getParcelable("USER");
-		if(currentPerson != null)
+		if (currentPerson != null)
 			userName = currentPerson.getName().getGivenName();
 		else
 			userName = "Teddy Tester";
 		distanceFrom = extras.getDouble("DISTANCE");
-		
 
 		// Set widget text
 		cacheNameText.setText(cacheName);
@@ -282,8 +280,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
 		cacheSizeText.setText(Double.toString(cacheSize));
 	}
-
-	
 
 	/*
 	 * Google+ callback methods
@@ -347,7 +343,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			}
 		};
 		task.execute((Void) null);
-		
+
 		// Construct share text
 		shareCacheToGoogle();
 		// Disconnect when finished sharing
@@ -376,17 +372,20 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// there are any more errors to resolve we'll get our
 			// onConnectionFailed, but if not, we'll get onConnected.
 			mPlusClient.connect();
-		} else if (requestCode == GOOGLE_REQUEST_CODE && responseCode != RESULT_OK) {
+		} else if (requestCode == GOOGLE_REQUEST_CODE
+				&& responseCode != RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned NOT OK.");
 			// If we've got an error we can't resolve, we're no
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
-		} else if (requestCode == GOOGLE_SHARE_CODE && responseCode == RESULT_OK) {
+		} else if (requestCode == GOOGLE_SHARE_CODE
+				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Share activity returned OK.");
-		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
+		} else if (requestCode == PHOTO_REQUEST_CODE
+				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
-			
+
 			// Change thumbnail
 			Bundle extras = intent.getExtras();
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -397,15 +396,17 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			//
 			// Get path to our picture folder. Create Geobook directory
 			// if necessary
-			File path = new File(Environment.getExternalStoragePublicDirectory(
-		            Environment.DIRECTORY_PICTURES), "Geobook/");
+			File path = new File(
+					Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					"Geobook/");
 			if (!path.mkdirs()) {
-		        Log.e(TAG, "Directory not created");
-		    }
-			
+				Log.e(TAG, "Directory not created");
+			}
+
 			// Get the new photos name and add to path
 			String fileName = getPhotoName();
-			File file = new File(path,fileName);
+			File file = new File(path, fileName);
 			Log.d(TAG, file.getAbsolutePath());
 			// Write image to file
 			try {
@@ -418,9 +419,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			}
 			// On success, record the file name to this cache
 			mCurrentPhoto = file;
-		}else if (requestCode == PHOTO_REQUEST_CODE+1000 && responseCode == RESULT_OK){
+		} else if (requestCode == PHOTO_REQUEST_CODE + 1000
+				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
-			
+
 			// Change thumbnail
 			Bundle extras = intent.getExtras();
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -431,15 +433,17 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			//
 			// Get path to our picture folder. Create Geobook directory
 			// if necessary
-			File path = new File(Environment.getExternalStoragePublicDirectory(
-		            Environment.DIRECTORY_PICTURES), "Geobook/");
+			File path = new File(
+					Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					"Geobook/");
 			if (!path.mkdirs()) {
-		        Log.e(TAG, "Directory not created");
-		    }
-			
+				Log.e(TAG, "Directory not created");
+			}
+
 			// Get the new photos name and add to path
 			String fileName = getPhotoName();
-			File file = new File(path,fileName);
+			File file = new File(path, fileName);
 			Log.d(TAG, file.getAbsolutePath());
 			// Write image to file
 			try {
@@ -452,8 +456,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			}
 			// On success, record the file name to this cache
 			mCurrentPhoto = file;
-			
-			
+
 			// Post to Google+
 			// Show the sign-in dialog
 			mConnectionProgressDialog = new ProgressDialog(CacheView.this);
@@ -529,17 +532,17 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		// Build the share intent
 		Intent shareIntent;
-		 if (mCurrentPhoto.exists()) {
-		 Uri contentUri = Uri.fromFile(mCurrentPhoto);
-		 shareIntent = ShareCompat.IntentBuilder.from(CacheView.this)
-		 .setStream(contentUri).setText(shareText)
-		 .setType("image/jpg").getIntent()
-		 .setPackage("com.google.android.apps.plus");
-		 } else {
-		shareIntent = ShareCompat.IntentBuilder.from(CacheView.this)
-				.setText(shareText).setType("image/*").getIntent()
-				.setPackage("com.google.android.apps.plus");
-		 }
+		if (mCurrentPhoto.exists()) {
+			Uri contentUri = Uri.fromFile(mCurrentPhoto);
+			shareIntent = ShareCompat.IntentBuilder.from(CacheView.this)
+					.setStream(contentUri).setText(shareText)
+					.setType("image/jpg").getIntent()
+					.setPackage("com.google.android.apps.plus");
+		} else {
+			shareIntent = ShareCompat.IntentBuilder.from(CacheView.this)
+					.setText(shareText).setType("image/*").getIntent()
+					.setPackage("com.google.android.apps.plus");
+		}
 
 		// Start Google+ with share intent
 		startActivityForResult(shareIntent, GOOGLE_SHARE_CODE);
@@ -551,12 +554,12 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	 * @return image- a file that contains the image.
 	 * @throws IOException
 	 */
-	private String getPhotoName(){
+	private String getPhotoName() {
 		// Create an image file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
 				.format(new Date());
 		String imageFileName = "Geobook_PNG_" + timeStamp + ".png";
-		
+
 		return imageFileName;
 	}
 }

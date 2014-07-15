@@ -2,6 +2,9 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 public class Cache {
 	ArrayList<String> cache;
 	int size;
@@ -155,4 +158,17 @@ public class Cache {
 		return result;
 
 	}
+
+	public boolean equals(Marker m) {
+		// TODO:
+		return true;
+	}
+
+	public boolean equals(MarkerOptions mo) {
+		boolean result = false;
+		double EPISILON = 0.00001;
+
+		return result;
+	}
+
 }

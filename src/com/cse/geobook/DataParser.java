@@ -24,7 +24,7 @@ import android.util.Log;
  */
 
 public class DataParser {
-
+	private static final String TAG = "DataParser.java";
 	/*
 	 * Stream passed should be getResources().openRawResources(R.raw.*) where *
 	 * is the id of the file
@@ -104,8 +104,8 @@ public class DataParser {
 			line = this.reader.readLine();
 			String[] contents = line.split("[,]");
 
-			// Log.d("Length",
-			// "Length of array: " + Integer.toString(contents.length));
+//			Log.d("Length",
+//					"Length of array: " + Integer.toString(contents.length));
 
 			// if line matches required format
 			String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -168,8 +168,11 @@ public class DataParser {
 		ArrayList<Cache> cache_array = new ArrayList<Cache>();
 
 		if (this.reader != null) {
+//			int counter = 0;
 			while (this.ready()) {
 				cache_array.add(this.readMarker());
+//				counter++;
+//				Log.d(TAG,Integer.toString(counter));
 			}
 		}
 		return cache_array;
