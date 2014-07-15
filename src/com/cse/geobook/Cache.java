@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.util.Log;
 
 public class Cache {
-	public static final int numberOfdescriptors = 9;
 	ArrayList<String> cache;
 	int size;
 
@@ -17,15 +16,18 @@ public class Cache {
 	// data[][2] = latitude
 	// data[][1] = longitude
 	// data[][3] = creator
-	// data[][4] = diff
-	// data[][5] = terrain
-	// data[][6] = awesomeness
-	// data[][7] = container
-	// data[][8] = description
+	// data[][4] = photo
+	// data[][5] = diff
+	// data[][6] = terrain
+	// data[][7] = awesomeness
+	// data[][8] = container
+	// data[][9] = description
+
+	public static final int numberOfdescriptors = 10;
 
 	private enum DESCRIPTOR {
-		NAME(0), LAT(2), LNG(1), CREATOR(3), DIFFICULTY(4), TERRAIN(5), RATING(
-				6), CONTAINER(7), DESCRIPTION(8);
+		NAME(0), LAT(2), LNG(1), CREATOR(3), PHOTO(4), DIFFICULTY(5), TERRAIN(6), RATING(
+				7), CONTAINER(8), DESCRIPTION(9);
 		int INDEX;
 
 		DESCRIPTOR(int i) {
@@ -61,12 +63,20 @@ public class Cache {
 		return cache.get(DESCRIPTOR.CREATOR.INDEX);
 	}
 
+	public String getPhoto() {
+		return cache.get(DESCRIPTOR.PHOTO.INDEX);
+	}
+
 	public String getDifficulty() {
 		return cache.get(DESCRIPTOR.DIFFICULTY.INDEX);
 	}
 
 	public String getTerrain() {
 		return cache.get(DESCRIPTOR.TERRAIN.INDEX);
+	}
+
+	public double getRating() {
+		return Double.parseDouble(cache.get(DESCRIPTOR.RATING.INDEX));
 	}
 
 	public String getContainer() {
@@ -97,6 +107,11 @@ public class Cache {
 		cache.set(index, creator);
 	}
 
+	public void photo(String photoName) {
+		int index = DESCRIPTOR.PHOTO.INDEX;
+		cache.set(index, photoName);
+	}
+
 	public void difficulty(String difficulty) {
 		int index = DESCRIPTOR.DIFFICULTY.INDEX;
 		cache.set(index, difficulty);
@@ -105,6 +120,11 @@ public class Cache {
 	public void terrain(String terrain) {
 		int index = DESCRIPTOR.TERRAIN.INDEX;
 		cache.set(index, terrain);
+	}
+
+	public void rating(String rating) {
+		int index = DESCRIPTOR.RATING.INDEX;
+		cache.set(index, rating);
 	}
 
 	public void container(String container) {
