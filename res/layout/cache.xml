@@ -9,51 +9,201 @@
     <!-- TEST IMAGE -->
 
     <ImageView
-        android:id="@+id/ivPhoto"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/cache_thumbnail"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:contentDescription="@string/cachePicture"
         android:src="@drawable/earth_logo" />
 
-    <EditText
-        android:id="@+id/cacheName"
+    <TextView
+        android:id="@+id/cache_name"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="14dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:text="Cache Name"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/cache_placed_by"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cache_name"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        android:text="Placed by: "
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/date_found"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cache_placed_by"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        android:text="Date Found:"
+        android:textColor="#FFFFFF" />
+
+    <RelativeLayout
+        android:id="@+id/cache_stat_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/cache_thumbnail" >
+
+        <TextView
+            android:id="@+id/cache_difficulty_label"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/cache_difficulty"
+            android:gravity="center"
+            android:text="D"
+            android:textSize="30sp"
+            android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/cache_difficulty"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/blank_place_holder_L"
+            android:gravity="bottom|center"
+            android:text="1.0"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
+        
+        <TextView
+            android:id="@+id/blank_place_holder_L"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/cache_terrain_label" />
+
+        <TextView
+            android:id="@+id/cache_terrain_label"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/cache_terrain"
+            android:gravity="center"
+            android:text="T"
+            android:textSize="30sp"
+            android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/cache_terrain"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/blank_place_holder_C"
+            android:gravity="bottom|center"
+            android:text="1.0"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/blank_place_holder_C"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/cache_awesomeness_label"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/blank_place_holder_C"
+            android:gravity="center"
+            android:text="A"
+            android:textSize="30sp"
+            android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/cache_awesomeness"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/cache_awesomeness_label"
+            android:gravity="bottom|center"
+            android:text="1.0"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
+        
+        <TextView
+            android:id="@+id/blank_place_holder_R"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/cache_awesomeness" />
+
+        <TextView
+            android:id="@+id/cache_size_label"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/blank_place_holder_R"
+            android:gravity="center"
+            android:text="S"
+            android:textSize="30sp"
+            android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/cache_size"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/cache_size_label"
+            android:gravity="bottom|center"
+            android:text="1.0"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
+    </RelativeLayout>
+
+    <RatingBar
+        android:id="@+id/user_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cache_stat_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+    
+    <EditText
+        android:id="@+id/user_description"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_rating_bar"
+        android:layout_centerHorizontal="true"
         android:ems="10"
-        android:textColor="#FFFFFF"
-        android:width="100dp" />
+        android:hint="User comments"
+        android:inputType="textMultiLine"
+        android:maxLines="3"
+        android:textColor="#FFFFFF" />
 
     <Button
+        android:id="@+id/found_cache_button"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/save_cache_button"
+        android:text="Found it!" />
+    <Button
         android:id="@+id/save_cache_button"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/saveButton" />
-    
+
     <Button
         android:id="@+id/share_cache_button"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="Share" />
-    
+
     <Button
         android:id="@+id/capture_image_button"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:text="Photo" />
+<<<<<<< HEAD
 
     <RatingBar
         android:id="@+id/ratingBar1"
@@ -105,3 +255,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
+=======
+</RelativeLayout>
+>>>>>>> FETCH_HEAD

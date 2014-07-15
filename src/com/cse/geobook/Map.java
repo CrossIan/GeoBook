@@ -1,18 +1,25 @@
 package com.cse.geobook;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,24 +34,72 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.plus.model.people.Person;
 
 public class Map extends FragmentActivity {
 	// GoogleMap gMap;
 
 	GoogleMap gMap;
+	private Person currentPerson;
 	Bundle extras;
 	Data caches;
 	Button listView;
+	LatLng lastLocation;
+	String currentCity, currentState;
 	ArrayList<Marker> markers;
+	BitmapDescriptor colorMarker;
+	private static boolean startUp;
+	private static final String TAG = "Map.java";
 
-	private final double MAX_DISTANCEFROMCACHE = 25;
+	// private final double MAX_DISTANCEFROMCACHE = 25;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.map);
 		this.getExtras();
+		this.setMarkerColor();
 		this.setUpMap();
+		startUp = true;
+
+		// TODO for testing only: remove later
+		// TODO keep this segment of code that gets location
+		if (gMap == null) {
+			gMap = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
+			gMap.setMyLocationEnabled(true);
+			if (gMap != null) {
+				gMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+					@Override
+					public void onMyLocationChange(Location arg0) {
+						lastLocation = new LatLng(arg0.getLatitude(), arg0
+								.getLongitude());
+						Log.d("Map.java",
+								"Starting location: " + lastLocation.toString());
+						if (startUp) {
+							gMap.animateCamera(CameraUpdateFactory
+									.newLatLngZoom(lastLocation, 11));
+							startUp = false;
+
+							// Set local variables to current city/state based
+							// // on location
+							setCurrentCityState(lastLocation);
+						}
+					}
+				});
+				setUpActionListeners();
+			}
+
+		}
+
+		gMap.addMarker(new MarkerOptions()
+				.position(new LatLng(39.948846, -83.850573)).title("Fricker's")
+				.snippet("Cold beer here!"));
+		gMap.addMarker(new MarkerOptions()
+				.position(new LatLng(39.985029, -83.864287))
+				.title("Test point 1").snippet("This place..."));
+
 	}
 
 	/**
@@ -55,17 +110,27 @@ public class Map extends FragmentActivity {
 	 */
 	private void getExtras() {
 		this.extras = this.getIntent().getExtras();
-		MarkerOptions mo = null;
+
+		currentPerson = extras.getParcelable("USER");
+		if (currentPerson != null)
+			Toast.makeText(this, currentPerson.getName().getGivenName(),
+					Toast.LENGTH_SHORT).show();
+		else
+			Toast.makeText(this, "Teddy Tester", Toast.LENGTH_SHORT).show();
+
+		Cache tempTarget = null;
 		int zoom = 11;
 		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
 			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
-			mo = caches.target;
+			tempTarget = caches.target;
 			zoom = caches.zoom;
 		}
 
 		this.caches = readInData();
-		if (mo != null) {
-			caches.target = mo;
+
+		// if target is null, use the target set by readInData
+		if (tempTarget != null) {
+			caches.target = tempTarget;
 			caches.zoom = zoom;
 		}
 	}
@@ -81,31 +146,22 @@ public class Map extends FragmentActivity {
 		this.gMap.setOnInfoWindowClickListener(listener);
 	}
 
-	/**
-	 * <pre>
-	 * Initialzes {@code this.gMap} 
-	 * Adds all markers to {@code gMap}
-	 * 
-	 * </pre>
-	 * 
-	 * @requires {@code caches} != null
-	 */
-	private void setUpMap() {
+	private void setMarkerColor() {
 
 		String colorValue = Settings.getColorMarker(this
 				.getApplicationContext());
 		// Default Value
-		BitmapDescriptor colorMarker = BitmapDescriptorFactory
+		colorMarker = BitmapDescriptorFactory
 				.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
 		switch (colorValue) {
 		case "1":
 			colorMarker = BitmapDescriptorFactory
-			.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 			break;
 		case "2":
 			colorMarker = BitmapDescriptorFactory
-			.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 			break;
 		case "3":
 			colorMarker = BitmapDescriptorFactory
@@ -141,10 +197,21 @@ public class Map extends FragmentActivity {
 			break;
 		}
 
+	}
+
+	/**
+	 * <pre>
+	 * Initialzes {@code this.gMap} 
+	 * Adds all markers to {@code gMap}
+	 * 
+	 * </pre>
+	 * 
+	 * @requires {@code caches} != null
+	 */
+	private void setUpMap() {
 		if (this.gMap == null) {
 			this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
-
 		}
 		markers = new ArrayList<Marker>();
 		this.setUpActionListeners();
@@ -154,22 +221,27 @@ public class Map extends FragmentActivity {
 		 * set up markers
 		 */
 
-		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-				this.caches.target.getPosition(), this.caches.zoom));
+		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+				this.caches.target.getLat(), this.caches.target.getLng()),
+				this.caches.zoom));
 
 		// set all caches
 		int size = this.caches.allCaches.size();
 		Log.d("cache", "all -size: " + size);
+		int line = 1;
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.allCaches.get(i)));
+			Log.d("cache", "line: " + line);
+			markers.add(this.gMap
+					.addMarker(createMarkerOptions(this.caches.allCaches.get(i))));
+			line++;
 		}
 
 		// set found caches
 		size = this.caches.foundCaches.size();
 		Log.d("cache", "found - size: " + size);
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(this.caches.foundCaches.get(i)
-					.icon(colorMarker)));
+			markers.add(this.gMap.addMarker(createMarkerOptions(
+					this.caches.foundCaches.get(i)).icon(colorMarker)));
 		}
 
 	}
@@ -181,20 +253,29 @@ public class Map extends FragmentActivity {
 		}
 	}
 
-	private boolean cacheFound(MarkerOptions mo) {
-		return caches.foundCaches.contains(mo);
+	private boolean cacheFound(Cache c) {
+		return caches.foundCaches.contains(c);
 	}
 
 	private static double distance(LatLng start, LatLng end) {
-		double xSquared = Math.pow((start.latitude - end.latitude), 2);
-		double ySquared = Math.pow((start.longitude - end.longitude), 2);
-		// convert to feet
-		double convertToFeet = (10000 / 90 * 3280.4);
-		xSquared *= convertToFeet;
-		ySquared *= convertToFeet;
+		double lat1 = start.latitude;
+		double lon1 = start.longitude;
+		double lat2 = end.latitude;
+		double lon2 = end.longitude;
 
-		return Math.sqrt(xSquared + ySquared);
+		double R = 6371; // km
+		double phi1 = Math.toRadians(lat1);
+		double phi2 = Math.toRadians(lat2);
+		double dphi = Math.toRadians(lat2 - lat1);
+		double dlamb = Math.toRadians(lon2 - lon1);
 
+		double a = Math.sin(dphi / 2) * Math.sin(dphi / 2) + Math.cos(phi1)
+				* Math.cos(phi2) * Math.sin(dlamb / 2) * Math.sin(dlamb / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+		double d = R * c; // Distance in km
+
+		return d * 1000; // Distance in m
 	}
 
 	/**
@@ -214,6 +295,7 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public boolean onMyLocationButtonClick() {
+			Log.d("Map.java", "Tapped MyLocation button");
 			if (Map.this.gMap != null) {
 				Map.this.gMap.stopAnimation();
 				Location myloc = Map.this.gMap.getMyLocation();
@@ -235,19 +317,20 @@ public class Map extends FragmentActivity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
-						MarkerOptions mo = new MarkerOptions().position(pos);
-						mo.title("default");
-						mo.snippet("");
-						Map.this.caches.allCaches.add(mo);
-						Map.this.gMap.addMarker(mo);
+						Cache cache = new Cache();
+						cache.lat(String.valueOf(pos.latitude));
+						cache.lng(String.valueOf(pos.longitude));
+						cache.name("default");
+						cache.description("");
+						Map.this.caches.foundCaches.add(cache);
+						Map.this.gMap.addMarker(createMarkerOptions(cache));
 						// Todo place in hash map
-						DataParser all = new DataParser(
-								getApplicationContext(), Cache.ALL_CACHES);
-						all.overwriteAll(Map.this.caches.allCaches);
-						all.close();
+						DataParser found = new DataParser(
+								getApplicationContext(), Cache.FOUND_CACHES);
+						found.overwriteAll(Map.this.caches.foundCaches);
+						found.close();
 
 						break;
 					case DialogInterface.BUTTON_NEUTRAL:
@@ -272,7 +355,6 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public boolean onMarkerClick(Marker marker) {
-			// TODO Auto-generated method stub
 			if (marker.isInfoWindowShown()) {
 				marker.hideInfoWindow();
 			} else {
@@ -283,18 +365,30 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onInfoWindowClick(final Marker marker) {
-			MarkerOptions mo = new MarkerOptions();
-			mo.title(marker.getTitle());
-			mo.snippet(marker.getSnippet());
-			mo.position(marker.getPosition());
+			// Cache cache = new Cache();
+			// cache.name(marker.getTitle());
+			// cache.description(marker.getSnippet());
+			// cache.lat(String.valueOf(marker.getPosition().latitude));
+			// cache.lng(String.valueOf(marker.getPosition().longitude));
 
-			Intent cache = new Intent("android.intent.action.CACHE");
+			Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 			Bundle extra = new Bundle();
 
-			Map.this.caches.target = mo;
-			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-
-			cache.putExtras(extra);
+			// Map.this.caches.target = cache;
+			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			extra.putDouble("LAT", marker.getPosition().latitude);
+			extra.putDouble("LNG", marker.getPosition().longitude);
+			extra.putString("NAME", marker.getTitle());
+			extra.putString("PLACEDBY", marker.getSnippet());
+			extra.putString("DATE", "13 July 2014");
+			extra.putDouble("DIFF", 0.5);
+			extra.putDouble("TERR", 1.1);
+			extra.putDouble("AWES", 5.0);
+			extra.putDouble("SIZE", 3.9);
+			extra.putParcelable("USER", (Parcelable) currentPerson);
+			double distanceFrom = distance(lastLocation, marker.getPosition());
+			extra.putDouble("DISTANCE", distanceFrom);
+			cacheView.putExtras(extra);
 			/**
 			 * <pre> doesn't work
 			 * 
@@ -315,7 +409,7 @@ public class Map extends FragmentActivity {
 			 * } else { // error }
 			 */
 			// remove once above is working
-			Map.this.startActivity(cache);
+			Map.this.startActivity(cacheView);
 
 		}
 	}
@@ -381,6 +475,9 @@ public class Map extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		this.getExtras();
+		// TODO why do we have to remove markers?
+		// only have to remove target from map -> to show updated made in caches
+		// in time will change to only remove target and not every marker
 		this.removeAllMarkers();
 		this.setUpMap();
 
@@ -388,16 +485,14 @@ public class Map extends FragmentActivity {
 
 	private Data readInData() {
 
-		File allCachesfile = getApplicationContext().getFileStreamPath(
-				Cache.ALL_CACHES);
 		File foundCachesfile = getApplicationContext().getFileStreamPath(
 				Cache.FOUND_CACHES);
 		File targetCacheFile = getApplicationContext().getFileStreamPath(
 				Cache.TARGET_CACHE);
 
-		ArrayList<MarkerOptions> ac = null;
-		ArrayList<MarkerOptions> fc = null;
-		ArrayList<MarkerOptions> t = null;
+		ArrayList<Cache> ac = null;
+		ArrayList<Cache> fc = null;
+		ArrayList<Cache> t = null;
 
 		DataParser all = new DataParser(getApplicationContext(),
 				Cache.ALL_CACHES);
@@ -410,7 +505,7 @@ public class Map extends FragmentActivity {
 			fc = found.read();
 			found.close();
 		} else {
-			fc = new ArrayList<MarkerOptions>();
+			fc = new ArrayList<Cache>();
 		}
 
 		if (targetCacheFile.exists()) {
@@ -421,9 +516,12 @@ public class Map extends FragmentActivity {
 		} else {
 			DataParser target = new DataParser(getApplicationContext(),
 					Cache.TARGET_CACHE);
-			t = new ArrayList<MarkerOptions>();
-			t.add(new MarkerOptions()
-					.position(new LatLng(39.961138, -83.001465)));
+			t = new ArrayList<Cache>();
+			Cache cache = new Cache();
+			cache.name("defaultTarget");
+			cache.lat("39.961138");
+			cache.lng("-83.001465");
+			t.add(cache);
 			target.overwriteAll(t);
 
 			target.close();
@@ -432,4 +530,36 @@ public class Map extends FragmentActivity {
 		return new Data(fc, ac, t.get(0), 11);
 	}
 
+	private MarkerOptions createMarkerOptions(Cache cache) {
+		MarkerOptions result = new MarkerOptions();
+		result.title(cache.getName());
+		result.snippet(cache.getDescription());
+		result.position(new LatLng(cache.getLat(), cache.getLng()));
+
+		return result;
+	}
+
+	/*
+	 * This method sets the class variables currentCity and currentState based
+	 * on a Geocoder object.
+	 */
+	private void setCurrentCityState(LatLng loc) {
+		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+		List<Address> addresses;
+		try {
+			addresses = gcd.getFromLocation(loc.latitude, loc.longitude, 1);
+			if (addresses.size() > 0) {
+				String[] addressLine = addresses.get(0).getAddressLine(1)
+						.split(",");
+				currentCity = addressLine[0];
+				currentState = addressLine[1].substring(1, 3);
+				Log.d(TAG, currentCity + ", " + currentState);
+				Toast.makeText(Map.this, currentCity + ", " + currentState,
+						Toast.LENGTH_SHORT).show();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
