@@ -160,15 +160,10 @@ public class Cache {
 	}
 
 	public boolean equals(Marker m) {
-		// TODO:
 		return true;
 	}
 
 	public boolean equals(MarkerOptions mo) {
-		boolean result = false;
-		double EPISILON = 0.00001;
-
-		return result;
+		return this.getName().equals(mo.getTitle());
 	}
-
 }
