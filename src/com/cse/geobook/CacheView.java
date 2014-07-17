@@ -3,6 +3,7 @@ package com.cse.geobook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -66,7 +67,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Data for this cache
 	public Person currentPerson;
-	public String userName, cacheName, cachePlacedBy, dateFound,
+	public String userName, cacheName, cachePlacedBy, cacheDateFound,
 			userDescription;
 	public Double cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
 			cacheAwesomeness, cacheSize, distanceFrom;
@@ -257,7 +258,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// this.cacheLong.setText(Double.toString(this.data.target.getLng()));
 		cacheName = extras.getString("NAME");
 		cachePlacedBy = extras.getString("PLACEDBY");
-		dateFound = extras.getString("DATE");
+		cacheDateFound = extras.getString("DATE");
 		cacheLat = extras.getDouble("LAT");
 		cacheLng = extras.getDouble("LNG");
 		cacheDifficulty = extras.getDouble("DIFF");
@@ -274,7 +275,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// Set widget text
 		cacheNameText.setText(cacheName);
 		cachePlacedByText.setText("Placed by: \"" + cachePlacedBy + "\"");
-		cacheDateFoundText.setText("Date found: " + dateFound);
+		cacheDateFoundText.setText("Date found: " + cacheDateFound);
 		cacheDifficultyText.setText(Double.toString(cacheDifficulty));
 		cacheTerrainText.setText(Double.toString(cacheTerrain));
 		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
@@ -419,6 +420,24 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			}
 			// On success, record the file name to this cache
 			mCurrentPhoto = file;
+			String[] dateInfo = fileName.split("_");
+			cacheDateFound = dateInfo[2];
+			final String OLD_FORMAT = "yyyyMMdd";
+			final String NEW_FORMAT = "dd/MM/yyyy";
+
+			SimpleDateFormat sdf = new SimpleDateFormat(OLD_FORMAT);
+			Date d;
+			try {
+				d = sdf.parse(dateInfo[2]);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				d = null;
+			}
+			sdf.applyPattern(NEW_FORMAT);
+			cacheDateFound = sdf.format(d);
+			cacheDateFoundText.setText("Date found: " + cacheDateFound);
+			
 		} else if (requestCode == PHOTO_REQUEST_CODE + 1000
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
