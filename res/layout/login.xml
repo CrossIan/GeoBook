@@ -45,7 +45,7 @@
             android:layout_height="50dp"
             android:layout_below="@+id/google_sign_in_button"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="Bypass" />
 
         <Button
@@ -54,7 +54,7 @@
             android:layout_height="50dp"
             android:layout_alignLeft="@+id/bypass_button"
             android:layout_below="@+id/bypass_button"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="Sign out" />
 
         <Button
@@ -63,7 +63,7 @@
             android:layout_height="50dp"
             android:layout_alignLeft="@+id/sign_out_button"
             android:layout_below="@+id/sign_out_button"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="1.0"
             android:text="Revoke Access" />
 
