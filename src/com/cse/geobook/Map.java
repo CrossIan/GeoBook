@@ -484,21 +484,9 @@ public class Map extends FragmentActivity {
 					Cache.TARGET_CACHE);
 			t = target.read();
 			target.close();
-		} else {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
-			t = new ArrayList<Cache>();
-			Cache cache = new Cache();
-			cache.name("defaultTarget");
-			cache.lat("39.961138");
-			cache.lng("-83.001465");
-			t.add(cache);
-			target.overwriteAll(t);
-
-			target.close();
 		}
 
-		return new Data(fc, ac, t.get(0), 11);
+		return new Data(fc, ac, null, 11);
 	}
 
 	private MarkerOptions createMarkerOptions(Cache cache) {
