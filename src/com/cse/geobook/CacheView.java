@@ -62,7 +62,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Resources for photo functionality
 	private static final int PHOTO_REQUEST_CODE = 6969;
-	private boolean waitOnCamera = false;
 
 	//
 	// Data for this cache
@@ -242,7 +241,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 				Intent intent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				waitOnCamera = true;
+				// Start the photo activity with a different call back request
+				// This will make a share to Google+ after the photo is taken
 				startActivityForResult(intent, PHOTO_REQUEST_CODE + 1000);
 			}
 		}
@@ -392,12 +392,17 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	}
 	
 	
-	/*
-	 * Perform actions according to which activity is returning a result.
+
+
+	/**
+	 * Perform unique actions according to which activity is returning
+	 * a result.
 	 */
 	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
 		Log.v(TAG, "ActivityResult: " + requestCode);
+		//
+		// Action for Google+ sign in request SUCCESS
 		if (requestCode == GOOGLE_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned OK.");
 			// If we have a successful result, we will want to be able to
@@ -408,18 +413,21 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// there are any more errors to resolve we'll get our
 			// onConnectionFailed, but if not, we'll get onConnected.
 			mPlusClient.connect();
-		} else if (requestCode == GOOGLE_REQUEST_CODE
-				&& responseCode != RESULT_OK) {
+		//
+		// Action for Google+ sign in request FAILED
+		} else if (requestCode == GOOGLE_REQUEST_CODE && responseCode != RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned NOT OK.");
 			// If we've got an error we can't resolve, we're no
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
+		// 
+		// 
 		} else if (requestCode == GOOGLE_SHARE_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Share activity returned OK.");
 		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
-
+			// Perform actions for photo activity return
 			photoResultActions(intent);
 			
 		} else if (requestCode == PHOTO_REQUEST_CODE + 1000 && responseCode == RESULT_OK) {
@@ -487,7 +495,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 
 
-	/*
+	
+	/**
 	 * Generates an intent that shares the current cache to Google+.
 	 */
 	private void shareCacheToGoogle() {
@@ -535,6 +544,13 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		return imageFileName;
 	}
 	
+	
+	/**
+	 * Changes the format of the date contained in a photos file
+	 * name.
+	 * @param dateString
+	 * @return
+	 */
 	private String getDateFromString(String dateString){
 		final String OLD_FORMAT = "yyyyMMdd";
 		final String NEW_FORMAT = "dd/MM/yyyy";
@@ -552,6 +568,11 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		return sdf.format(d);
 	}
 	
+	
+	/**
+	 * Actions to be performed when the photo activity returns.
+	 * @param intent
+	 */
 	private void photoResultActions(Intent intent) {
 		// Change thumbnail
 		Bundle extras = intent.getExtras();
