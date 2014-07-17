@@ -212,6 +212,7 @@ public class Map extends FragmentActivity {
 
 	}
 
+	// DEPRECIATED
 	private void removeAllMarkers() {
 		int size = markers.size();
 		for (int i = 0; i < size; i++) {
@@ -427,13 +428,23 @@ public class Map extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		this.getExtras();
-		// TODO why do we have to remove markers?
-		// only have to remove target from map -> to show updated made in caches
-		// in time will change to only remove target and not every marker
-		this.removeAllMarkers();
-		this.setUpMap();
+		File targetCacheFile = getApplicationContext().getFileStreamPath(
+				Cache.TARGET_CACHE);
 
+		if (targetCacheFile.exists()) {
+			DataParser target = new DataParser(getApplicationContext(),
+					Cache.TARGET_CACHE);
+			caches.target = target.read().get(0);
+			target.close();
+		}
+
+		// updates changes make to the target
+		for (int i = 0; i < markers.size(); i++) {
+			if (caches.target.equals(markers.get(i))) {
+				markers.remove(i);
+				this.gMap.addMarker(createMarkerOptions(caches.target));
+			}
+		}
 	}
 
 	private Data readInData() {
