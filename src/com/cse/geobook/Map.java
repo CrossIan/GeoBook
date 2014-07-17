@@ -338,8 +338,7 @@ public class Map extends FragmentActivity {
 
 			Cache target = caches.getCache(marker);
 
-			// Map.this.caches.target = cache;
-			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 			extra.putDouble("LAT", target.getLat());
 			extra.putDouble("LNG", target.getLng());
 			extra.putString("NAME", target.getName());
@@ -350,6 +349,7 @@ public class Map extends FragmentActivity {
 			extra.putDouble("AWES", target.getRating());
 			extra.putDouble("SIZE", target.getContainer());
 			extra.putParcelable("USER", (Parcelable) currentPerson);
+			Map.this.caches.target = target;
 
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);

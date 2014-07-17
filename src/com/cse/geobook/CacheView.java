@@ -210,11 +210,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	 */
 	private void getExtras() {
 		Bundle extras = this.getIntent().getExtras();
-		// this.data = extras.getParcelable(Data.CACHE_DATA);
-		// this.cacheName.setText(this.data.target.getName());
-		// this.description.setText(this.data.target.getDescription());
-		// this.cacheLat.setText(Double.toString(this.data.target.getLat()));
-		// this.cacheLong.setText(Double.toString(this.data.target.getLng()));
+		this.data = extras.getParcelable(Data.CACHE_DATA);
+
 		cacheName = extras.getString("NAME");
 		cachePlacedBy = extras.getString("PLACEDBY");
 		cacheDateFound = extras.getString("DATE");
