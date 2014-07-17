@@ -436,15 +436,22 @@ public class Map extends FragmentActivity {
 					Cache.TARGET_CACHE);
 			caches.target = target.read().get(0);
 			target.close();
+
+			// if target exists && if target is in on the map, remove marker and
+			// replace with new values
+
+			// assumes that the cache is already added to the found caches in
+			// cacheView
+			for (int i = 0; i < markers.size(); i++) {
+				if (caches.target.equals(markers.get(i))) {
+					markers.remove(i);
+					this.gMap.addMarker(createMarkerOptions(caches.target)
+							.icon(colorMarker));
+				}
+			}
+
 		}
 
-		// updates changes make to the target
-		for (int i = 0; i < markers.size(); i++) {
-			if (caches.target.equals(markers.get(i))) {
-				markers.remove(i);
-				this.gMap.addMarker(createMarkerOptions(caches.target));
-			}
-		}
 	}
 
 	private Data readInData() {
