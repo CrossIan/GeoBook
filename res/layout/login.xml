@@ -1,7 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#666666" >
+    android:background="@drawable/book" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:text="Geobook"
-            android:textColor="#1919BA"
+            android:textColor="#000000"
             android:textSize="50sp"
             android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:text="Sign in to get started"
-            android:textColor="#1919BA"
+            android:textColor="#000000"
             android:textSize="20dp"
             android:textStyle="italic" />
 
@@ -40,31 +40,33 @@
             android:layout_marginTop="20dp" />
 
         <Button
+            android:id="@+id/bypass_button"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/google_sign_in_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Bypass" />
+
+        <Button
             android:id="@+id/sign_out_button"
             android:layout_width="160dp"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignLeft="@+id/bypass_button"
+            android:layout_below="@+id/bypass_button"
+            android:layout_marginTop="10dp"
             android:text="Sign out" />
 
         <Button
             android:id="@+id/revoke_access_button"
             android:layout_width="160dp"
             android:layout_height="50dp"
-            android:layout_below="@+id/google_sign_in_button"
-            android:layout_marginTop="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="Revoke Access"
-            android:layout_weight = "1.0" />
+            android:layout_alignLeft="@+id/sign_out_button"
+            android:layout_below="@+id/sign_out_button"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1.0"
+            android:text="Revoke Access" />
 
-        <Button
-            android:id="@+id/bypass_button"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/google_sign_in_button"
-            android:layout_centerHorizontal="true"
-            android:text="Bypass" />
     </RelativeLayout>
 
 </ScrollView>
