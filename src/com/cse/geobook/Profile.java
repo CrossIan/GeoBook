@@ -45,18 +45,23 @@ public class Profile extends Activity {
 
 		// Set widget values
 		userNameText.setText(userName);
-		locationText.setText(currentCity + ", " + this.currentState);
+		if(currentState.equals(""))
+			locationText.setText(currentCity);
+		else
+			locationText.setText(currentCity + ", " + this.currentState);
 
 		profilePicUrl = profilePicUrl.substring(0,
 				profilePicUrl.length() - 2)
                 + 400;
 
         new LoadProfileImage(profilePicView).execute(profilePicUrl);
-//		profilePicView.setImageURI(profilePicImage.);
 		this.setProgress(35, 100);
 
 	}
 
+	/*
+	 * Load extras from incoming Bundle
+	 */
 	private void getExtras() {
 		this.extra = this.getIntent().getExtras();
 		currentPerson = extra.getParcelable("USER");
@@ -67,11 +72,19 @@ public class Profile extends Activity {
 		profilePicUrl = currentPerson.getImage().getUrl();
 	}
 
+	
+	/*
+	 * Set the progress bar according to the #cachesFound/#cachesTotal
+	 */
 	private void setProgress(int progress, int max) {
 		this.progressBar.setProgress(progress);
 		this.progressBar.setMax(max);
 	}
 
+	
+	/*
+	 * Set profile picture to be Google+ picture
+	 */
 	private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
 		ImageView bmImage;
 
@@ -91,7 +104,6 @@ public class Profile extends Activity {
 			}
 			return mIcon11;
 		}
-
 		protected void onPostExecute(Bitmap result) {
 			bmImage.setImageBitmap(result);
 		}
