@@ -131,6 +131,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
 				"http://schemas.google.com/BuyActivity").build();
 	}
+	
+	
 
 	@Override
 	public void onClick(View v) {
@@ -358,6 +360,39 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	}
 
 	/*
+	 * A helper method to flip the mResolveOnFail flag and start the resolution
+	 * of the ConnenctionResult from the failed connect() call.
+	 */
+	private void startResolution() {
+		try {
+			// Don't start another resolution now until we have a
+			// result from the activity we're about to start.
+			mResolveOnFail = false;
+			// If we can resolve the error, then call start resolution
+			// and pass it an integer tag we can use to track. This means
+			// that when we get the onActivityResult callback we'll know
+			// its from being started here.
+			mConnectionResult.startResolutionForResult(this,
+					GOOGLE_REQUEST_CODE);
+		} catch (SendIntentException e) {
+			// Any problems, just try to connect() again so we get a new
+			// ConnectionResult.
+			mPlusClient.connect();
+		}
+	}
+	
+	@Override
+	public void onAccessRevoked(ConnectionResult status) {
+		// mPlusClient is now disconnected and access has been revoked.
+		// We should now delete any data we need to comply with the
+		// developer properties. To reset ourselves to the original state,
+		// we should now connect again. We don't have to disconnect as that
+		// happens as part of the call.
+		mPlusClient.connect();
+	}
+	
+	
+	/*
 	 * Perform actions according to which activity is returning a result.
 	 */
 	protected void onActivityResult(int requestCode, int responseCode,
@@ -380,66 +415,14 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
-		} else if (requestCode == GOOGLE_SHARE_CODE
-				&& responseCode == RESULT_OK) {
+		} else if (requestCode == GOOGLE_SHARE_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Share activity returned OK.");
-		} else if (requestCode == PHOTO_REQUEST_CODE
-				&& responseCode == RESULT_OK) {
+		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
-			// Change thumbnail
-			Bundle extras = intent.getExtras();
-			Bitmap imageBitmap = (Bitmap) extras.get("data");
-			cacheThumbnail.setImageBitmap(imageBitmap);
-
-			//
-			// Save picture to our directory
-			//
-			// Get path to our picture folder. Create Geobook directory
-			// if necessary
-			File path = new File(
-					Environment
-							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-					"Geobook/");
-			if (!path.mkdirs()) {
-				Log.e(TAG, "Directory not created");
-			}
-
-			// Get the new photos name and add to path
-			String fileName = getPhotoName();
-			File file = new File(path, fileName);
-			Log.d(TAG, file.getAbsolutePath());
-			// Write image to file
-			try {
-				FileOutputStream fOut = new FileOutputStream(file);
-				imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-				fOut.flush();
-				fOut.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// On success, record the file name to this cache
-			mCurrentPhoto = file;
-			String[] dateInfo = fileName.split("_");
-			cacheDateFound = dateInfo[2];
-			final String OLD_FORMAT = "yyyyMMdd";
-			final String NEW_FORMAT = "dd/MM/yyyy";
-
-			SimpleDateFormat sdf = new SimpleDateFormat(OLD_FORMAT);
-			Date d;
-			try {
-				d = sdf.parse(dateInfo[2]);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				d = null;
-			}
-			sdf.applyPattern(NEW_FORMAT);
-			cacheDateFound = sdf.format(d);
-			cacheDateFoundText.setText("Date found: " + cacheDateFound);
+			photoResultActions(intent);
 			
-		} else if (requestCode == PHOTO_REQUEST_CODE + 1000
-				&& responseCode == RESULT_OK) {
+		} else if (requestCode == PHOTO_REQUEST_CODE + 1000 && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
 			// Change thumbnail
@@ -495,44 +478,14 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 				} else {
 					// If we don't have one though, we can start connect
 					// in order to retrieve one.
-					mPlusClient.connect();
+					mPlusClient.connect();	// Shares to Google+ when connected
 				}
 			}
 		}
 
 	}
 
-	@Override
-	public void onAccessRevoked(ConnectionResult status) {
-		// mPlusClient is now disconnected and access has been revoked.
-		// We should now delete any data we need to comply with the
-		// developer properties. To reset ourselves to the original state,
-		// we should now connect again. We don't have to disconnect as that
-		// happens as part of the call.
-		mPlusClient.connect();
-	}
 
-	/*
-	 * A helper method to flip the mResolveOnFail flag and start the resolution
-	 * of the ConnenctionResult from the failed connect() call.
-	 */
-	private void startResolution() {
-		try {
-			// Don't start another resolution now until we have a
-			// result from the activity we're about to start.
-			mResolveOnFail = false;
-			// If we can resolve the error, then call start resolution
-			// and pass it an integer tag we can use to track. This means
-			// that when we get the onActivityResult callback we'll know
-			// its from being started here.
-			mConnectionResult.startResolutionForResult(this,
-					GOOGLE_REQUEST_CODE);
-		} catch (SendIntentException e) {
-			// Any problems, just try to connect() again so we get a new
-			// ConnectionResult.
-			mPlusClient.connect();
-		}
-	}
 
 	/*
 	 * Generates an intent that shares the current cache to Google+.
@@ -580,5 +533,61 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		String imageFileName = "Geobook_PNG_" + timeStamp + ".png";
 
 		return imageFileName;
+	}
+	
+	private String getDateFromString(String dateString){
+		final String OLD_FORMAT = "yyyyMMdd";
+		final String NEW_FORMAT = "dd/MM/yyyy";
+
+		SimpleDateFormat sdf = new SimpleDateFormat(OLD_FORMAT);
+		Date d;
+		try {
+			d = sdf.parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			d = null;
+		}
+		sdf.applyPattern(NEW_FORMAT);
+		return sdf.format(d);
+	}
+	
+	private void photoResultActions(Intent intent) {
+		// Change thumbnail
+		Bundle extras = intent.getExtras();
+		Bitmap imageBitmap = (Bitmap) extras.get("data");
+		cacheThumbnail.setImageBitmap(imageBitmap);
+
+		//
+		// Save picture to our directory
+		// Get path to our picture folder. Create Geobook directory
+		// if necessary
+		File path = new File(
+				Environment
+						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+				"Geobook/");
+		if (!path.mkdirs()) {
+			Log.e(TAG, "Directory not created");
+		}
+
+		// Get the new photos name and add to path
+		String fileName = getPhotoName();
+		File file = new File(path, fileName);
+		Log.d(TAG, file.getAbsolutePath());
+		// Write image to file
+		try {
+			FileOutputStream fOut = new FileOutputStream(file);
+			imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+			fOut.flush();
+			fOut.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// On success, record the file name to this cache
+		mCurrentPhoto = file;
+		// Set cacheDateFound from file name
+		String[] dateInfo = fileName.split("_");
+		cacheDateFound = getDateFromString(dateInfo[2]);
+		cacheDateFoundText.setText("Date found: " + cacheDateFound);
 	}
 }
