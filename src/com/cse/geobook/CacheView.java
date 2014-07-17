@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
@@ -139,49 +140,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		 */
 		if (v.getId() == R.id.save_cache_button) {
 			Log.d(TAG, "Tapped save_cache_button");
-			// int size = CacheView.this.data.allCaches.size();
-			// boolean searching = true;
-			// int i = 0;
-			// while (searching && i < size) {
-			// Cache cache = CacheView.this.data.allCaches.get(i);
-			// if (Math.abs(cache.getLat() - data.target.getLat()) <
-			// CacheView.this.EPISILON
-			// && Math.abs(cache.getLat() - data.target.getLat()) <
-			// CacheView.this.EPISILON) {
-			// cache.name(CacheView.this.cacheName.getText().toString());
-			// cache.description(CacheView.this.description.getText()
-			// .toString());
-			// searching = false;
-			// CacheView.this.data.foundCaches.add(cache);
-			// CacheView.this.data.allCaches.remove(i);
-			//
-			// }
-			// i++;
-			// }
-			// if (!searching) {
-			// Log.d("data", "marker found");
-			// } else {
-			// Log.d("data", "marker not found");
-			// }
-			//
-			// DataParser found = new DataParser(
-			// CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-			// found.overwriteAll(CacheView.this.data.foundCaches);
-			// found.close();
-			//
-			// DataParser all = new DataParser(
-			// CacheView.this.getApplicationContext(), Cache.ALL_CACHES);
-			// all.overwriteAll(CacheView.this.data.allCaches);
-			// all.close();
-			//
-			// /*
-			// * Bundle extras_new = new Bundle();
-			// * extras_new.putParcelable(Data.CACHE_DATA, data);
-			// *
-			// * Intent map = new Intent("android.intent.action.MAP");
-			// * map.putExtras(extras_new); startActivity(map);
-			// */
-			// CacheView.this.finish();
+
 		}
 		/*
 		 * Share on social media
@@ -437,7 +396,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			sdf.applyPattern(NEW_FORMAT);
 			cacheDateFound = sdf.format(d);
 			cacheDateFoundText.setText("Date found: " + cacheDateFound);
-			
+
 		} else if (requestCode == PHOTO_REQUEST_CODE + 1000
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
@@ -581,4 +540,48 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		return imageFileName;
 	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+
+		// saves found caches if it exists && target
+		boolean searching = true;
+		int size = data.foundCaches.size();
+		for (int i = 0; i < size && searching; i++) {
+			if (data.target.equals(data.foundCaches.get(i))) {
+				data.foundCaches.set(i, data.target);
+				searching = false;
+
+				// overwrites found caches
+				DataParser found = new DataParser(
+						CacheView.this.getApplicationContext(),
+						Cache.FOUND_CACHES);
+				found.overwriteAll(CacheView.this.data.foundCaches);
+				found.close();
+
+				// overwrites target cache
+				DataParser target_dp = new DataParser(
+						CacheView.this.getApplicationContext(),
+						Cache.TARGET_CACHE);
+
+				ArrayList<Cache> local_target = new ArrayList<Cache>();
+				local_target.add(data.target);
+				target_dp.overwriteAll(local_target);
+				target_dp.close();
+			}
+		}
+
+		/*
+		 * Bundle extras_new = new Bundle();
+		 * extras_new.putParcelable(Data.CACHE_DATA, data);
+		 * 
+		 * Intent map = new Intent("android.intent.action.MAP");
+		 * map.putExtras(extras_new); startActivity(map);
+		 */
+		CacheView.this.finish();
+
+	}
+
 }
