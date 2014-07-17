@@ -124,14 +124,58 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
-		if (distanceFrom <= distThreshold)
-			foundCacheButton.setVisibility(View.VISIBLE);
-		else
-			foundCacheButton.setVisibility(View.INVISIBLE);
+//		if (distanceFrom <= distThreshold)
+//			foundCacheButton.setVisibility(View.VISIBLE);
+//		else
+//			foundCacheButton.setVisibility(View.INVISIBLE);
 		// Initialize the Google+ client
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
 				"http://schemas.google.com/BuyActivity").build();
 	}
+	
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+
+		// saves found caches if it exists && target
+		boolean searching = true;
+		int size = data.foundCaches.size();
+		for (int i = 0; i < size && searching; i++) {
+			if (data.target.equals(data.foundCaches.get(i))) {
+				data.foundCaches.set(i, data.target);
+				searching = false;
+
+				// overwrites found caches
+				DataParser found = new DataParser(
+						CacheView.this.getApplicationContext(),
+						Cache.FOUND_CACHES);
+				found.overwriteAll(CacheView.this.data.foundCaches);
+				found.close();
+
+				// overwrites target cache
+				DataParser target_dp = new DataParser(
+						CacheView.this.getApplicationContext(),
+						Cache.TARGET_CACHE);
+
+				ArrayList<Cache> local_target = new ArrayList<Cache>();
+				local_target.add(data.target);
+				target_dp.overwriteAll(local_target);
+				target_dp.close();
+			}
+		}
+
+		/*
+		 * Bundle extras_new = new Bundle();
+		 * extras_new.putParcelable(Data.CACHE_DATA, data);
+		 * 
+		 * Intent map = new Intent("android.intent.action.MAP");
+		 * map.putExtras(extras_new); startActivity(map);
+		 */
+		CacheView.this.finish();
+	}
+	
 
 	@Override
 	public void onClick(View v) {
@@ -210,11 +254,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	 */
 	private void getExtras() {
 		Bundle extras = this.getIntent().getExtras();
-		// this.data = extras.getParcelable(Data.CACHE_DATA);
-		// this.cacheName.setText(this.data.target.getName());
-		// this.description.setText(this.data.target.getDescription());
-		// this.cacheLat.setText(Double.toString(this.data.target.getLat()));
-		// this.cacheLong.setText(Double.toString(this.data.target.getLng()));
 		cacheName = extras.getString("NAME");
 		cachePlacedBy = extras.getString("PLACEDBY");
 		cacheDateFound = extras.getString("DATE");
@@ -332,18 +371,15 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// there are any more errors to resolve we'll get our
 			// onConnectionFailed, but if not, we'll get onConnected.
 			mPlusClient.connect();
-		} else if (requestCode == GOOGLE_REQUEST_CODE
-				&& responseCode != RESULT_OK) {
+		} else if (requestCode == GOOGLE_REQUEST_CODE && responseCode != RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned NOT OK.");
 			// If we've got an error we can't resolve, we're no
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
-		} else if (requestCode == GOOGLE_SHARE_CODE
-				&& responseCode == RESULT_OK) {
+		} else if (requestCode == GOOGLE_SHARE_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Share activity returned OK.");
-		} else if (requestCode == PHOTO_REQUEST_CODE
-				&& responseCode == RESULT_OK) {
+		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
 			// Change thumbnail
@@ -397,8 +433,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheDateFound = sdf.format(d);
 			cacheDateFoundText.setText("Date found: " + cacheDateFound);
 
-		} else if (requestCode == PHOTO_REQUEST_CODE + 1000
-				&& responseCode == RESULT_OK) {
+		} else if (requestCode == PHOTO_REQUEST_CODE + 1000 && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
 			// Change thumbnail
@@ -457,6 +492,27 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 					mPlusClient.connect();
 				}
 			}
+			
+			//
+			// Save to file
+			data.foundCaches.add(data.target);
+
+			// overwrites found caches
+			DataParser found = new DataParser(
+					CacheView.this.getApplicationContext(),
+					Cache.FOUND_CACHES);
+			found.overwriteAll(CacheView.this.data.foundCaches);
+			found.close();
+
+			// overwrites target cache
+			DataParser target_dp = new DataParser(
+					CacheView.this.getApplicationContext(),
+					Cache.TARGET_CACHE);
+
+			ArrayList<Cache> local_target = new ArrayList<Cache>();
+			local_target.add(data.target);
+			target_dp.overwriteAll(local_target);
+			target_dp.close();
 		}
 
 	}
@@ -540,48 +596,4 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		return imageFileName;
 	}
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-
-		// saves found caches if it exists && target
-		boolean searching = true;
-		int size = data.foundCaches.size();
-		for (int i = 0; i < size && searching; i++) {
-			if (data.target.equals(data.foundCaches.get(i))) {
-				data.foundCaches.set(i, data.target);
-				searching = false;
-
-				// overwrites found caches
-				DataParser found = new DataParser(
-						CacheView.this.getApplicationContext(),
-						Cache.FOUND_CACHES);
-				found.overwriteAll(CacheView.this.data.foundCaches);
-				found.close();
-
-				// overwrites target cache
-				DataParser target_dp = new DataParser(
-						CacheView.this.getApplicationContext(),
-						Cache.TARGET_CACHE);
-
-				ArrayList<Cache> local_target = new ArrayList<Cache>();
-				local_target.add(data.target);
-				target_dp.overwriteAll(local_target);
-				target_dp.close();
-			}
-		}
-
-		/*
-		 * Bundle extras_new = new Bundle();
-		 * extras_new.putParcelable(Data.CACHE_DATA, data);
-		 * 
-		 * Intent map = new Intent("android.intent.action.MAP");
-		 * map.putExtras(extras_new); startActivity(map);
-		 */
-		CacheView.this.finish();
-
-	}
-
 }
