@@ -546,29 +546,28 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// saves found caches if it exists && target
 		boolean searching = true;
 		int size = data.foundCaches.size();
-		for (int i = 0; i < size && searching; i++) {
-			if (data.target.equals(data.foundCaches.get(i))) {
-				data.foundCaches.set(i, data.target);
-				searching = false;
+		// for (int i = 0; i < size && searching; i++) {
+		// if (data.target.equals(data.foundCaches.get(i))) {
+		// data.foundCaches.set(i, data.target);
+		data.foundCaches.add(data.target);
+		searching = false;
 
-				// overwrites found caches
-				DataParser found = new DataParser(
-						CacheView.this.getApplicationContext(),
-						Cache.FOUND_CACHES);
-				found.overwriteAll(CacheView.this.data.foundCaches);
-				found.close();
+		// overwrites found caches
+		DataParser found = new DataParser(
+				CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
+		found.overwriteAll(CacheView.this.data.foundCaches);
+		found.close();
 
-				// overwrites target cache
-				DataParser target_dp = new DataParser(
-						CacheView.this.getApplicationContext(),
-						Cache.TARGET_CACHE);
+		// overwrites target cache
+		DataParser target_dp = new DataParser(
+				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
 
-				ArrayList<Cache> local_target = new ArrayList<Cache>();
-				local_target.add(data.target);
-				target_dp.overwriteAll(local_target);
-				target_dp.close();
-			}
-		}
+		ArrayList<Cache> local_target = new ArrayList<Cache>();
+		local_target.add(data.target);
+		target_dp.overwriteAll(local_target);
+		target_dp.close();
+		// }
+		// }
 
 		/*
 		 * Bundle extras_new = new Bundle();
