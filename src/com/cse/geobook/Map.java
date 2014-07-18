@@ -212,18 +212,15 @@ public class Map extends FragmentActivity {
 
 	}
 
-	// DEPRECIATED
-	private void removeAllMarkers() {
-		int size = markers.size();
-		for (int i = 0; i < size; i++) {
-			markers.get(i).remove();
-		}
-	}
-
-	private boolean cacheFound(Cache c) {
-		return caches.foundCaches.contains(c);
-	}
-
+	/**
+	 * returns the distance between two {@code LatLng} locations
+	 * 
+	 * @param start
+	 *            the initial {@code LatLng}
+	 * @param end
+	 *            the finishing {@code LatLng}
+	 * @return the distance between two {@code LatLng} locations
+	 */
 	private static double distance(LatLng start, LatLng end) {
 		double lat1 = start.latitude;
 		double lon1 = start.longitude;
@@ -247,9 +244,6 @@ public class Map extends FragmentActivity {
 
 	/**
 	 * class to implement all Listeners
-	 * 
-	 * @author Nate
-	 * 
 	 */
 	private class clickListener implements OnMapClickListener,
 			OnMapLongClickListener, OnMarkerClickListener,
@@ -454,6 +448,12 @@ public class Map extends FragmentActivity {
 
 	}
 
+	/**
+	 * Reads in the persistent cache data and returns its values stored the
+	 * {@code Data} class
+	 * 
+	 * @return the persistent data
+	 */
 	private Data readInData() {
 
 		File foundCachesfile = getApplicationContext().getFileStreamPath(
@@ -463,7 +463,7 @@ public class Map extends FragmentActivity {
 
 		ArrayList<Cache> ac = null;
 		ArrayList<Cache> fc = null;
-		ArrayList<Cache> t = null;
+		Cache t = null;
 
 		DataParser all = new DataParser(getApplicationContext(),
 				Cache.ALL_CACHES);
@@ -482,11 +482,11 @@ public class Map extends FragmentActivity {
 		if (targetCacheFile.exists()) {
 			DataParser target = new DataParser(getApplicationContext(),
 					Cache.TARGET_CACHE);
-			t = target.read();
+			t = target.read().get(0);
 			target.close();
 		}
 
-		return new Data(fc, ac, null, 11);
+		return new Data(fc, ac, t, 11);
 	}
 
 	private MarkerOptions createMarkerOptions(Cache cache) {
@@ -498,7 +498,7 @@ public class Map extends FragmentActivity {
 		return result;
 	}
 
-	/*
+	/**
 	 * This method sets the class variables currentCity and currentState based
 	 * on a Geocoder object.
 	 */
@@ -517,7 +517,6 @@ public class Map extends FragmentActivity {
 					currentState = "";
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

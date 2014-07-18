@@ -9,6 +9,10 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.Marker;
 
+/**
+ * Data class that can be used to easily pass relevent data through the bundle
+ * 
+ */
 public class Data implements Parcelable {
 	ArrayList<Cache> foundCaches;
 	ArrayList<Cache> allCaches;
@@ -53,7 +57,7 @@ public class Data implements Parcelable {
 	private Cache getNextCache(Parcel in) {
 		Cache result = new Cache();
 		for (int i = 0; i < Cache.numberOfdescriptors; i++) {
-			String descriptor = in.readString(); // snippit
+			String descriptor = in.readString();
 			result.set(i, descriptor);
 		}
 		return result;

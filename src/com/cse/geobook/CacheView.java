@@ -58,9 +58,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 												// connect()
 	private ProgressDialog mConnectionProgressDialog; // Sign in progress dialog
 	// End Google+ resources
-	//
 
-	//
 	// Resources for photo functionality
 	private static final int PHOTO_REQUEST_CODE = 6969;
 	private boolean waitOnCamera = false;
@@ -543,14 +541,18 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// TODO Auto-generated method stub
 		super.onPause();
 
+		// TODO: this loop needs to be restored, commented out for testing only
+
 		// saves found caches if it exists && target
-		boolean searching = true;
-		int size = data.foundCaches.size();
+		// boolean searching = true;
+		// int size = data.foundCaches.size();
 		// for (int i = 0; i < size && searching; i++) {
 		// if (data.target.equals(data.foundCaches.get(i))) {
 		// data.foundCaches.set(i, data.target);
+		// searching = false;
+
+		// TODO: this gets removed as well
 		data.foundCaches.add(data.target);
-		searching = false;
 
 		// overwrites found caches
 		DataParser found = new DataParser(
@@ -568,15 +570,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		target_dp.close();
 		// }
 		// }
-
-		/*
-		 * Bundle extras_new = new Bundle();
-		 * extras_new.putParcelable(Data.CACHE_DATA, data);
-		 * 
-		 * Intent map = new Intent("android.intent.action.MAP");
-		 * map.putExtras(extras_new); startActivity(map);
-		 */
-		CacheView.this.finish();
 
 	}
 

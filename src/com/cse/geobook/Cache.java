@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * Data class to hold a single cache with all its descriptors
+ * 
+ */
 public class Cache {
 	ArrayList<String> cache;
 	int size;
