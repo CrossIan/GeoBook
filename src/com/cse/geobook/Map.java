@@ -338,8 +338,7 @@ public class Map extends FragmentActivity {
 
 			Cache target = caches.getCache(marker);
 
-			// Map.this.caches.target = cache;
-			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 			extra.putDouble("LAT", target.getLat());
 			extra.putDouble("LNG", target.getLng());
 			extra.putString("NAME", target.getName());
@@ -350,6 +349,7 @@ public class Map extends FragmentActivity {
 			extra.putDouble("AWES", target.getRating());
 			extra.putDouble("SIZE", target.getContainer());
 			extra.putParcelable("USER", (Parcelable) currentPerson);
+			Map.this.caches.target = target;
 
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
@@ -484,21 +484,9 @@ public class Map extends FragmentActivity {
 					Cache.TARGET_CACHE);
 			t = target.read();
 			target.close();
-		} else {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
-			t = new ArrayList<Cache>();
-			Cache cache = new Cache();
-			cache.name("defaultTarget");
-			cache.lat("39.961138");
-			cache.lng("-83.001465");
-			t.add(cache);
-			target.overwriteAll(t);
-
-			target.close();
 		}
 
-		return new Data(fc, ac, t.get(0), 11);
+		return new Data(fc, ac, null, 11);
 	}
 
 	private MarkerOptions createMarkerOptions(Cache cache) {
