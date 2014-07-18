@@ -160,7 +160,7 @@ public class Cache {
 	}
 
 	public boolean equals(Marker m) {
-		return true;
+		return this.getName().equals(m.getTitle());
 	}
 
 	public boolean equals(MarkerOptions mo) {
