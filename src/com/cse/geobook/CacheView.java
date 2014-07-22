@@ -64,7 +64,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	// Resources for photo functionality
 	private static final int PHOTO_REQUEST_CODE = 6969;
-	private boolean waitOnCamera = false;
+	private static final int PHOTO_SHARE_REQUEST_CODE = 123321;
 
 	//
 	// Data for this cache
@@ -212,8 +212,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 				Intent intent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				waitOnCamera = true;
-				startActivityForResult(intent, PHOTO_REQUEST_CODE + 1000);
+				startActivityForResult(intent, PHOTO_SHARE_REQUEST_CODE);
 			}
 		}
 	}
@@ -332,6 +331,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
 		Log.v(TAG, "ActivityResult: " + requestCode);
+		//
+		// Google+ request result SUCCESS
 		if (requestCode == GOOGLE_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned OK.");
 			// If we have a successful result, we will want to be able to
@@ -342,18 +343,21 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// there are any more errors to resolve we'll get our
 			// onConnectionFailed, but if not, we'll get onConnected.
 			mPlusClient.connect();
-		} else if (requestCode == GOOGLE_REQUEST_CODE
-				&& responseCode != RESULT_OK) {
+		//
+		// Google+ request result FAILED
+		} else if (requestCode == GOOGLE_REQUEST_CODE && responseCode != RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned NOT OK.");
 			// If we've got an error we can't resolve, we're no
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
-		} else if (requestCode == GOOGLE_SHARE_CODE
-				&& responseCode == RESULT_OK) {
+		// 
+		// Google+ share result SUCCESS
+		} else if (requestCode == GOOGLE_SHARE_CODE&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Share activity returned OK.");
-		} else if (requestCode == PHOTO_REQUEST_CODE
-				&& responseCode == RESULT_OK) {
+		//
+		// Photo activity result SUCCESS
+		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
 			// Change thumbnail
@@ -406,7 +410,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheDateFound = sdf.format(d);
 			cacheDateFoundText.setText("Date found: " + cacheDateFound);
 
-		} else if (requestCode == PHOTO_REQUEST_CODE + 1000
+		//
+		// P
+		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
@@ -550,41 +556,41 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		return imageFileName;
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		// saves found caches if it exists && target
-		boolean cacheIsInFound = false;
-		int size = data.foundCaches.size();
-		for (int i = 0; i < size && !cacheIsInFound; i++) {
-			if (data.target.equals(data.foundCaches.get(i))) {
-				data.foundCaches.set(i, data.target);
-				cacheIsInFound = true;
-			}
-		}
-		// adds the cache to found if it did not exist and you are within range
-		if (!cacheIsInFound && cacheHasBeenFound) {
-			data.foundCaches.add(data.target);
-			cacheIsInFound = true;
-		}
-
-		// overwrites the found caches only if cacheIsInFound
-		if (cacheIsInFound) {
-			DataParser found = new DataParser(
-					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-			found.overwriteAll(CacheView.this.data.foundCaches);
-			found.close();
-		}
-
-		// overwrites target cache always
-		DataParser target_dp = new DataParser(
-				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
-
-		ArrayList<Cache> local_target = new ArrayList<Cache>();
-		local_target.add(data.target);
-		target_dp.overwriteAll(local_target);
-		target_dp.close();
-	}
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//
+//		// saves found caches if it exists && target
+//		boolean cacheIsInFound = false;
+//		int size = data.foundCaches.size();
+//		for (int i = 0; i < size && !cacheIsInFound; i++) {
+//			if (data.target.equals(data.foundCaches.get(i))) {
+//				data.foundCaches.set(i, data.target);
+//				cacheIsInFound = true;
+//			}
+//		}
+//		// adds the cache to found if it did not exist and you are within range
+//		if (!cacheIsInFound && cacheHasBeenFound) {
+//			data.foundCaches.add(data.target);
+//			cacheIsInFound = true;
+//		}
+//
+//		// overwrites the found caches only if cacheIsInFound
+//		if (cacheIsInFound) {
+//			DataParser found = new DataParser(
+//					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
+//			found.overwriteAll(CacheView.this.data.foundCaches);
+//			found.close();
+//		}
+//
+//		// overwrites target cache always
+//		DataParser target_dp = new DataParser(
+//				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
+//
+//		ArrayList<Cache> local_target = new ArrayList<Cache>();
+//		local_target.add(data.target);
+//		target_dp.overwriteAll(local_target);
+//		target_dp.close();
+//	}
 
 }
