@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
 
         <TextView
             android:id="@+id/login_title"
@@ -37,13 +37,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_below="@+id/sign_in_hint"
+            android:layout_gravity="center"
             android:orientation="vertical" >
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/google_sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_marginLeft= "25dp"
                 android:layout_marginTop="20dp" >
             </com.google.android.gms.common.SignInButton>
 
@@ -51,7 +53,6 @@
                 android:id="@+id/bypass_button"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
-   
                 android:layout_marginTop="5dp"
                 android:text="Bypass" />
 
