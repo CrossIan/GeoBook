@@ -1,6 +1,8 @@
 package com.cse.geobook;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
@@ -14,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -73,7 +76,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	public String mCurrentPhotoPath; // The absolute path to the caches photo
 	public File mCurrentPhoto;
 	public Data data;
-	public Double distThreshold = 20000.0; // 20km
+	public Double distThreshold = 20.0; // 20 meters
 
 	//
 	// Layout widgets
@@ -130,6 +133,23 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			mPlusClient = new PlusClient.Builder(this, this, this).setActions(
 					"http://schemas.google.com/BuyActivity").build();
 			cacheHasBeenFound = false;
+		}
+
+		if (this.data.target.getPhoto() != null
+				&& this.data.target.getPhoto().length() > 0) {
+			File path = new File(
+					Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					"Geobook/");
+			try {
+				FileInputStream photoIStream = new FileInputStream(new File(
+						path, this.data.target.getPhoto()));
+				cacheThumbnail.setImageBitmap(BitmapFactory
+						.decodeStream(photoIStream));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -488,10 +508,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	private void shareCacheToGoogle() {
 		userDescription = userDescriptionText.getText().toString();
 		Log.d("CacheView.java", userDescription);
-		String shareText;
-		
-		if(userDescription.length() > 1){
-			shareText = String.format(
+		String shareText = String.format(
 				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
 						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
 						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
@@ -499,17 +516,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 						+ "User notes:  %s\n", userName, cacheName,
 				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
 				cacheTerrain, cacheAwesomeness, cacheSize, userDescription);
-		}
-		else{
-			shareText = String.format(
-				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
-						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
-						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
-						+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n"
-						, userName, cacheName,
-				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
-				cacheTerrain, cacheAwesomeness, cacheSize);
-		}
 
 		// Build the share intent
 		Intent shareIntent;
