@@ -550,41 +550,41 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		return imageFileName;
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		// saves found caches if it exists && target
-		boolean cacheIsInFound = false;
-		int size = data.foundCaches.size();
-		for (int i = 0; i < size && !cacheIsInFound; i++) {
-			if (data.target.equals(data.foundCaches.get(i))) {
-				data.foundCaches.set(i, data.target);
-				cacheIsInFound = true;
-			}
-		}
-		// adds the cache to found if it did not exist and you are within range
-		if (!cacheIsInFound && cacheHasBeenFound) {
-			data.foundCaches.add(data.target);
-			cacheIsInFound = true;
-		}
-
-		// overwrites the found caches only if cacheIsInFound
-		if (cacheIsInFound) {
-			DataParser found = new DataParser(
-					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-			found.overwriteAll(CacheView.this.data.foundCaches);
-			found.close();
-		}
-
-		// overwrites target cache always
-		DataParser target_dp = new DataParser(
-				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
-
-		ArrayList<Cache> local_target = new ArrayList<Cache>();
-		local_target.add(data.target);
-		target_dp.overwriteAll(local_target);
-		target_dp.close();
-	}
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//
+//		// saves found caches if it exists && target
+//		boolean cacheIsInFound = false;
+//		int size = data.foundCaches.size();
+//		for (int i = 0; i < size && !cacheIsInFound; i++) {
+//			if (data.target.equals(data.foundCaches.get(i))) {
+//				data.foundCaches.set(i, data.target);
+//				cacheIsInFound = true;
+//			}
+//		}
+//		// adds the cache to found if it did not exist and you are within range
+//		if (!cacheIsInFound && cacheHasBeenFound) {
+//			data.foundCaches.add(data.target);
+//			cacheIsInFound = true;
+//		}
+//
+//		// overwrites the found caches only if cacheIsInFound
+//		if (cacheIsInFound) {
+//			DataParser found = new DataParser(
+//					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
+//			found.overwriteAll(CacheView.this.data.foundCaches);
+//			found.close();
+//		}
+//
+//		// overwrites target cache always
+//		DataParser target_dp = new DataParser(
+//				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
+//
+//		ArrayList<Cache> local_target = new ArrayList<Cache>();
+//		local_target.add(data.target);
+//		target_dp.overwriteAll(local_target);
+//		target_dp.close();
+//	}
 
 }
