@@ -64,6 +64,8 @@
         android:id="@+id/cache_stat_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_below="@+id/main_layout" >
 
         <TextView
@@ -188,7 +190,7 @@
         android:layout_above="@+id/found_cache_button"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
-        android:text="Photo" />
+        android:text="@string/photo" />
 
     <Button
         android:id="@+id/share_cache_button"
@@ -197,7 +199,7 @@
         android:layout_above="@+id/found_cache_button"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:text="Share" />
+        android:text="@string/share" />
 
     <Button
         android:id="@+id/found_cache_button"
@@ -208,7 +210,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="Found it!" />
+        android:text="@string/foundit" />
 
 </RelativeLayout>
 
