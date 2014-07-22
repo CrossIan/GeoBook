@@ -8,56 +8,63 @@
 
     <!-- TEST IMAGE -->
 
-    <ImageView
-        android:id="@+id/cache_thumbnail"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/cachePicture"
-        android:src="@drawable/earth_logo" />
-
-    <TextView
-        android:id="@+id/cache_name"
-        android:layout_width="150dp"
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:textSize="20sp"
-        android:text="Cache Name"
-        android:textColor="#FFFFFF" />
+        android:layout_alignParentTop="true" >
 
-    <TextView
-        android:id="@+id/cache_placed_by"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cache_name"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:textSize="15sp"
-        android:text="Placed by: "
-        android:textColor="#FFFFFF" />
+        <ImageView
+            android:id="@+id/cache_thumbnail"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/cachePicture"
+            android:src="@drawable/earth_logo" />
 
-    <TextView
-        android:id="@+id/date_found"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cache_placed_by"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:textSize="15sp"
-        android:text="Date Found:"
-        android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/cache_name"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:text="Cache Name"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/cache_placed_by"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cache_name"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="Placed by: "
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/date_found"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cache_placed_by"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="Date Found:"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/cache_stat_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/cache_thumbnail" >
+        android:layout_below="@+id/main_layout" >
 
         <TextView
             android:id="@+id/cache_difficulty_label"
@@ -175,34 +182,28 @@
         android:textColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/found_cache_button"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_above="@+id/save_cache_button"
-        android:text="Found it!" />
-    <Button
-        android:id="@+id/save_cache_button"
+        android:id="@+id/capture_image_button"
         android:layout_width="110dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/saveButton" />
+        android:layout_above="@+id/found_cache_button"
+        android:layout_alignParentLeft="true"
+        android:text="Photo" />
 
     <Button
         android:id="@+id/share_cache_button"
         android:layout_width="110dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/found_cache_button"
         android:layout_alignParentRight="true"
         android:text="Share" />
 
     <Button
-        android:id="@+id/capture_image_button"
-        android:layout_width="110dp"
+        android:id="@+id/found_cache_button"
+        android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="Photo" />
+        android:text="Found it!" />
 
 </RelativeLayout>
 

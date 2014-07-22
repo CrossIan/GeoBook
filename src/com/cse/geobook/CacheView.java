@@ -100,8 +100,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		// Link widgets
 		cacheThumbnail = (ImageView) this.findViewById(R.id.cache_thumbnail);
-		saveCacheButton = (Button) this.findViewById(R.id.save_cache_button);
-		saveCacheButton.setOnClickListener(this);
 		shareCacheButton = (Button) this.findViewById(R.id.share_cache_button);
 		shareCacheButton.setOnClickListener(this);
 		captureImageButton = (Button) this
@@ -158,16 +156,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	@Override
 	public void onClick(View v) {
 		/*
-		 * Save users changes and return to Map
-		 */
-		if (v.getId() == R.id.save_cache_button) {
-			Log.d(TAG, "Tapped save_cache_button");
-
-		}
-		/*
 		 * Share on social media
 		 */
-		else if (v.getId() == R.id.share_cache_button) {
+		if (v.getId() == R.id.share_cache_button) {
 			// Create the share dialog
 			Log.d(TAG, "Tapped share_cache_button");
 
@@ -528,7 +519,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		// Build the share intent
 		Intent shareIntent;
-		if (mCurrentPhoto.exists()) {
+		if (mCurrentPhoto != null && mCurrentPhoto.exists()) {
 			Uri contentUri = Uri.fromFile(mCurrentPhoto);
 			shareIntent = ShareCompat.IntentBuilder.from(CacheView.this)
 					.setStream(contentUri).setText(shareText)
