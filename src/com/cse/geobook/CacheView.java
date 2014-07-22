@@ -87,6 +87,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	final Double EPISILON = .00001;
 
+	boolean cacheHasBeenFound;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -122,13 +124,16 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
-		if (distanceFrom <= distThreshold)
+		if (distanceFrom <= distThreshold) {
 			foundCacheButton.setVisibility(View.VISIBLE);
-		else
+			cacheHasBeenFound = true;
+		} else {
 			foundCacheButton.setVisibility(View.INVISIBLE);
-		// Initialize the Google+ client
-		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
-				"http://schemas.google.com/BuyActivity").build();
+			// Initialize the Google+ client
+			mPlusClient = new PlusClient.Builder(this, this, this).setActions(
+					"http://schemas.google.com/BuyActivity").build();
+			cacheHasBeenFound = false;
+		}
 	}
 
 	@Override
@@ -538,29 +543,32 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 
-		// TODO: this loop needs to be restored, commented out for testing only
-
 		// saves found caches if it exists && target
-		// boolean searching = true;
-		// int size = data.foundCaches.size();
-		// for (int i = 0; i < size && searching; i++) {
-		// if (data.target.equals(data.foundCaches.get(i))) {
-		// data.foundCaches.set(i, data.target);
-		// searching = false;
+		boolean cacheIsInFound = false;
+		int size = data.foundCaches.size();
+		for (int i = 0; i < size && !cacheIsInFound; i++) {
+			if (data.target.equals(data.foundCaches.get(i))) {
+				data.foundCaches.set(i, data.target);
+				cacheIsInFound = true;
+			}
+		}
+		// adds the cache to found if it did not exist and you are within range
+		if (!cacheIsInFound && cacheHasBeenFound) {
+			data.foundCaches.add(data.target);
+			cacheIsInFound = true;
+		}
 
-		// TODO: this gets removed as well
-		data.foundCaches.add(data.target);
+		// overwrites the found caches only if cacheIsInFound
+		if (cacheIsInFound) {
+			DataParser found = new DataParser(
+					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
+			found.overwriteAll(CacheView.this.data.foundCaches);
+			found.close();
+		}
 
-		// overwrites found caches
-		DataParser found = new DataParser(
-				CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-		found.overwriteAll(CacheView.this.data.foundCaches);
-		found.close();
-
-		// overwrites target cache
+		// overwrites target cache always
 		DataParser target_dp = new DataParser(
 				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
 
@@ -568,9 +576,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		local_target.add(data.target);
 		target_dp.overwriteAll(local_target);
 		target_dp.close();
-		// }
-		// }
-
 	}
 
 }
