@@ -123,7 +123,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
-		// TODO: put in a thread
 		if (distanceFrom <= distThreshold) {
 			foundCacheButton.setVisibility(View.VISIBLE);
 			cacheHasBeenFound = true;
