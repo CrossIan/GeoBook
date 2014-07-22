@@ -508,7 +508,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		// Build the share intent
 		Intent shareIntent;
-		if (mCurrentPhoto.exists()) {
+		if (mCurrentPhoto != null && mCurrentPhoto.exists()) {
 			Uri contentUri = Uri.fromFile(mCurrentPhoto);
 			shareIntent = ShareCompat.IntentBuilder.from(CacheView.this)
 					.setStream(contentUri).setText(shareText)
