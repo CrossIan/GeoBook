@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 public class CacheList extends Activity implements OnItemClickListener,
-		android.widget.AdapterView.OnItemSelectedListener {
+        android.widget.AdapterView.OnItemSelectedListener {
 	static int startCacheNameID = 900;
 
 	Data caches;
@@ -33,29 +33,29 @@ public class CacheList extends Activity implements OnItemClickListener,
 		Log.d(this.getClass().toString(), "getting extras");
 		this.getExtras();
 
-		setContentView(R.layout.cache_list);
+		this.setContentView(R.layout.cache_list);
 
-		lv = (ListView) findViewById(R.id.ListView01);
-		found_cb = (CheckBox) findViewById(R.id.show_found_check);
-		all_cb = (CheckBox) findViewById(R.id.show_not_found_check);
+		this.lv = (ListView) this.findViewById(R.id.ListView01);
+		this.found_cb = (CheckBox) this.findViewById(R.id.show_found_check);
+		this.all_cb = (CheckBox) this.findViewById(R.id.show_not_found_check);
 
 		// Add options to sort spinner
-		sortOptions = new String[5];
-		sortOptions[0] = "Name";
-		sortOptions[1] = "Rating";
-		sortOptions[2] = "Size";
-		sortOptions[3] = "Difficulty";
-		sortOptions[4] = "Terrain";
-		Spinner sortSpinner = (Spinner) findViewById(R.id.sort_spinner);
+		this.sortOptions = new String[5];
+		this.sortOptions[0] = "Name";
+		this.sortOptions[1] = "Rating";
+		this.sortOptions[2] = "Size";
+		this.sortOptions[3] = "Difficulty";
+		this.sortOptions[4] = "Terrain";
+		Spinner sortSpinner = (Spinner) this.findViewById(R.id.sort_spinner);
 		sortSpinner.setOnItemSelectedListener(this);
 
 		ArrayAdapter spinnerAdapter = new ArrayAdapter(this,
-				android.R.layout.simple_spinner_item, sortOptions);
+		        android.R.layout.simple_spinner_item, this.sortOptions);
 		sortSpinner.setAdapter(spinnerAdapter);
 
 		if (this.caches != null) {
 
-			caches.sort(Cache.DESCRIPTOR.NAME);
+			this.caches.sort(Cache.DESCRIPTOR.NAME);
 
 			/**
 			 * <pre>
@@ -68,10 +68,10 @@ public class CacheList extends Activity implements OnItemClickListener,
 			 * </pre>
 			 */
 
-			lv.setOnItemClickListener(this);
+			this.lv.setOnItemClickListener(this);
 			// initialize menu
-			set_all_titles();
-			set_found_titles();
+			this.set_all_titles();
+			this.set_found_titles();
 			this.setTitlesBasedOnCheckBox();
 			this.updateList();
 
@@ -93,9 +93,9 @@ public class CacheList extends Activity implements OnItemClickListener,
 	private void updateList() {
 
 		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, titles);
+		        android.R.layout.simple_list_item_1, this.titles);
 
-		lv.setAdapter(listAdapter);
+		this.lv.setAdapter(listAdapter);
 	}
 
 	/**
@@ -105,10 +105,10 @@ public class CacheList extends Activity implements OnItemClickListener,
 	 * @param al
 	 */
 	private void set_all_titles() {
-		int size = caches.allCaches.size();
-		all_titles = new String[size];
+		int size = this.caches.allCaches.size();
+		this.all_titles = new String[size];
 		for (int i = 0; i < size; i++) {
-			all_titles[i] = caches.allCaches.get(i).getName();
+			this.all_titles[i] = this.caches.allCaches.get(i).getName();
 		}
 	}
 
@@ -119,10 +119,10 @@ public class CacheList extends Activity implements OnItemClickListener,
 	 * @param al
 	 */
 	private void set_found_titles() {
-		int size = caches.foundCaches.size();
-		found_titles = new String[size];
+		int size = this.caches.foundCaches.size();
+		this.found_titles = new String[size];
 		for (int i = 0; i < size; i++) {
-			found_titles[i] = caches.foundCaches.get(i).getName();
+			this.found_titles[i] = this.caches.foundCaches.get(i).getName();
 		}
 	}
 
@@ -132,43 +132,43 @@ public class CacheList extends Activity implements OnItemClickListener,
 	private void setTitlesBasedOnCheckBox() {
 		int size = 0;
 		// both
-		if (found_cb.isChecked() && all_cb.isChecked()) {
-			size = found_titles.length + all_titles.length;
-			titles = new String[size];
-			int index = found_titles.length;
+		if (this.found_cb.isChecked() && this.all_cb.isChecked()) {
+			size = this.found_titles.length + this.all_titles.length;
+			this.titles = new String[size];
+			int index = this.found_titles.length;
 			for (int i = 0; i < index; i++) {
-				titles[i] = found_titles[i];
+				this.titles[i] = this.found_titles[i];
 			}
-			size = all_titles.length;
+			size = this.all_titles.length;
 			for (int i = 0; index + i < size; i++) {
-				titles[index + i] = all_titles[i];
+				this.titles[index + i] = this.all_titles[i];
 			}
 
-		} else if (all_cb.isChecked()) { // all
-			size = found_titles.length;
-			titles = new String[size];
+		} else if (this.all_cb.isChecked()) { // all
+			size = this.found_titles.length;
+			this.titles = new String[size];
 			for (int i = 0; i < size; i++) {
-				titles[i] = all_titles[i];
+				this.titles[i] = this.all_titles[i];
 			}
-		} else if (found_cb.isChecked()) { // found
-			size = all_titles.length;
-			titles = new String[size];
+		} else if (this.found_cb.isChecked()) { // found
+			size = this.all_titles.length;
+			this.titles = new String[size];
 			for (int i = 0; i < size; i++) {
-				titles[i] = found_titles[i];
+				this.titles[i] = this.found_titles[i];
 			}
 		} else { // none
-			titles = new String[0];
+			this.titles = new String[0];
 		}
 
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	        long id) {
 		int zoom = 16;
 
 		Data data = new Data(this.caches.foundCaches, this.caches.foundCaches,
-				this.caches.foundCaches.get(position), zoom);
+		        this.caches.foundCaches.get(position), zoom);
 
 		Bundle extras_new = new Bundle();
 		extras_new.putParcelable(Data.CACHE_DATA, data);
@@ -181,28 +181,28 @@ public class CacheList extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
+	        long id) {
 		switch (position) {
-		case 0: // name
-			caches.sort(Cache.DESCRIPTOR.NAME);
-			break;
-		case 1: // rating
-			caches.sort(Cache.DESCRIPTOR.RATING);
-			break;
-		case 2: // size
-			caches.sort(Cache.DESCRIPTOR.CONTAINER);
-			break;
-		case 3: // difficulty
-			caches.sort(Cache.DESCRIPTOR.DIFFICULTY);
-			break;
-		case 4: // terrain
-			caches.sort(Cache.DESCRIPTOR.TERRAIN);
-			break;
-		default:
-			break;
+			case 0: // name
+				this.caches.sort(Cache.DESCRIPTOR.NAME);
+				break;
+			case 1: // rating
+				this.caches.sort(Cache.DESCRIPTOR.RATING);
+				break;
+			case 2: // size
+				this.caches.sort(Cache.DESCRIPTOR.CONTAINER);
+				break;
+			case 3: // difficulty
+				this.caches.sort(Cache.DESCRIPTOR.DIFFICULTY);
+				break;
+			case 4: // terrain
+				this.caches.sort(Cache.DESCRIPTOR.TERRAIN);
+				break;
+			default:
+				break;
 		}
-		set_all_titles();
-		set_found_titles();
+		this.set_all_titles();
+		this.set_found_titles();
 
 		this.setTitlesBasedOnCheckBox();
 		this.updateList();
