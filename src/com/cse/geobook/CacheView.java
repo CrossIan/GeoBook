@@ -91,7 +91,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cache);
 		Log.d(TAG, "onCreate");
@@ -124,6 +123,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
+		// TODO: put in a thread
 		if (distanceFrom <= distThreshold) {
 			foundCacheButton.setVisibility(View.VISIBLE);
 			cacheHasBeenFound = true;
@@ -389,7 +389,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			try {
 				d = sdf.parse(dateInfo[2]);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				d = null;
 			}

@@ -251,7 +251,6 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
-			// TODO Auto-generated method stub
 		}
 
 		@Override

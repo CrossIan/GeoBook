@@ -86,7 +86,6 @@ public class DataParser {
 		try {
 			stream.write(line.getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -104,8 +103,8 @@ public class DataParser {
 			line = this.reader.readLine();
 			String[] contents = line.split("[,]");
 
-//			Log.d("Length",
-//					"Length of array: " + Integer.toString(contents.length));
+			// Log.d("Length",
+			// "Length of array: " + Integer.toString(contents.length));
 
 			// if line matches required format
 			String matchDouble = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -134,7 +133,6 @@ public class DataParser {
 
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -151,7 +149,6 @@ public class DataParser {
 		try {
 			ready = this.reader.ready();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ready;
@@ -168,11 +165,11 @@ public class DataParser {
 		ArrayList<Cache> cache_array = new ArrayList<Cache>();
 
 		if (this.reader != null) {
-//			int counter = 0;
+			// int counter = 0;
 			while (this.ready()) {
 				cache_array.add(this.readMarker());
-//				counter++;
-//				Log.d(TAG,Integer.toString(counter));
+				// counter++;
+				// Log.d(TAG,Integer.toString(counter));
 			}
 		}
 		return cache_array;
@@ -201,10 +198,8 @@ public class DataParser {
 
 			Log.d("data", "data has been saved");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -214,7 +209,6 @@ public class DataParser {
 			if (this.reader != null)
 				this.reader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

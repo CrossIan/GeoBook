@@ -182,7 +182,6 @@ public class CacheList extends Activity implements OnItemClickListener,
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
 		switch (position) {
 		case 0: // name
 			caches.sort(Cache.DESCRIPTOR.NAME);
@@ -211,7 +210,6 @@ public class CacheList extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
 
 	}
 
