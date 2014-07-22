@@ -1,6 +1,8 @@
 package com.cse.geobook;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
@@ -14,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -132,6 +135,23 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			mPlusClient = new PlusClient.Builder(this, this, this).setActions(
 					"http://schemas.google.com/BuyActivity").build();
 			cacheHasBeenFound = false;
+		}
+
+		if (this.data.target.getPhoto() != null
+				&& this.data.target.getPhoto().length() > 0) {
+			File path = new File(
+					Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					"Geobook/");
+			try {
+				FileInputStream photoIStream = new FileInputStream(new File(
+						path, this.data.target.getPhoto()));
+				cacheThumbnail.setImageBitmap(BitmapFactory
+						.decodeStream(photoIStream));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
