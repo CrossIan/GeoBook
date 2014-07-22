@@ -126,11 +126,11 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheHasBeenFound = true;
 		} else {
 			foundCacheButton.setVisibility(View.INVISIBLE);
-			// Initialize the Google+ client
-			mPlusClient = new PlusClient.Builder(this, this, this).setActions(
-					"http://schemas.google.com/BuyActivity").build();
 			cacheHasBeenFound = false;
 		}
+		// Initialize the Google+ client
+		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
+					"http://schemas.google.com/BuyActivity").build();
 	}
 
 	@Override
