@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/login_title"
@@ -14,7 +14,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:text="Geobook"
+            android:text="@string/geobook"
             android:textColor="#000000"
             android:textSize="50sp"
             android:textStyle="bold" />
@@ -26,7 +26,7 @@
             android:layout_below="@+id/login_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:text="Sign in to get started"
+            android:text="@string/signin_hint"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="italic" />
@@ -54,21 +54,21 @@
                 android:layout_width="160dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
-                android:text="Bypass" />
+                android:text="@string/bypass" />
 
             <Button
                 android:id="@+id/sign_out_button"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
-                android:text="Sign out" />
+                android:text="@string/signout" />
 
             <Button
                 android:id="@+id/revoke_access_button"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
-                android:text="Revoke Access" />
+                android:text="@string/revokeaccess" />
         </LinearLayout>
 
     </RelativeLayout>
