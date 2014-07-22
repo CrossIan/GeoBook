@@ -121,19 +121,16 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
-//		if (distanceFrom <= distThreshold) {
-//			foundCacheButton.setVisibility(View.VISIBLE);
-//			cacheHasBeenFound = true;
-//		} else {
-//			foundCacheButton.setVisibility(View.INVISIBLE);
-//			// Initialize the Google+ client
-//			mPlusClient = new PlusClient.Builder(this, this, this).setActions(
-//					"http://schemas.google.com/BuyActivity").build();
-//			cacheHasBeenFound = false;
-//		}
-		// Initialize the Google+ client
-		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
-				"http://schemas.google.com/BuyActivity").build();
+		if (distanceFrom <= distThreshold) {
+			foundCacheButton.setVisibility(View.VISIBLE);
+			cacheHasBeenFound = true;
+		} else {
+			foundCacheButton.setVisibility(View.INVISIBLE);
+			// Initialize the Google+ client
+			mPlusClient = new PlusClient.Builder(this, this, this).setActions(
+					"http://schemas.google.com/BuyActivity").build();
+			cacheHasBeenFound = false;
+		}
 	}
 
 	@Override
@@ -491,27 +488,14 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	private void shareCacheToGoogle() {
 		userDescription = userDescriptionText.getText().toString();
 		Log.d("CacheView.java", userDescription);
-		String shareText;
-		if (userDescription.length() > 1) {
-			shareText = String.format(
-					"%s found a new cache using GeoBook!\n\n"
-							+ "Cache Name:  %s\n" + "Placed By:  %s\n"
-							+ "Coordinates:  %2.6f, %2.6f\n\n"
-							+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
-							+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n"
-							+ "User notes:  %s\n", userName, cacheName,
-					cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
-					cacheTerrain, cacheAwesomeness, cacheSize, userDescription);
-		} else {
-			shareText = String.format(
-					"%s found a new cache using GeoBook!\n\n"
-							+ "Cache Name:  %s\n" + "Placed By:  %s\n"
-							+ "Coordinates:  %2.6f, %2.6f\n\n"
-							+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
-							+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n",
-					userName, cacheName, cachePlacedBy, cacheLat, cacheLng,
-					cacheDifficulty, cacheTerrain, cacheAwesomeness, cacheSize);
-		}
+		String shareText = String.format(
+				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
+						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
+						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
+						+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n"
+						+ "User notes:  %s\n", userName, cacheName,
+				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
+				cacheTerrain, cacheAwesomeness, cacheSize, userDescription);
 
 		// Build the share intent
 		Intent shareIntent;
