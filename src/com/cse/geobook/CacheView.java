@@ -73,7 +73,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	public String mCurrentPhotoPath; // The absolute path to the caches photo
 	public File mCurrentPhoto;
 	public Data data;
-	public Double distThreshold = 20.0; // 20 meters
+	public Double distThreshold = 20000.0; // 20km
 
 	//
 	// Layout widgets
@@ -488,7 +488,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	private void shareCacheToGoogle() {
 		userDescription = userDescriptionText.getText().toString();
 		Log.d("CacheView.java", userDescription);
-		String shareText = String.format(
+		String shareText;
+		
+		if(userDescription.length() > 1){
+			shareText = String.format(
 				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
 						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
 						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
@@ -496,6 +499,17 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 						+ "User notes:  %s\n", userName, cacheName,
 				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
 				cacheTerrain, cacheAwesomeness, cacheSize, userDescription);
+		}
+		else{
+			shareText = String.format(
+				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
+						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
+						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
+						+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n"
+						, userName, cacheName,
+				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
+				cacheTerrain, cacheAwesomeness, cacheSize);
+		}
 
 		// Build the share intent
 		Intent shareIntent;
