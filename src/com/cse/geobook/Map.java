@@ -62,22 +62,22 @@ public class Map extends FragmentActivity {
 	private void getExtras() {
 		this.extras = this.getIntent().getExtras();
 
-		currentPerson = extras.getParcelable("USER");
+		this.currentPerson = this.extras.getParcelable("USER");
 
 		Cache tempTarget = null;
 		int zoom = 11;
-		if (extras != null && extras.containsKey(Data.CACHE_DATA)) {
+		if (this.extras != null && this.extras.containsKey(Data.CACHE_DATA)) {
 			this.caches = this.extras.getParcelable(Data.CACHE_DATA);
-			tempTarget = caches.target;
-			zoom = caches.zoom;
+			tempTarget = this.caches.target;
+			zoom = this.caches.zoom;
 		}
 
-		this.caches = readInData();
+		this.caches = this.readInData();
 
 		// if target is null, use the target set by readInData
 		if (tempTarget != null) {
-			caches.target = tempTarget;
-			caches.zoom = zoom;
+			this.caches.target = tempTarget;
+			this.caches.zoom = zoom;
 		}
 	}
 
@@ -95,52 +95,52 @@ public class Map extends FragmentActivity {
 	private void setMarkerColor() {
 
 		String colorValue = Settings.getColorMarker(this
-				.getApplicationContext());
+		        .getApplicationContext());
 		// Default Value
-		colorMarker = BitmapDescriptorFactory
-				.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+		this.colorMarker = BitmapDescriptorFactory
+		        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
 		switch (colorValue) {
-		case "1":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-			break;
-		case "2":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-			break;
-		case "3":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-			break;
-		case "4":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
-			break;
-		case "5":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-			break;
-		case "6":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
-			break;
-		case "7":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-			break;
-		case "8":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
-			break;
-		case "9":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
-			break;
-		case "10":
-			colorMarker = BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-			break;
+			case "1":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+				break;
+			case "2":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_RED);
+				break;
+			case "3":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+				break;
+			case "4":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+				break;
+			case "5":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+				break;
+			case "6":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
+				break;
+			case "7":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+				break;
+			case "8":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+				break;
+			case "9":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
+				break;
+			case "10":
+				this.colorMarker = BitmapDescriptorFactory
+				        .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+				break;
 		}
 
 	}
@@ -155,31 +155,30 @@ public class Map extends FragmentActivity {
 	 * @requires {@code caches} != null
 	 */
 	private void setUpMap() {
-		gMap = ((SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.map)).getMap();
-		gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-				createMarkerOptions(this.caches.allCaches.get(0)).getPosition(),
-				11));
+		this.gMap = ((SupportMapFragment) this.getSupportFragmentManager()
+		        .findFragmentById(R.id.map)).getMap();
+		this.gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this
+		        .createMarkerOptions(this.caches.allCaches.get(0))
+		        .getPosition(), 11));
 
-		markers = new ArrayList<Marker>();
+		this.markers = new ArrayList<Marker>();
 		this.setUpActionListeners();
-		this.gMap.setMyLocationEnabled(true);
 
 		// set all caches
 		int size = this.caches.allCaches.size();
 		Log.d("cache", "all -size: " + size);
 
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap
-					.addMarker(createMarkerOptions(this.caches.allCaches.get(i))));
+			this.markers.add(this.gMap.addMarker(this
+			        .createMarkerOptions(this.caches.allCaches.get(i))));
 		}
 
 		// set found caches
 		size = this.caches.foundCaches.size();
 		Log.d("cache", "found - size: " + size);
 		for (int i = 0; i < size; i++) {
-			markers.add(this.gMap.addMarker(createMarkerOptions(
-					this.caches.foundCaches.get(i)).icon(colorMarker)));
+			this.markers.add(this.gMap.addMarker(this.createMarkerOptions(
+			        this.caches.foundCaches.get(i)).icon(this.colorMarker)));
 		}
 
 	}
@@ -206,7 +205,7 @@ public class Map extends FragmentActivity {
 		double dlamb = Math.toRadians(lon2 - lon1);
 
 		double a = Math.sin(dphi / 2) * Math.sin(dphi / 2) + Math.cos(phi1)
-				* Math.cos(phi2) * Math.sin(dlamb / 2) * Math.sin(dlamb / 2);
+		        * Math.cos(phi2) * Math.sin(dlamb / 2) * Math.sin(dlamb / 2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 		double d = R * c; // Distance in km
@@ -218,8 +217,8 @@ public class Map extends FragmentActivity {
 	 * class to implement all Listeners
 	 */
 	private class clickListener implements OnMapClickListener,
-			OnMapLongClickListener, OnMarkerClickListener,
-			OnInfoWindowClickListener {
+	        OnMapLongClickListener, OnMarkerClickListener,
+	        OnInfoWindowClickListener {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
@@ -230,29 +229,31 @@ public class Map extends FragmentActivity {
 
 			/** dialog click listener ONLY for the below alert dialog box */
 			class dialogClickListener implements
-					DialogInterface.OnClickListener {
+			        DialogInterface.OnClickListener {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						Cache cache = new Cache();
-						cache.lat(String.valueOf(pos.latitude));
-						cache.lng(String.valueOf(pos.longitude));
-						cache.name("default");
-						cache.description("");
-						Map.this.caches.foundCaches.add(cache);
-						Map.this.gMap.addMarker(createMarkerOptions(cache));
-						// Todo place in hash map
-						DataParser found = new DataParser(
-								getApplicationContext(), Cache.FOUND_CACHES);
-						found.overwriteAll(Map.this.caches.foundCaches);
-						found.close();
+						case DialogInterface.BUTTON_POSITIVE:
+							Cache cache = new Cache();
+							cache.lat(String.valueOf(pos.latitude));
+							cache.lng(String.valueOf(pos.longitude));
+							cache.name("default");
+							cache.description("");
+							Map.this.caches.foundCaches.add(cache);
+							Map.this.gMap.addMarker(Map.this
+							        .createMarkerOptions(cache));
+							// Todo place in hash map
+							DataParser found = new DataParser(
+							        Map.this.getApplicationContext(),
+							        Cache.FOUND_CACHES);
+							found.overwriteAll(Map.this.caches.foundCaches);
+							found.close();
 
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						// Todo
-						break;
+							break;
+						case DialogInterface.BUTTON_NEUTRAL:
+							// Todo
+							break;
 					}
 				}
 			}
@@ -260,10 +261,10 @@ public class Map extends FragmentActivity {
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.confirm_new_cache)
-					.setTitle(R.string.new_cache)
-					.setPositiveButton(R.string.cache_option_yes, listener)
+			        .setTitle(R.string.new_cache)
+			        .setPositiveButton(R.string.cache_option_yes, listener)
 
-					.setNegativeButton(R.string.cache_option_no, listener);
+			        .setNegativeButton(R.string.cache_option_no, listener);
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
@@ -286,7 +287,7 @@ public class Map extends FragmentActivity {
 			Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 			Bundle extra = new Bundle();
 
-			Cache target = caches.getCache(marker);
+			Cache target = Map.this.caches.getCache(marker);
 			Map.this.caches.target = target;
 			cacheView.putExtras(extra);
 
@@ -315,7 +316,7 @@ public class Map extends FragmentActivity {
 		if (item.getItemId() == R.id.menu_map_profile) {
 			Intent profileIntent = new Intent("android.intent.action.PROFILE");
 			Bundle extra = new Bundle();
-			extra.putParcelable("USER", (Parcelable) currentPerson);
+			extra.putParcelable("USER", (Parcelable) this.currentPerson);
 			profileIntent.putExtras(extra);
 
 			// Start profile activity
@@ -337,14 +338,14 @@ public class Map extends FragmentActivity {
 		} else if (item.getItemId() == R.id.menu_map_about) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
 			builder.setMessage(R.string.dialog_about_message).setTitle(
-					R.string.dialog_about_title);
+			        R.string.dialog_about_title);
 			builder.setPositiveButton(R.string.ok,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int id) {
-							// User clicked OK button
-						}
-					});
+			        new DialogInterface.OnClickListener() {
+				        @Override
+				        public void onClick(DialogInterface dialog, int id) {
+					        // User clicked OK button
+				        }
+			        });
 
 			AlertDialog dialog = builder.create();
 			dialog.show();
@@ -354,20 +355,21 @@ public class Map extends FragmentActivity {
 			this.finish();
 			this.startActivity(new Intent(Map.this, Login.class));
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		File targetCacheFile = getApplicationContext().getFileStreamPath(
-				Cache.TARGET_CACHE);
+		File targetCacheFile = this.getApplicationContext().getFileStreamPath(
+		        Cache.TARGET_CACHE);
 
 		if (targetCacheFile.exists()) {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
-			caches.target = target.read().get(0);
+			DataParser target = new DataParser(this.getApplicationContext(),
+			        Cache.TARGET_CACHE);
+			this.caches.target = target.read().get(0);
 			target.close();
 
 			// if target exists && if target is in on the map, remove marker and
@@ -375,11 +377,11 @@ public class Map extends FragmentActivity {
 
 			// assumes that the cache is already added to the found caches in
 			// cacheView
-			for (int i = 0; i < markers.size(); i++) {
-				if (caches.target.equals(markers.get(i))) {
-					markers.remove(i);
-					this.gMap.addMarker(createMarkerOptions(caches.target)
-							.icon(colorMarker));
+			for (int i = 0; i < this.markers.size(); i++) {
+				if (this.caches.target.equals(this.markers.get(i))) {
+					this.markers.remove(i);
+					this.gMap.addMarker(this.createMarkerOptions(
+					        this.caches.target).icon(this.colorMarker));
 				}
 			}
 
@@ -395,23 +397,23 @@ public class Map extends FragmentActivity {
 	 */
 	private Data readInData() {
 
-		File foundCachesfile = getApplicationContext().getFileStreamPath(
-				Cache.FOUND_CACHES);
-		File targetCacheFile = getApplicationContext().getFileStreamPath(
-				Cache.TARGET_CACHE);
+		File foundCachesfile = this.getApplicationContext().getFileStreamPath(
+		        Cache.FOUND_CACHES);
+		File targetCacheFile = this.getApplicationContext().getFileStreamPath(
+		        Cache.TARGET_CACHE);
 
 		ArrayList<Cache> ac = null;
 		ArrayList<Cache> fc = null;
 		Cache t = null;
 
-		DataParser all = new DataParser(getApplicationContext(),
-				Cache.ALL_CACHES);
+		DataParser all = new DataParser(this.getApplicationContext(),
+		        Cache.ALL_CACHES);
 		ac = all.read();
 		all.close();
 
 		if (foundCachesfile.exists()) {
-			DataParser found = new DataParser(getApplicationContext(),
-					Cache.FOUND_CACHES);
+			DataParser found = new DataParser(this.getApplicationContext(),
+			        Cache.FOUND_CACHES);
 			fc = found.read();
 			found.close();
 		} else {
@@ -419,8 +421,8 @@ public class Map extends FragmentActivity {
 		}
 
 		if (targetCacheFile.exists()) {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
+			DataParser target = new DataParser(this.getApplicationContext(),
+			        Cache.TARGET_CACHE);
 			t = target.read().get(0);
 			target.close();
 		}
