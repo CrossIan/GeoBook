@@ -1,7 +1,6 @@
 package com.cse.geobook;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -178,28 +177,6 @@ public class CacheList extends Activity implements OnItemClickListener,
 		cacheView.putExtras(extras_new);
 		this.startActivity(cacheView);
 		this.finish();
-	}
-
-	class ListActivityClickListener extends ListActivity {
-		protected void onListItemClick(ListView l, View v, int position, long id) {
-			// TODO Auto-generated method stub
-			super.onListItemClick(l, v, position, id);
-			int zoom = 16;
-
-			Bundle b = this.getIntent().getExtras();
-			Data data_in = b.getParcelable(Data.CACHE_DATA);
-
-			Data data = new Data(data_in.allCaches, data_in.foundCaches,
-					data_in.allCaches.get(position), zoom);
-
-			Bundle extras_new = new Bundle();
-			extras_new.putParcelable(Data.CACHE_DATA, data);
-
-			Intent map = new Intent("android.intent.action.MAP");
-			map.putExtras(extras_new);
-			this.startActivity(map);
-			this.finish();
-		}
 	}
 
 	@Override
