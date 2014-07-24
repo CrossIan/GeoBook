@@ -44,7 +44,6 @@ public class Map extends FragmentActivity {
 	Bundle extras;
 	Data caches;
 	Button listView;
-	LatLng lastLocation;
 	String currentCity, currentState;
 	ArrayList<Marker> markers;
 	BitmapDescriptor colorMarker;
@@ -167,27 +166,9 @@ public class Map extends FragmentActivity {
 	private void setUpMap() {
 		gMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
-		gMap.setMyLocationEnabled(true);
-		if (gMap != null) {
-			gMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-				@Override
-				public void onMyLocationChange(Location arg0) {
-					lastLocation = new LatLng(arg0.getLatitude(), arg0
-							.getLongitude());
-					Log.d("Map.java",
-							"Starting location: " + lastLocation.toString());
-					if (startUp) {
-						gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-								lastLocation, 11));
-						startUp = false;
-
-						// Set local variables to current city/state based
-						// on location
-						setCurrentCityState(lastLocation);
-					}
-				}
-			});
-		}
+		gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+				createMarkerOptions(this.caches.foundCaches.get(0))
+						.getPosition(), 11));
 
 		markers = new ArrayList<Marker>();
 		this.setUpActionListeners();
@@ -330,22 +311,7 @@ public class Map extends FragmentActivity {
 			Bundle extra = new Bundle();
 
 			Cache target = caches.getCache(marker);
-
-			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-			extra.putDouble("LAT", target.getLat());
-			extra.putDouble("LNG", target.getLng());
-			extra.putString("NAME", target.getName());
-			extra.putString("PLACEDBY", target.getCreator());
-			extra.putString("DATE", "");
-			extra.putDouble("DIFF", target.getDifficulty());
-			extra.putDouble("TERR", target.getTerrain());
-			extra.putDouble("AWES", target.getRating());
-			extra.putDouble("SIZE", target.getContainer());
-			extra.putParcelable("USER", (Parcelable) currentPerson);
 			Map.this.caches.target = target;
-
-			double distanceFrom = distance(lastLocation, marker.getPosition());
-			extra.putDouble("DISTANCE", distanceFrom);
 			cacheView.putExtras(extra);
 
 			// remove once above is working
