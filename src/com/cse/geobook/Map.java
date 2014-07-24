@@ -179,7 +179,7 @@ public class Map extends FragmentActivity {
 		Log.d("cache", "found - size: " + size);
 		for (int i = 0; i < size; i++) {
 			markers.add(this.gMap.addMarker(createMarkerOptions(
-					this.caches.foundCaches.get(i)).icon(colorMarker)));
+					this.caches.allCaches.get(i)).icon(colorMarker)));
 		}
 
 	}
