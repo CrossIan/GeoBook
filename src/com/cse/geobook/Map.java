@@ -212,17 +212,15 @@ public class Map extends FragmentActivity {
 
 	}
 
-	private void removeAllMarkers() {
-		int size = markers.size();
-		for (int i = 0; i < size; i++) {
-			markers.get(i).remove();
-		}
-	}
-
-	private boolean cacheFound(Cache c) {
-		return caches.foundCaches.contains(c);
-	}
-
+	/**
+	 * returns the distance between two {@code LatLng} locations
+	 * 
+	 * @param start
+	 *            the initial {@code LatLng}
+	 * @param end
+	 *            the finishing {@code LatLng}
+	 * @return the distance between two {@code LatLng} locations
+	 */
 	private static double distance(LatLng start, LatLng end) {
 		double lat1 = start.latitude;
 		double lon1 = start.longitude;
@@ -246,9 +244,6 @@ public class Map extends FragmentActivity {
 
 	/**
 	 * class to implement all Listeners
-	 * 
-	 * @author Nate
-	 * 
 	 */
 	private class clickListener implements OnMapClickListener,
 			OnMapLongClickListener, OnMarkerClickListener,
@@ -256,7 +251,6 @@ public class Map extends FragmentActivity {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
-			// TODO Auto-generated method stub
 		}
 
 		@Override
@@ -349,6 +343,7 @@ public class Map extends FragmentActivity {
 			extra.putDouble("AWES", target.getRating());
 			extra.putDouble("SIZE", target.getContainer());
 			extra.putParcelable("USER", (Parcelable) currentPerson);
+			Map.this.caches.target = target;
 
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
@@ -427,15 +422,38 @@ public class Map extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		this.getExtras();
-		// TODO why do we have to remove markers?
-		// only have to remove target from map -> to show updated made in caches
-		// in time will change to only remove target and not every marker
-		this.removeAllMarkers();
-		this.setUpMap();
+		File targetCacheFile = getApplicationContext().getFileStreamPath(
+				Cache.TARGET_CACHE);
+
+		if (targetCacheFile.exists()) {
+			DataParser target = new DataParser(getApplicationContext(),
+					Cache.TARGET_CACHE);
+			caches.target = target.read().get(0);
+			target.close();
+
+			// if target exists && if target is in on the map, remove marker and
+			// replace with new values
+
+			// assumes that the cache is already added to the found caches in
+			// cacheView
+			for (int i = 0; i < markers.size(); i++) {
+				if (caches.target.equals(markers.get(i))) {
+					markers.remove(i);
+					this.gMap.addMarker(createMarkerOptions(caches.target)
+							.icon(colorMarker));
+				}
+			}
+
+		}
 
 	}
 
+	/**
+	 * Reads in the persistent cache data and returns its values stored the
+	 * {@code Data} class
+	 * 
+	 * @return the persistent data
+	 */
 	private Data readInData() {
 
 		File foundCachesfile = getApplicationContext().getFileStreamPath(
@@ -445,7 +463,7 @@ public class Map extends FragmentActivity {
 
 		ArrayList<Cache> ac = null;
 		ArrayList<Cache> fc = null;
-		ArrayList<Cache> t = null;
+		Cache t = null;
 
 		DataParser all = new DataParser(getApplicationContext(),
 				Cache.ALL_CACHES);
@@ -464,23 +482,11 @@ public class Map extends FragmentActivity {
 		if (targetCacheFile.exists()) {
 			DataParser target = new DataParser(getApplicationContext(),
 					Cache.TARGET_CACHE);
-			t = target.read();
-			target.close();
-		} else {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
-			t = new ArrayList<Cache>();
-			Cache cache = new Cache();
-			cache.name("defaultTarget");
-			cache.lat("39.961138");
-			cache.lng("-83.001465");
-			t.add(cache);
-			target.overwriteAll(t);
-
+			t = target.read().get(0);
 			target.close();
 		}
 
-		return new Data(fc, ac, t.get(0), 11);
+		return new Data(fc, ac, t, 11);
 	}
 
 	private MarkerOptions createMarkerOptions(Cache cache) {
@@ -492,7 +498,7 @@ public class Map extends FragmentActivity {
 		return result;
 	}
 
-	/*
+	/**
 	 * This method sets the class variables currentCity and currentState based
 	 * on a Geocoder object.
 	 */
@@ -511,7 +517,6 @@ public class Map extends FragmentActivity {
 					currentState = "";
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
