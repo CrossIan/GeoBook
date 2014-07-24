@@ -435,6 +435,9 @@ public class Map extends FragmentActivity {
 				}
 			}
 
+		} else {
+			caches.target = new Cache();
+			caches.target.name("DEFAULT");
 		}
 
 	}

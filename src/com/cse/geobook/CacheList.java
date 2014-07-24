@@ -168,7 +168,7 @@ public class CacheList extends Activity implements OnItemClickListener,
 		int zoom = 16;
 
 		Data data = new Data(this.caches.foundCaches, this.caches.foundCaches,
-				this.caches.foundCaches.get(position), zoom);
+				this.caches.allCaches.get(position), zoom);
 
 		Bundle extras_new = new Bundle();
 		extras_new.putParcelable(Data.CACHE_DATA, data);
