@@ -332,11 +332,12 @@ public class Map extends FragmentActivity {
 			Cache target = caches.getCache(marker);
 
 			Map.this.caches.target = target;
-			extra.putParcelable("USER", (Parcelable) currentPerson);
-			Map.this.caches.target = target;
 
 			double distanceFrom = distance(lastLocation, marker.getPosition());
 			extra.putDouble("DISTANCE", distanceFrom);
+			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			extra.putParcelable("USER", (Parcelable) currentPerson);
+
 			cacheView.putExtras(extra);
 
 			// remove once above is working
