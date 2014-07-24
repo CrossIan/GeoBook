@@ -130,7 +130,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		}
 		// Initialize the Google+ client
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
-					"http://schemas.google.com/BuyActivity").build();
+				"http://schemas.google.com/BuyActivity").build();
 	}
 
 	@Override
@@ -323,21 +323,24 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// there are any more errors to resolve we'll get our
 			// onConnectionFailed, but if not, we'll get onConnected.
 			mPlusClient.connect();
-		//
-		// Google+ request result FAILED
-		} else if (requestCode == GOOGLE_REQUEST_CODE && responseCode != RESULT_OK) {
+			//
+			// Google+ request result FAILED
+		} else if (requestCode == GOOGLE_REQUEST_CODE
+				&& responseCode != RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned NOT OK.");
 			// If we've got an error we can't resolve, we're no
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
-		// 
-		// Google+ share result SUCCESS
-		} else if (requestCode == GOOGLE_SHARE_CODE&& responseCode == RESULT_OK) {
+			//
+			// Google+ share result SUCCESS
+		} else if (requestCode == GOOGLE_SHARE_CODE
+				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Share activity returned OK.");
-		//
-		// Photo activity result SUCCESS
-		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
+			//
+			// Photo activity result SUCCESS
+		} else if (requestCode == PHOTO_REQUEST_CODE
+				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
 			// Change thumbnail
@@ -390,8 +393,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheDateFound = sdf.format(d);
 			cacheDateFoundText.setText("Date found: " + cacheDateFound);
 
-		//
-		// P
+			//
+			// P
 		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
@@ -495,26 +498,24 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		userDescription = userDescriptionText.getText().toString();
 		Log.d("CacheView.java", userDescription);
 		String shareText;
-		
-		if(userDescription.length() > 1){
-			shareText = String.format(
-				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
-						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
-						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
-						+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n"
-						+ "User notes:  %s\n", userName, cacheName,
-				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
-				cacheTerrain, cacheAwesomeness, cacheSize, userDescription);
-		}
-		else{
-			shareText = String.format(
-				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
-						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
-						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
-						+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n"
-						, userName, cacheName,
-				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
-				cacheTerrain, cacheAwesomeness, cacheSize);
+
+		if (userDescription.length() > 1) {
+			shareText = String.format("%s found a new cache using GeoBook!\n\n"
+					+ "Cache Name:  %s\n" + "Placed By:  %s\n"
+					+ "Coordinates:  %2.6f, %2.6f\n\n" + "Difficulty:  %1.1f\n"
+					+ "Terrain:  %1.1f\n" + "Awesomeness:  %1.1f\n"
+					+ "Size:  %1.1f\n\n" + "User notes:  %s\n", userName,
+					cacheName, cachePlacedBy, cacheLat, cacheLng,
+					cacheDifficulty, cacheTerrain, cacheAwesomeness, cacheSize,
+					userDescription);
+		} else {
+			shareText = String.format("%s found a new cache using GeoBook!\n\n"
+					+ "Cache Name:  %s\n" + "Placed By:  %s\n"
+					+ "Coordinates:  %2.6f, %2.6f\n\n" + "Difficulty:  %1.1f\n"
+					+ "Terrain:  %1.1f\n" + "Awesomeness:  %1.1f\n"
+					+ "Size:  %1.1f\n\n", userName, cacheName, cachePlacedBy,
+					cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
+					cacheAwesomeness, cacheSize);
 		}
 
 		// Build the share intent
@@ -550,41 +551,41 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		return imageFileName;
 	}
 
-//	@Override
-//	protected void onPause() {
-//		super.onPause();
-//
-//		// saves found caches if it exists && target
-//		boolean cacheIsInFound = false;
-//		int size = data.foundCaches.size();
-//		for (int i = 0; i < size && !cacheIsInFound; i++) {
-//			if (data.target.equals(data.foundCaches.get(i))) {
-//				data.foundCaches.set(i, data.target);
-//				cacheIsInFound = true;
-//			}
-//		}
-//		// adds the cache to found if it did not exist and you are within range
-//		if (!cacheIsInFound && cacheHasBeenFound) {
-//			data.foundCaches.add(data.target);
-//			cacheIsInFound = true;
-//		}
-//
-//		// overwrites the found caches only if cacheIsInFound
-//		if (cacheIsInFound) {
-//			DataParser found = new DataParser(
-//					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-//			found.overwriteAll(CacheView.this.data.foundCaches);
-//			found.close();
-//		}
-//
-//		// overwrites target cache always
-//		DataParser target_dp = new DataParser(
-//				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
-//
-//		ArrayList<Cache> local_target = new ArrayList<Cache>();
-//		local_target.add(data.target);
-//		target_dp.overwriteAll(local_target);
-//		target_dp.close();
-//	}
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		// saves found caches if it exists && target
+		boolean cacheIsInFound = false;
+		int size = data.foundCaches.size();
+		for (int i = 0; i < size && !cacheIsInFound; i++) {
+			if (data.target.equals(data.foundCaches.get(i))) {
+				data.foundCaches.set(i, data.target);
+				cacheIsInFound = true;
+			}
+		}
+		// adds the cache to found if it did not exist and you are within range
+		if (!cacheIsInFound && cacheHasBeenFound) {
+			data.foundCaches.add(data.target);
+			cacheIsInFound = true;
+		}
+
+		// overwrites the found caches only if cacheIsInFound
+		if (cacheIsInFound) {
+			DataParser found = new DataParser(
+					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
+			found.overwriteAll(CacheView.this.data.foundCaches);
+			found.close();
+		}
+
+		// overwrites target cache always
+		DataParser target_dp = new DataParser(
+				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
+
+		ArrayList<Cache> local_target = new ArrayList<Cache>();
+		local_target.add(data.target);
+		target_dp.overwriteAll(local_target);
+		target_dp.close();
+	}
 
 }
