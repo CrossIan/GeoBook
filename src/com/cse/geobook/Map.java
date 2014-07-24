@@ -167,8 +167,8 @@ public class Map extends FragmentActivity {
 		gMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
 		gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-				createMarkerOptions(this.caches.foundCaches.get(0))
-						.getPosition(), 11));
+				createMarkerOptions(this.caches.allCaches.get(0)).getPosition(),
+				11));
 
 		markers = new ArrayList<Marker>();
 		this.setUpActionListeners();

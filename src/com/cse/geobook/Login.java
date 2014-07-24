@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -57,17 +56,6 @@ public class Login extends Activity implements OnClickListener {
 		revokeAccessButton.setOnClickListener(this);
 		bypassButton = (Button) findViewById(R.id.bypass_button);
 		bypassButton.setOnClickListener(this);
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		Log.v(TAG, "Stop");
-		// It can be a little costly to keep the connection open
-		// to Google Play Services, so each time our activity is
-		// stopped we should disconnect.
-		if (mPlusClient.isConnected())
-			mPlusClient.disconnect();
 	}
 
 	/*
