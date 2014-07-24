@@ -442,6 +442,21 @@ public class Map extends FragmentActivity {
 
 	}
 
+	private ArrayList<Cache> readFile(String fileName) {
+
+		File file = getApplicationContext().getFileStreamPath(fileName);
+		ArrayList<Cache> cacheList = null;
+		if (file.exists()) {
+			DataParser parser = new DataParser(getApplicationContext(),
+					fileName);
+			cacheList = parser.read();
+			parser.close();
+		} else {
+			cacheList = new ArrayList<Cache>();
+		}
+		return cacheList;
+	}
+
 	/**
 	 * Reads in the persistent cache data and returns its values stored the
 	 * {@code Data} class
@@ -449,35 +464,16 @@ public class Map extends FragmentActivity {
 	 * @return the persistent data
 	 */
 	private Data readInData() {
-
-		File foundCachesfile = getApplicationContext().getFileStreamPath(
-				Cache.FOUND_CACHES);
-		File targetCacheFile = getApplicationContext().getFileStreamPath(
-				Cache.TARGET_CACHE);
-
 		ArrayList<Cache> ac = null;
 		ArrayList<Cache> fc = null;
+		ArrayList<Cache> tc = null;
 		Cache t = null;
 
-		DataParser all = new DataParser(getApplicationContext(),
-				Cache.ALL_CACHES);
-		ac = all.read();
-		all.close();
-
-		if (foundCachesfile.exists()) {
-			DataParser found = new DataParser(getApplicationContext(),
-					Cache.FOUND_CACHES);
-			fc = found.read();
-			found.close();
-		} else {
-			fc = new ArrayList<Cache>();
-		}
-
-		if (targetCacheFile.exists()) {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
-			t = target.read().get(0);
-			target.close();
+		ac = readFile(Cache.ALL_CACHES);
+		fc = readFile(Cache.FOUND_CACHES);
+		tc = readFile(Cache.TARGET_CACHE);
+		if (tc.size() > 0) {
+			t = tc.get(0);
 		}
 
 		return new Data(fc, ac, t, 11);
