@@ -1,17 +1,11 @@
 package com.cse.geobook;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,7 +20,6 @@ import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -44,7 +36,6 @@ public class Map extends FragmentActivity {
 	Bundle extras;
 	Data caches;
 	Button listView;
-	String currentCity, currentState;
 	ArrayList<Marker> markers;
 	BitmapDescriptor colorMarker;
 	private static boolean startUp;
@@ -228,25 +219,10 @@ public class Map extends FragmentActivity {
 	 */
 	private class clickListener implements OnMapClickListener,
 			OnMapLongClickListener, OnMarkerClickListener,
-			OnInfoWindowClickListener, OnMyLocationButtonClickListener {
+			OnInfoWindowClickListener {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
-		}
-
-		@Override
-		public boolean onMyLocationButtonClick() {
-			Log.d("Map.java", "Tapped MyLocation button");
-			if (Map.this.gMap != null) {
-				Map.this.gMap.stopAnimation();
-				Location myloc = Map.this.gMap.getMyLocation();
-				if (myloc != null) {
-					Map.this.gMap.animateCamera(CameraUpdateFactory
-							.newLatLng(new LatLng(myloc.getLatitude(), myloc
-									.getLongitude())));
-				}
-			}
-			return true;
 		}
 
 		@Override
@@ -340,8 +316,6 @@ public class Map extends FragmentActivity {
 			Intent profileIntent = new Intent("android.intent.action.PROFILE");
 			Bundle extra = new Bundle();
 			extra.putParcelable("USER", (Parcelable) currentPerson);
-			extra.putString("CITY", currentCity);
-			extra.putString("STATE", currentState);
 			profileIntent.putExtras(extra);
 
 			// Start profile activity
@@ -463,32 +437,4 @@ public class Map extends FragmentActivity {
 		return result;
 	}
 
-	/**
-	 * This method sets the class variables currentCity and currentState based
-	 * on a Geocoder object.
-	 */
-	private void setCurrentCityState(LatLng loc) {
-		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-		List<Address> addresses;
-		try {
-			addresses = gcd.getFromLocation(loc.latitude, loc.longitude, 1);
-			if (addresses.size() > 0) {
-				String[] addressLine = addresses.get(0).getAddressLine(1)
-						.split(",");
-				currentCity = addressLine[0];
-				if (addressLine.length > 1)
-					currentState = addressLine[1].substring(1, 3);
-				else
-					currentState = "";
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (currentState.length() > 1)
-			Toast.makeText(Map.this, currentCity + ", " + currentState,
-					Toast.LENGTH_SHORT).show();
-		else
-			Toast.makeText(Map.this, currentCity, Toast.LENGTH_SHORT).show();
-	}
 }
