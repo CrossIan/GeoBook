@@ -3,7 +3,9 @@ package com.cse.geobook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
@@ -56,24 +58,22 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 												// connect()
 	private ProgressDialog mConnectionProgressDialog; // Sign in progress dialog
 	// End Google+ resources
-	//
 
-	//
 	// Resources for photo functionality
 	private static final int PHOTO_REQUEST_CODE = 6969;
-	private boolean waitOnCamera = false;
+	private static final int PHOTO_SHARE_REQUEST_CODE = 123321;
 
 	//
 	// Data for this cache
 	public Person currentPerson;
-	public String userName, cacheName, cachePlacedBy, dateFound,
+	public String userName, cacheName, cachePlacedBy, cacheDateFound,
 			userDescription;
 	public Double cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
 			cacheAwesomeness, cacheSize, distanceFrom;
 	public String mCurrentPhotoPath; // The absolute path to the caches photo
 	public File mCurrentPhoto;
 	public Data data;
-	public Double distThreshold = 20.0; // 20 meters
+	public Double distThreshold = 20000.0; // 20km
 
 	//
 	// Layout widgets
@@ -87,17 +87,16 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	final Double EPISILON = .00001;
 
+	boolean cacheHasBeenFound;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cache);
 		Log.d(TAG, "onCreate");
 
 		// Link widgets
 		cacheThumbnail = (ImageView) this.findViewById(R.id.cache_thumbnail);
-		saveCacheButton = (Button) this.findViewById(R.id.save_cache_button);
-		saveCacheButton.setOnClickListener(this);
 		shareCacheButton = (Button) this.findViewById(R.id.share_cache_button);
 		shareCacheButton.setOnClickListener(this);
 		captureImageButton = (Button) this
@@ -122,70 +121,24 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
-		if (distanceFrom <= distThreshold)
+		if (distanceFrom <= distThreshold) {
 			foundCacheButton.setVisibility(View.VISIBLE);
-		else
+			cacheHasBeenFound = true;
+		} else {
 			foundCacheButton.setVisibility(View.INVISIBLE);
+			cacheHasBeenFound = false;
+		}
 		// Initialize the Google+ client
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
-				"http://schemas.google.com/BuyActivity").build();
+					"http://schemas.google.com/BuyActivity").build();
 	}
 
 	@Override
 	public void onClick(View v) {
 		/*
-		 * Save users changes and return to Map
-		 */
-		if (v.getId() == R.id.save_cache_button) {
-			Log.d(TAG, "Tapped save_cache_button");
-			// int size = CacheView.this.data.allCaches.size();
-			// boolean searching = true;
-			// int i = 0;
-			// while (searching && i < size) {
-			// Cache cache = CacheView.this.data.allCaches.get(i);
-			// if (Math.abs(cache.getLat() - data.target.getLat()) <
-			// CacheView.this.EPISILON
-			// && Math.abs(cache.getLat() - data.target.getLat()) <
-			// CacheView.this.EPISILON) {
-			// cache.name(CacheView.this.cacheName.getText().toString());
-			// cache.description(CacheView.this.description.getText()
-			// .toString());
-			// searching = false;
-			// CacheView.this.data.foundCaches.add(cache);
-			// CacheView.this.data.allCaches.remove(i);
-			//
-			// }
-			// i++;
-			// }
-			// if (!searching) {
-			// Log.d("data", "marker found");
-			// } else {
-			// Log.d("data", "marker not found");
-			// }
-			//
-			// DataParser found = new DataParser(
-			// CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-			// found.overwriteAll(CacheView.this.data.foundCaches);
-			// found.close();
-			//
-			// DataParser all = new DataParser(
-			// CacheView.this.getApplicationContext(), Cache.ALL_CACHES);
-			// all.overwriteAll(CacheView.this.data.allCaches);
-			// all.close();
-			//
-			// /*
-			// * Bundle extras_new = new Bundle();
-			// * extras_new.putParcelable(Data.CACHE_DATA, data);
-			// *
-			// * Intent map = new Intent("android.intent.action.MAP");
-			// * map.putExtras(extras_new); startActivity(map);
-			// */
-			// CacheView.this.finish();
-		}
-		/*
 		 * Share on social media
 		 */
-		else if (v.getId() == R.id.share_cache_button) {
+		if (v.getId() == R.id.share_cache_button) {
 			// Create the share dialog
 			Log.d(TAG, "Tapped share_cache_button");
 
@@ -239,8 +192,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 				Intent intent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				waitOnCamera = true;
-				startActivityForResult(intent, PHOTO_REQUEST_CODE + 1000);
+				startActivityForResult(intent, PHOTO_SHARE_REQUEST_CODE);
 			}
 		}
 	}
@@ -250,14 +202,11 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	 */
 	private void getExtras() {
 		Bundle extras = this.getIntent().getExtras();
-		// this.data = extras.getParcelable(Data.CACHE_DATA);
-		// this.cacheName.setText(this.data.target.getName());
-		// this.description.setText(this.data.target.getDescription());
-		// this.cacheLat.setText(Double.toString(this.data.target.getLat()));
-		// this.cacheLong.setText(Double.toString(this.data.target.getLng()));
+		this.data = extras.getParcelable(Data.CACHE_DATA);
+
 		cacheName = extras.getString("NAME");
 		cachePlacedBy = extras.getString("PLACEDBY");
-		dateFound = extras.getString("DATE");
+		cacheDateFound = extras.getString("DATE");
 		cacheLat = extras.getDouble("LAT");
 		cacheLng = extras.getDouble("LNG");
 		cacheDifficulty = extras.getDouble("DIFF");
@@ -274,7 +223,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// Set widget text
 		cacheNameText.setText(cacheName);
 		cachePlacedByText.setText("Placed by: \"" + cachePlacedBy + "\"");
-		cacheDateFoundText.setText("Date found: " + dateFound);
+		cacheDateFoundText.setText("Date found: " + cacheDateFound);
 		cacheDifficultyText.setText(Double.toString(cacheDifficulty));
 		cacheTerrainText.setText(Double.toString(cacheTerrain));
 		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
@@ -362,6 +311,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
 		Log.v(TAG, "ActivityResult: " + requestCode);
+		//
+		// Google+ request result SUCCESS
 		if (requestCode == GOOGLE_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned OK.");
 			// If we have a successful result, we will want to be able to
@@ -372,18 +323,21 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// there are any more errors to resolve we'll get our
 			// onConnectionFailed, but if not, we'll get onConnected.
 			mPlusClient.connect();
-		} else if (requestCode == GOOGLE_REQUEST_CODE
-				&& responseCode != RESULT_OK) {
+		//
+		// Google+ request result FAILED
+		} else if (requestCode == GOOGLE_REQUEST_CODE && responseCode != RESULT_OK) {
 			Log.d(TAG, "Google+ sign in returned NOT OK.");
 			// If we've got an error we can't resolve, we're no
 			// longer in the midst of signing in, so we can stop
 			// the progress spinner.
 			mConnectionProgressDialog.dismiss();
-		} else if (requestCode == GOOGLE_SHARE_CODE
-				&& responseCode == RESULT_OK) {
+		// 
+		// Google+ share result SUCCESS
+		} else if (requestCode == GOOGLE_SHARE_CODE&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Share activity returned OK.");
-		} else if (requestCode == PHOTO_REQUEST_CODE
-				&& responseCode == RESULT_OK) {
+		//
+		// Photo activity result SUCCESS
+		} else if (requestCode == PHOTO_REQUEST_CODE && responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
 			// Change thumbnail
@@ -419,7 +373,26 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			}
 			// On success, record the file name to this cache
 			mCurrentPhoto = file;
-		} else if (requestCode == PHOTO_REQUEST_CODE + 1000
+			String[] dateInfo = fileName.split("_");
+			cacheDateFound = dateInfo[2];
+			final String OLD_FORMAT = "yyyyMMdd";
+			final String NEW_FORMAT = "dd/MM/yyyy";
+
+			SimpleDateFormat sdf = new SimpleDateFormat(OLD_FORMAT);
+			Date d;
+			try {
+				d = sdf.parse(dateInfo[2]);
+			} catch (ParseException e) {
+				e.printStackTrace();
+				d = null;
+			}
+			sdf.applyPattern(NEW_FORMAT);
+			cacheDateFound = sdf.format(d);
+			cacheDateFoundText.setText("Date found: " + cacheDateFound);
+
+		//
+		// P
+		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
@@ -521,7 +494,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	private void shareCacheToGoogle() {
 		userDescription = userDescriptionText.getText().toString();
 		Log.d("CacheView.java", userDescription);
-		String shareText = String.format(
+		String shareText;
+		
+		if(userDescription.length() > 1){
+			shareText = String.format(
 				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
 						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
 						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
@@ -529,10 +505,21 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 						+ "User notes:  %s\n", userName, cacheName,
 				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
 				cacheTerrain, cacheAwesomeness, cacheSize, userDescription);
+		}
+		else{
+			shareText = String.format(
+				"%s found a new cache using GeoBook!\n\n" + "Cache Name:  %s\n"
+						+ "Placed By:  %s\n" + "Coordinates:  %2.6f, %2.6f\n\n"
+						+ "Difficulty:  %1.1f\n" + "Terrain:  %1.1f\n"
+						+ "Awesomeness:  %1.1f\n" + "Size:  %1.1f\n\n"
+						, userName, cacheName,
+				cachePlacedBy, cacheLat, cacheLng, cacheDifficulty,
+				cacheTerrain, cacheAwesomeness, cacheSize);
+		}
 
 		// Build the share intent
 		Intent shareIntent;
-		if (mCurrentPhoto.exists()) {
+		if (mCurrentPhoto != null && mCurrentPhoto.exists()) {
 			Uri contentUri = Uri.fromFile(mCurrentPhoto);
 			shareIntent = ShareCompat.IntentBuilder.from(CacheView.this)
 					.setStream(contentUri).setText(shareText)
@@ -562,4 +549,42 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		return imageFileName;
 	}
+
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//
+//		// saves found caches if it exists && target
+//		boolean cacheIsInFound = false;
+//		int size = data.foundCaches.size();
+//		for (int i = 0; i < size && !cacheIsInFound; i++) {
+//			if (data.target.equals(data.foundCaches.get(i))) {
+//				data.foundCaches.set(i, data.target);
+//				cacheIsInFound = true;
+//			}
+//		}
+//		// adds the cache to found if it did not exist and you are within range
+//		if (!cacheIsInFound && cacheHasBeenFound) {
+//			data.foundCaches.add(data.target);
+//			cacheIsInFound = true;
+//		}
+//
+//		// overwrites the found caches only if cacheIsInFound
+//		if (cacheIsInFound) {
+//			DataParser found = new DataParser(
+//					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
+//			found.overwriteAll(CacheView.this.data.foundCaches);
+//			found.close();
+//		}
+//
+//		// overwrites target cache always
+//		DataParser target_dp = new DataParser(
+//				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
+//
+//		ArrayList<Cache> local_target = new ArrayList<Cache>();
+//		local_target.add(data.target);
+//		target_dp.overwriteAll(local_target);
+//		target_dp.close();
+//	}
+
 }

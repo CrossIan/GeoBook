@@ -337,8 +337,8 @@ public class Map extends FragmentActivity {
 
 			Cache target = caches.getCache(marker);
 
-			// Map.this.caches.target = cache;
-			// extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
+			Map.this.caches.target = target;
+			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
 			extra.putDouble("LAT", target.getLat());
 			extra.putDouble("LNG", target.getLng());
 			extra.putString("NAME", target.getName());
