@@ -332,16 +332,6 @@ public class Map extends FragmentActivity {
 			Cache target = caches.getCache(marker);
 
 			Map.this.caches.target = target;
-			extra.putParcelable(Data.CACHE_DATA, Map.this.caches);
-			extra.putDouble("LAT", target.getLat());
-			extra.putDouble("LNG", target.getLng());
-			extra.putString("NAME", target.getName());
-			extra.putString("PLACEDBY", target.getCreator());
-			extra.putString("DATE", "");
-			extra.putDouble("DIFF", target.getDifficulty());
-			extra.putDouble("TERR", target.getTerrain());
-			extra.putDouble("AWES", target.getRating());
-			extra.putDouble("SIZE", target.getContainer());
 			extra.putParcelable("USER", (Parcelable) currentPerson);
 			Map.this.caches.target = target;
 
@@ -439,8 +429,8 @@ public class Map extends FragmentActivity {
 			for (int i = 0; i < markers.size(); i++) {
 				if (caches.target.equals(markers.get(i))) {
 					markers.remove(i);
-					this.gMap.addMarker(createMarkerOptions(caches.target)
-							.icon(colorMarker));
+					markers.add(this.gMap.addMarker(createMarkerOptions(
+							caches.target).icon(colorMarker)));
 				}
 			}
 
