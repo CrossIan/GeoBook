@@ -1,7 +1,6 @@
 package com.cse.geobook;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -10,8 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 
 public class Login extends Activity implements OnClickListener {
@@ -20,21 +17,6 @@ public class Login extends Activity implements OnClickListener {
 	// Google+ resources
 	// -------------------------------------------------------*
 	private static final String TAG = "Login.java";
-	// A magic number we will use to know that our sign-in error
-	// resolution activity has completed.
-	private static final int OUR_REQUEST_CODE = 49404;
-	// The core Google+ client.
-	private PlusClient mPlusClient;
-	// A flag to stop multiple dialogues appearing for the user.
-	private boolean mResolveOnFail;
-	// We can store the connection result from a failed connect()
-	// attempt in order to make the application feel a bit more
-	// responsive for the user.
-	private ConnectionResult mConnectionResult;
-	// A progress dialog to display when the user is connecting in
-	// case there is a delay in any of the dialogs being ready.
-	private ProgressDialog mConnectionProgressDialog;
-
 	// -------------------------------------------------------*
 	// Generic resources
 	// -------------------------------------------------------*
@@ -56,17 +38,6 @@ public class Login extends Activity implements OnClickListener {
 		revokeAccessButton.setOnClickListener(this);
 		bypassButton = (Button) findViewById(R.id.bypass_button);
 		bypassButton.setOnClickListener(this);
-	}
-
-	/*
-	 * Gets user Google+ profile info
-	 */
-	private void retrieveProfileInfo() {
-		currentPerson = mPlusClient.getCurrentPerson();
-		if (currentPerson.getName().hasGivenName())
-			currentUserName = currentPerson.getName().getGivenName();
-		else
-			currentUserName = "Teddy Tester";
 	}
 
 	// Define click behavior
