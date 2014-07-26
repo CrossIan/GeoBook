@@ -66,8 +66,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Data for this cache
 	public Person currentPerson;
-	public String userName, cacheName, cachePlacedBy, cacheDateFound,
-			userDescription;
+	public String userName, cacheName, cachePlacedBy, cacheDateFound;
+	public String userDescription;
+
 	public Double cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
 			cacheAwesomeness, cacheSize, distanceFrom;
 	public String mCurrentPhotoPath; // The absolute path to the caches photo
@@ -84,6 +85,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	EditText userDescriptionText;
 	Button saveCacheButton, shareCacheButton, captureImageButton,
 			foundCacheButton;
+	RatingBar userRatingBar;
 
 	final Double EPISILON = .00001;
 
@@ -115,6 +117,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheSizeText = (TextView) this.findViewById(R.id.cache_size);
 		userDescriptionText = (EditText) this
 				.findViewById(R.id.user_description);
+		userRatingBar = (RatingBar) findViewById(R.id.user_rating_bar);
 
 		// Get extras from originating activity
 		this.getExtras();
@@ -228,6 +231,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheTerrain = data.target.getTerrain();
 		cacheAwesomeness = data.target.getRating();
 		cacheSize = data.target.getContainer();
+		userDescription = data.target.getDescription();
 
 		// Set widget text
 		cacheNameText.setText(cacheName);
@@ -238,6 +242,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
 		cacheSizeText.setText(Double.toString(cacheSize));
 
+		userRatingBar.setRating(cacheAwesomeness.floatValue());
+		userDescriptionText.setText(userDescription);
 		// TODO: set PHOTO
 		if (this.data.target.getPhoto().length() > 0) {
 			// Bitmap imageBitmap = new Bitmap();
