@@ -25,7 +25,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -49,7 +48,6 @@ public class Map extends FragmentActivity {
 	ArrayList<Marker> markers;
 	BitmapDescriptor colorMarker;
 	private static boolean startUp;
-	private static final String TAG = "Map.java";
 	private Cache oldTarget;
 
 	// private final double MAX_DISTANCEFROMCACHE = 25;
@@ -100,7 +98,6 @@ public class Map extends FragmentActivity {
 		clickListener listener = new clickListener();
 		this.gMap.setOnMarkerClickListener(listener);
 		this.gMap.setOnMapClickListener(listener);
-		this.gMap.setOnMapLongClickListener(listener);
 		this.gMap.setOnInfoWindowClickListener(listener);
 	}
 
@@ -248,8 +245,8 @@ public class Map extends FragmentActivity {
 	 * class to implement all Listeners
 	 */
 	private class clickListener implements OnMapClickListener,
-			OnMapLongClickListener, OnMarkerClickListener,
-			OnInfoWindowClickListener, OnMyLocationButtonClickListener {
+			OnMarkerClickListener, OnInfoWindowClickListener,
+			OnMyLocationButtonClickListener {
 
 		@Override
 		public void onMapClick(LatLng arg0) {
@@ -268,51 +265,6 @@ public class Map extends FragmentActivity {
 				}
 			}
 			return true;
-		}
-
-		@Override
-		public void onMapLongClick(final LatLng pos) {
-
-			/** dialog click listener ONLY for the below alert dialog box */
-			class dialogClickListener implements
-					DialogInterface.OnClickListener {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						Cache cache = new Cache();
-						cache.lat(String.valueOf(pos.latitude));
-						cache.lng(String.valueOf(pos.longitude));
-						cache.name("default");
-						cache.description("");
-						Map.this.caches.foundCaches.add(cache);
-						Map.this.gMap.addMarker(createMarkerOptions(cache));
-						// Todo place in hash map
-						DataParser found = new DataParser(
-								getApplicationContext(), Cache.FOUND_CACHES);
-						found.overwriteAll(Map.this.caches.foundCaches);
-						found.close();
-
-						break;
-					case DialogInterface.BUTTON_NEUTRAL:
-						// Todo
-						break;
-					}
-				}
-			}
-			dialogClickListener listener = new dialogClickListener();
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(Map.this);
-			builder.setMessage(R.string.confirm_new_cache)
-					.setTitle(R.string.new_cache)
-					.setPositiveButton(R.string.cache_option_yes, listener)
-
-					.setNegativeButton(R.string.cache_option_no, listener);
-
-			AlertDialog dialog = builder.create();
-			dialog.show();
-
 		}
 
 		@Override
