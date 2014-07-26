@@ -168,13 +168,11 @@ public class CacheList extends Activity implements OnItemClickListener,
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		int zoom = 16;
 
-		Data data = new Data(this.caches.foundCaches, this.caches.foundCaches,
-				this.caches.allCaches.get(position), zoom);
+		caches.target = caches.getCache(titles[position]);
 
 		Bundle extras_new = new Bundle();
-		extras_new.putParcelable(Data.CACHE_DATA, data);
+		extras_new.putParcelable(Data.CACHE_DATA, caches);
 
 		Intent cacheView = new Intent("android.intent.action.CACHEVIEW");
 		cacheView.putExtras(extras_new);

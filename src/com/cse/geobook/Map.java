@@ -50,6 +50,7 @@ public class Map extends FragmentActivity {
 	BitmapDescriptor colorMarker;
 	private static boolean startUp;
 	private static final String TAG = "Map.java";
+	private Cache oldTarget;
 
 	// private final double MAX_DISTANCEFROMCACHE = 25;
 
@@ -89,6 +90,7 @@ public class Map extends FragmentActivity {
 			caches.target = tempTarget;
 			caches.zoom = zoom;
 		}
+		oldTarget = caches.target;
 	}
 
 	/**
@@ -339,7 +341,7 @@ public class Map extends FragmentActivity {
 			extra.putParcelable("USER", (Parcelable) currentPerson);
 
 			cacheView.putExtras(extra);
-
+			Map.this.markers.remove(marker);
 			// remove once above is working
 			Map.this.startActivity(cacheView);
 		}
@@ -487,34 +489,55 @@ public class Map extends FragmentActivity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
 		super.onNewIntent(intent);
-		File targetCacheFile = getApplicationContext().getFileStreamPath(
-				Cache.TARGET_CACHE);
 
-		if (targetCacheFile.exists()) {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
-			caches.target = target.read().get(0);
-			target.close();
-
-			// if target exists && if target is in on the map, remove marker and
-			// replace with new values
-
-			// assumes that the cache is already added to the found caches in
-			// cacheView
-			for (int i = 0; i < markers.size(); i++) {
-				if (caches.target.equals(markers.get(i))) {
-					markers.remove(i);
-					markers.add(this.gMap.addMarker(createMarkerOptions(
-							caches.target).icon(colorMarker)));
-				}
-			}
-
-		} else {
-			caches.target = new Cache();
-			caches.target.name("DEFAULT");
-		}
+		setIntent(intent);
+		this.extras = intent.getExtras();
+		this.caches = this.extras.getParcelable(Data.CACHE_DATA);
+		// old marker is removed in onInfoWindow Click !!
+		markers.add(this.gMap.addMarker(createMarkerOptions(caches.target)
+				.icon(colorMarker)));
+		this.save();
 	}
 
+	/**
+	 * saves found and target if target has been updated
+	 */
+	private void save() {
+		if (!oldTarget.equals(caches.target)) {
+			// saves found caches if it exists && target
+			boolean cacheIsInFound = false;
+			int size = caches.foundCaches.size();
+			for (int i = 0; i < size; i++) {
+				if (caches.target.equals(caches.foundCaches.get(i))) {
+					caches.foundCaches.set(i, caches.target);
+					cacheIsInFound = true;
+				}
+			}
+			// adds the cache to found if it did not exist and you are within
+			// range
+			if (!cacheIsInFound) {
+				caches.foundCaches.add(caches.target);
+				cacheIsInFound = true;
+			}
+
+			// overwrites the found caches only if cacheIsInFound
+			if (cacheIsInFound) {
+				DataParser found = new DataParser(this.getApplicationContext(),
+						Cache.FOUND_CACHES);
+				found.overwriteAll(this.caches.foundCaches);
+				found.close();
+			}
+
+			// overwrites target cache always
+			DataParser target_dp = new DataParser(getApplicationContext(),
+					Cache.TARGET_CACHE);
+
+			ArrayList<Cache> local_target = new ArrayList<Cache>();
+			local_target.add(caches.target);
+			target_dp.overwriteAll(local_target);
+			target_dp.close();
+		}
+
+	}
 }

@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
@@ -26,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -203,6 +203,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	private void getExtras() {
 		Bundle extras = this.getIntent().getExtras();
 		this.data = extras.getParcelable(Data.CACHE_DATA);
+
+		// make sure found caches is showing up
+		data.target = data.getCache(data.target);
 
 		cacheName = data.target.getName();
 		cachePlacedBy = data.target.getCreator();
@@ -551,57 +554,30 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		return imageFileName;
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		// saves found caches if it exists && target
-		this.save();
-		boolean cacheIsInFound = false;
-		int size = data.foundCaches.size();
-		for (int i = 0; i < size; i++) {
-			if (data.target.equals(data.foundCaches.get(i))) {
-				data.foundCaches.set(i, data.target);
-				cacheIsInFound = true;
-			}
-		}
-		// adds the cache to found if it did not exist and you are within range
-		if (!cacheIsInFound && cacheHasBeenFound) {
-			data.foundCaches.add(data.target);
-			cacheIsInFound = true;
+	private void update() {
+		if (this.cacheHasBeenFound) {
+			data.target
+					.description(((TextView) findViewById(R.id.user_description))
+							.getText().toString());
+			data.target.photo(this.getPhotoName());
+			data.target.rating(String
+					.valueOf(((RatingBar) findViewById(R.id.user_rating_bar))
+							.getRating()));
 		}
 
-		// overwrites the found caches only if cacheIsInFound
-		if (cacheIsInFound) {
-			DataParser found = new DataParser(
-					CacheView.this.getApplicationContext(), Cache.FOUND_CACHES);
-			found.overwriteAll(CacheView.this.data.foundCaches);
-			found.close();
-		}
-
-		// overwrites target cache always
-		DataParser target_dp = new DataParser(
-				CacheView.this.getApplicationContext(), Cache.TARGET_CACHE);
-
-		ArrayList<Cache> local_target = new ArrayList<Cache>();
-		local_target.add(data.target);
-		target_dp.overwriteAll(local_target);
-		target_dp.close();
-
-	}
-
-	private void save() {
-		data.target
-				.description(((TextView) findViewById(R.id.user_description))
-						.getText().toString());
-		data.target.photo(this.getPhotoName());
 	}
 
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
-		Intent map = new Intent("android.intent.action.MAP");
 
+		this.update();
+
+		Intent map = new Intent("android.intent.action.MAP");
+		Bundle extras = new Bundle();
+		extras.putParcelable(Data.CACHE_DATA, data);
+		map.putExtras(extras);
 		// Finish login activity and move to map view
 		this.startActivity(map);
 		this.finish();

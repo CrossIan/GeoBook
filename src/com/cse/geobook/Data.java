@@ -159,20 +159,31 @@ public class Data implements Parcelable {
 		Collections.sort(foundCaches, comparator);
 	}
 
+	public Cache getCache(Cache c) {
+		return getCache(c.getName());
+	}
+
 	public Cache getCache(Marker m) {
+		return getCache(m.getTitle());
+	}
+
+	public Cache getCache(String s) {
 		int i = 0;
 		Cache result = null;
 		int size = foundCaches.size();
 		boolean searching = true;
 		while (searching && i < size) {
-			if (this.foundCaches.get(i).getName().equals(m.getTitle())) {
+			if (this.foundCaches.get(i).getName().equals(s)) {
 				result = this.allCaches.get(i);
 				searching = false;
 			}
+			i++;
 		}
+
+		i = 0;
 		size = this.allCaches.size();
 		while (searching && i < size) {
-			if (this.allCaches.get(i).getName().equals(m.getTitle())) {
+			if (this.allCaches.get(i).getName().equals(s)) {
 				result = this.allCaches.get(i);
 				searching = false;
 			}
