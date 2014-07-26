@@ -39,6 +39,7 @@ public class CacheList extends Activity implements OnItemClickListener,
 		lv = (ListView) findViewById(R.id.ListView01);
 		found_cb = (CheckBox) findViewById(R.id.show_found_check);
 		all_cb = (CheckBox) findViewById(R.id.show_not_found_check);
+
 		found_cb.setOnClickListener(this);
 		all_cb.setOnClickListener(this);
 

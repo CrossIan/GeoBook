@@ -168,4 +168,12 @@ public class Cache {
 
 	}
 
+	public boolean is(Cache c) {
+		return this.getName().equals(c.getName())
+				&& this.getPhoto().equals(c.getPhoto())
+				&& this.getDescription().equals(c.getDescription())
+				&& this.getRating() == c.getRating();
+
+	}
+
 }

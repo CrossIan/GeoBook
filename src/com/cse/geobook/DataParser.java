@@ -53,7 +53,6 @@ public class DataParser {
 					stream));
 
 			this.reader = readr;
-			Log.d("data", "persistent data read in, this is desireable");
 		} catch (FileNotFoundException e) {
 
 			e.printStackTrace();
@@ -65,8 +64,6 @@ public class DataParser {
 			BufferedReader readr = new BufferedReader(new InputStreamReader(
 					stream));
 			this.reader = readr;
-			Log.d("data", "static data read in, this is not desireable");
-
 		}
 	}
 
@@ -82,7 +79,7 @@ public class DataParser {
 			line += cache.get(i) + ",";
 		}
 		line += cache.get(Cache.numberOfdescriptors - 1);
-
+		line += "\n";
 		try {
 			stream.write(line.getBytes());
 		} catch (IOException e) {
@@ -172,6 +169,7 @@ public class DataParser {
 				// Log.d(TAG,Integer.toString(counter));
 			}
 		}
+		Log.d("data", "reading");
 		return cache_array;
 	}
 

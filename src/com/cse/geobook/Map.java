@@ -423,6 +423,9 @@ public class Map extends FragmentActivity {
 			parser.close();
 		} else {
 			cacheList = new ArrayList<Cache>();
+			if (fileName.equals(Cache.TARGET_CACHE)) {
+				cacheList.add(new Cache());
+			}
 		}
 		return cacheList;
 	}
@@ -504,7 +507,7 @@ public class Map extends FragmentActivity {
 	 * saves found and target if target has been updated
 	 */
 	private void save() {
-		if (!oldTarget.equals(caches.target)) {
+		if (!oldTarget.is(caches.target)) {
 			// saves found caches if it exists && target
 			boolean cacheIsInFound = false;
 			int size = caches.foundCaches.size();

@@ -118,6 +118,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 		// Get extras from originating activity
 		this.getExtras();
+		this.initData();
 		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
@@ -204,6 +205,17 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		Bundle extras = this.getIntent().getExtras();
 		this.data = extras.getParcelable(Data.CACHE_DATA);
 
+		currentPerson = extras.getParcelable("USER");
+		if (currentPerson != null)
+			userName = currentPerson.getName().getGivenName();
+		else
+			userName = "Teddy Tester";
+		distanceFrom = extras.getDouble("DISTANCE");
+
+	}
+
+	private void initData() {
+
 		// make sure found caches is showing up
 		data.target = data.getCache(data.target);
 
@@ -216,12 +228,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheTerrain = data.target.getTerrain();
 		cacheAwesomeness = data.target.getRating();
 		cacheSize = data.target.getContainer();
-		currentPerson = extras.getParcelable("USER");
-		if (currentPerson != null)
-			userName = currentPerson.getName().getGivenName();
-		else
-			userName = "Teddy Tester";
-		distanceFrom = extras.getDouble("DISTANCE");
 
 		// Set widget text
 		cacheNameText.setText(cacheName);
@@ -231,6 +237,13 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		cacheTerrainText.setText(Double.toString(cacheTerrain));
 		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
 		cacheSizeText.setText(Double.toString(cacheSize));
+
+		// TODO: set PHOTO
+		if (this.data.target.getPhoto().length() > 0) {
+			// Bitmap imageBitmap = new Bitmap();
+			// cacheThumbnail.setImageBitmap(imageBitmap);
+		}
+
 	}
 
 	/*
@@ -582,7 +595,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		this.startActivity(map);
 		this.finish();
 		finish();
-
 	}
 
 }
