@@ -446,7 +446,7 @@ public class Map extends FragmentActivity {
 
 		File file = getApplicationContext().getFileStreamPath(fileName);
 		ArrayList<Cache> cacheList = null;
-		if (file.exists()) {
+		if (file.exists() || fileName.equals(Cache.ALL_CACHES)) {
 			DataParser parser = new DataParser(getApplicationContext(),
 					fileName);
 			cacheList = parser.read();

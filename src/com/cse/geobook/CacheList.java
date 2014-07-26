@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -13,7 +14,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 public class CacheList extends Activity implements OnItemClickListener,
-		android.widget.AdapterView.OnItemSelectedListener {
+		android.widget.AdapterView.OnItemSelectedListener, OnClickListener {
 	static int startCacheNameID = 900;
 
 	Data caches;
@@ -38,6 +39,7 @@ public class CacheList extends Activity implements OnItemClickListener,
 		lv = (ListView) findViewById(R.id.ListView01);
 		found_cb = (CheckBox) findViewById(R.id.show_found_check);
 		all_cb = (CheckBox) findViewById(R.id.show_not_found_check);
+		found_cb.setOnClickListener(this);
 
 		// Add options to sort spinner
 		sortOptions = new String[5];
@@ -177,6 +179,7 @@ public class CacheList extends Activity implements OnItemClickListener,
 		cacheView.putExtras(extras_new);
 		this.startActivity(cacheView);
 		this.finish();
+
 	}
 
 	@Override
@@ -213,6 +216,17 @@ public class CacheList extends Activity implements OnItemClickListener,
 	public void onNothingSelected(AdapterView<?> parent) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.show_found_check:
+		case R.id.show_not_found_check:
+			this.setTitlesBasedOnCheckBox();
+			this.updateList();
+			break;
+		}
 	}
 
 }
