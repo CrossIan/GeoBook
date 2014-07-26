@@ -410,38 +410,6 @@ public class Map extends FragmentActivity {
 			return false;
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		File targetCacheFile = getApplicationContext().getFileStreamPath(
-				Cache.TARGET_CACHE);
-
-		if (targetCacheFile.exists()) {
-			DataParser target = new DataParser(getApplicationContext(),
-					Cache.TARGET_CACHE);
-			caches.target = target.read().get(0);
-			target.close();
-
-			// if target exists && if target is in on the map, remove marker and
-			// replace with new values
-
-			// assumes that the cache is already added to the found caches in
-			// cacheView
-			for (int i = 0; i < markers.size(); i++) {
-				if (caches.target.equals(markers.get(i))) {
-					markers.remove(i);
-					markers.add(this.gMap.addMarker(createMarkerOptions(
-							caches.target).icon(colorMarker)));
-				}
-			}
-
-		} else {
-			caches.target = new Cache();
-			caches.target.name("DEFAULT");
-		}
-
-	}
-
 	private ArrayList<Cache> readFile(String fileName) {
 
 		File file = getApplicationContext().getFileStreamPath(fileName);
@@ -501,7 +469,7 @@ public class Map extends FragmentActivity {
 				String[] addressLine = addresses.get(0).getAddressLine(1)
 						.split(",");
 				currentCity = addressLine[0];
-				if (addressLine.length > 1)
+				if (addressLine.length > 0)
 					currentState = addressLine[1].substring(1, 3);
 				else
 					currentState = "";
@@ -510,10 +478,43 @@ public class Map extends FragmentActivity {
 			e.printStackTrace();
 		}
 
-		if (currentState.length() > 1)
+		if (currentState.length() > 0)
 			Toast.makeText(Map.this, currentCity + ", " + currentState,
 					Toast.LENGTH_SHORT).show();
 		else
 			Toast.makeText(Map.this, currentCity, Toast.LENGTH_SHORT).show();
 	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		File targetCacheFile = getApplicationContext().getFileStreamPath(
+				Cache.TARGET_CACHE);
+
+		if (targetCacheFile.exists()) {
+			DataParser target = new DataParser(getApplicationContext(),
+					Cache.TARGET_CACHE);
+			caches.target = target.read().get(0);
+			target.close();
+
+			// if target exists && if target is in on the map, remove marker and
+			// replace with new values
+
+			// assumes that the cache is already added to the found caches in
+			// cacheView
+			for (int i = 0; i < markers.size(); i++) {
+				if (caches.target.equals(markers.get(i))) {
+					markers.remove(i);
+					markers.add(this.gMap.addMarker(createMarkerOptions(
+							caches.target).icon(colorMarker)));
+				}
+			}
+
+		} else {
+			caches.target = new Cache();
+			caches.target.name("DEFAULT");
+		}
+	}
+
 }

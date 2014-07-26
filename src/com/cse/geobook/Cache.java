@@ -2,6 +2,8 @@ package com.cse.geobook;
 
 import java.util.ArrayList;
 
+import com.google.android.gms.maps.model.Marker;
+
 public class Cache {
 	ArrayList<String> cache;
 	int size;
@@ -159,6 +161,11 @@ public class Cache {
 	@Override
 	public boolean equals(Object obj) {
 		return this.getName().equals(obj.toString());
+	}
+
+	public boolean equals(Marker m) {
+		return this.getName().equals(m.getTitle());
+
 	}
 
 }

@@ -554,11 +554,11 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		// saves found caches if it exists && target
+		this.save();
 		boolean cacheIsInFound = false;
 		int size = data.foundCaches.size();
-		for (int i = 0; i < size && !cacheIsInFound; i++) {
+		for (int i = 0; i < size; i++) {
 			if (data.target.equals(data.foundCaches.get(i))) {
 				data.foundCaches.set(i, data.target);
 				cacheIsInFound = true;
@@ -586,6 +586,27 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		local_target.add(data.target);
 		target_dp.overwriteAll(local_target);
 		target_dp.close();
+
+	}
+
+	private void save() {
+		data.target
+				.description(((TextView) findViewById(R.id.user_description))
+						.getText().toString());
+		data.target.photo(this.getPhotoName());
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent map = new Intent("android.intent.action.MAP");
+
+		// Finish login activity and move to map view
+		this.startActivity(map);
+		this.finish();
+		finish();
+
 	}
 
 }

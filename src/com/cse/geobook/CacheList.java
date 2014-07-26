@@ -40,6 +40,7 @@ public class CacheList extends Activity implements OnItemClickListener,
 		found_cb = (CheckBox) findViewById(R.id.show_found_check);
 		all_cb = (CheckBox) findViewById(R.id.show_not_found_check);
 		found_cb.setOnClickListener(this);
+		all_cb.setOnClickListener(this);
 
 		// Add options to sort spinner
 		sortOptions = new String[5];
@@ -147,13 +148,13 @@ public class CacheList extends Activity implements OnItemClickListener,
 			}
 
 		} else if (all_cb.isChecked()) { // all
-			size = found_titles.length;
+			size = all_titles.length;
 			titles = new String[size];
 			for (int i = 0; i < size; i++) {
 				titles[i] = all_titles[i];
 			}
 		} else if (found_cb.isChecked()) { // found
-			size = all_titles.length;
+			size = found_titles.length;
 			titles = new String[size];
 			for (int i = 0; i < size; i++) {
 				titles[i] = found_titles[i];
@@ -220,13 +221,10 @@ public class CacheList extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.show_found_check:
-		case R.id.show_not_found_check:
-			this.setTitlesBasedOnCheckBox();
-			this.updateList();
-			break;
-		}
+
+		this.setTitlesBasedOnCheckBox();
+		this.updateList();
+
 	}
 
 }
