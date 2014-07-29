@@ -26,7 +26,7 @@ public class Profile extends Activity {
 	        currentState;
 	private ImageView profilePicView;
 	private String profilePicUrl;
-	private TextView userNameText, locationText;
+	private TextView userNameText, locationText, progressText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class Profile extends Activity {
 		this.profilePicView = (ImageView) this.findViewById(R.id.profile_pic);
 		this.userNameText = (TextView) this.findViewById(R.id.user_name);
 		this.locationText = (TextView) this.findViewById(R.id.location_text);
+		this.progressText = (TextView) this.findViewById(R.id.progress_text);
 
 		// Set widget values
 		this.userNameText.setText(this.userName);
@@ -80,6 +81,7 @@ public class Profile extends Activity {
 
 		this.progressBar.setProgress(numFound);
 		this.progressBar.setMax(numTotal);
+		this.progressText.setText(Double.toString(numFound/numTotal) + "% Caches Found");
 	}
 
 	private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {

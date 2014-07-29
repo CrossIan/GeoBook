@@ -322,6 +322,7 @@ public class Map extends FragmentActivity {
 			extra.putParcelable("USER", (Parcelable) currentPerson);
 			extra.putString("CITY", currentCity);
 			extra.putString("STATE", currentState);
+			extra.putParcelable(Data.CACHE_DATA, this.caches);
 			profileIntent.putExtras(extra);
 
 			// Start profile activity
