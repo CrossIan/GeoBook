@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -120,9 +121,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		userRatingBar = (RatingBar) findViewById(R.id.user_rating_bar);
 
 		// Get extras from originating activity
+		mCurrentPhotoPath = "";
 		this.getExtras();
 		this.initData();
-		mCurrentPhotoPath = "";
 
 		// Determine if we're close enough to have found the cache
 		if (distanceFrom <= distThreshold) {
@@ -248,6 +249,13 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		if (this.data.target.getPhoto().length() > 0) {
 			// Bitmap imageBitmap = new Bitmap();
 			// cacheThumbnail.setImageBitmap(imageBitmap);
+			String photoName = this.data.target.getPhoto();
+			String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/Geobook/";
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+			Bitmap bitmap = BitmapFactory.decodeFile(photoPath + photoName, options);
+			cacheThumbnail.setImageBitmap(bitmap);
 		}
 
 	}
