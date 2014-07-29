@@ -63,5 +63,13 @@
     <!-- STRINGS USED IN ListView -->
     <string name="title_activity_listView">List View</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="photo">Photo</string>
+    <string name="share">Share</string>
+    <string name="foundit">Found it!</string>
+    <string name="geobook">GeoBook</string>
+    <string name="signin_hint">Sign in to get started</string>
+    <string name="bypass">Bypass</string>
+    <string name="signout">Signout</string>
+    <string name="revokeaccess">Revoke Access</string>
 
 </resources>
