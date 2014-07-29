@@ -45,7 +45,10 @@ public class Profile extends Activity {
 
 		// Set widget values
 		userNameText.setText(userName);
-		locationText.setText(currentCity + ", " + this.currentState);
+		if(this.currentState.equals(""))
+			locationText.setText(currentCity);
+		else
+			locationText.setText(currentCity + ", " + this.currentState);
 
 		profilePicUrl = profilePicUrl.substring(0,
 				profilePicUrl.length() - 2)
