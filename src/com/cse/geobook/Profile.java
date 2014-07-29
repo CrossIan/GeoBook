@@ -44,11 +44,12 @@ public class Profile extends Activity {
 
 		// Set widget values
 <<<<<<< HEAD
-		userNameText.setText(userName);
-		if(this.currentState.equals(""))
-			locationText.setText(currentCity);
-		else
-			locationText.setText(currentCity + ", " + this.currentState);
+		this.userNameText.setText(this.userName);
+		if(this.currentState.equals("")) {
+	        this.locationText.setText(this.currentCity);
+        } else {
+	        this.locationText.setText(this.currentCity + ", " + this.currentState);
+        }
 =======
 		this.userNameText.setText(this.userName);
 		this.locationText.setText(this.currentCity + ", " + this.currentState);
@@ -77,10 +78,9 @@ public class Profile extends Activity {
 	private void setProgress() {
 		int numFound = this.caches.foundCaches.size();
 		int numTotal = this.caches.allCaches.size();
-		int percentFound = (numFound / numTotal) * 100;
 
-		this.progressBar.setProgress(percentFound);
-		this.progressBar.setMax(100);
+		this.progressBar.setProgress(numFound);
+		this.progressBar.setMax(numTotal);
 	}
 
 	private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
