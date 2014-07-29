@@ -44,7 +44,7 @@
     <!-- STRINGS USED IN Profile -->
     <string name="title_activity_profile">User Profile</string>
     <string name="userProfileImageDescription">User\'s profile picture</string>
-    <string name="cacheProgress">X of Y Caches</string>
+    <string name="cacheProgress">% Caches Found</string>
     <string name="lastCacheFound">Cache Name</string>
     <string name="lastCacheDate">01/11/2014</string>
     <string name="lastCacheDifficulty">Hard</string>
