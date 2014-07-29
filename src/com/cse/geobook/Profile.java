@@ -22,9 +22,9 @@ public class Profile extends Activity {
 	Data caches;
 	private Bundle extra;
 	private Person currentPerson;
-	private String userName, cacheName, cachePlacedBy, dateFound, currentCity,
+	private String userName, currentCity,
 	        currentState;
-	private ImageView profilePicView, cachePicView;
+	private ImageView profilePicView;
 	private String profilePicUrl;
 	private TextView userNameText, locationText;
 
@@ -38,22 +38,20 @@ public class Profile extends Activity {
 		this.progressBar = (ProgressBar) this
 		        .findViewById(R.id.cache_progress_bar);
 		this.profilePicView = (ImageView) this.findViewById(R.id.profile_pic);
-		this.cachePicView = (ImageView) this.findViewById(R.id.cache_image);
 		this.userNameText = (TextView) this.findViewById(R.id.user_name);
 		this.locationText = (TextView) this.findViewById(R.id.location_text);
 
 		// Set widget values
-<<<<<<< HEAD
 		this.userNameText.setText(this.userName);
 		if(this.currentState.equals("")) {
 	        this.locationText.setText(this.currentCity);
         } else {
 	        this.locationText.setText(this.currentCity + ", " + this.currentState);
         }
-=======
+
 		this.userNameText.setText(this.userName);
 		this.locationText.setText(this.currentCity + ", " + this.currentState);
->>>>>>> branch 'working-2' of https://github.com/CrossIan/GeoBook
+
 
 		this.profilePicUrl = this.profilePicUrl.substring(0,
 		        this.profilePicUrl.length() - 2) + 400;
@@ -71,6 +69,7 @@ public class Profile extends Activity {
 		this.userName = this.currentPerson.getName().getGivenName();
 		this.currentCity = this.extra.getString("CITY");
 		this.currentState = this.extra.getString("STATE");
+		this.caches = this.extra.getParcelable(Data.CACHE_DATA);
 
 		this.profilePicUrl = this.currentPerson.getImage().getUrl();
 	}
