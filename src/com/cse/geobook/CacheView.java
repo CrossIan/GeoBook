@@ -1,6 +1,7 @@
 package com.cse.geobook;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -246,8 +248,34 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		userDescriptionText.setText(userDescription);
 		// TODO: set PHOTO
 		if (this.data.target.getPhoto().length() > 0) {
+
+			File path = new File(
+					Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					"Geobook/");
+			if (!path.mkdirs()) {
+				Log.e(TAG, "Directory not created");
+			}
+
+			// Get the new photos name and add to path
+			String fileName = getPhotoName();
+			File file = new File(path, fileName);
+			Log.d(TAG, file.getAbsolutePath());
+			// Write image to file
+			try {
+				FileInputStream fOut = new FileInputStream(file);
+				Bitmap bitmap = BitmapFactory
+						.decodeFile(file.getAbsolutePath());
+				// Drawable d = new BitmapDrawable(getResources(), myBitmap);
+				cacheThumbnail.setImageBitmap(bitmap);
+
+				fOut.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			// Bitmap imageBitmap = new Bitmap();
 			// cacheThumbnail.setImageBitmap(imageBitmap);
+
 		}
 
 	}
