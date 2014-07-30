@@ -68,7 +68,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Data for this cache
 	public Person currentPerson;
-	public String userName, cacheName, cachePlacedBy, cacheDateFound;
+	public String userName, cacheName, cachePlacedBy, cacheDateFound,
+			cachePhoto;
 	public String userDescription;
 
 	public Double cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
@@ -238,7 +239,16 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// Set widget text
 		cacheNameText.setText(cacheName);
 		cachePlacedByText.setText("Placed by: \"" + cachePlacedBy + "\"");
-		cacheDateFoundText.setText("Date found: " + cacheDateFound);
+
+		String[] date = cacheDateFound.split("_");
+		if (date.length > 2) {
+
+			String tempd = date[2];
+			String realDate = tempd.substring(4, 6) + "/"
+					+ tempd.substring(6, 8) + "/" + tempd.substring(0, 4);
+			this.cacheDateFoundText.setText(realDate);
+		}
+
 		cacheDifficultyText.setText(Double.toString(cacheDifficulty));
 		cacheTerrainText.setText(Double.toString(cacheTerrain));
 		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
@@ -472,7 +482,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			String fileName = getPhotoName();
 			File file = new File(path, fileName);
 			Log.d(TAG, file.getAbsolutePath());
-			data.target.photo(fileName);
+			cachePhoto = fileName;
+
 			// Write image to file
 			try {
 				FileOutputStream fOut = new FileOutputStream(file);
@@ -508,6 +519,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 				}
 			}
 		}
+		updateUI();
 
 	}
 
@@ -601,6 +613,15 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		String imageFileName = "Geobook_PNG_" + timeStamp + ".png";
 
 		return imageFileName;
+	}
+
+	private void updateUI() {
+		data.target.photo(cachePhoto);
+		String[] date = cachePhoto.split("_");
+		String tempd = date[2];
+		String realDate = tempd.substring(4, 6) + "/" + tempd.substring(6, 8)
+				+ "/" + tempd.substring(0, 4);
+		this.cacheDateFoundText.setText(realDate);
 	}
 
 	private void update() {
