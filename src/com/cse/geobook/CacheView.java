@@ -253,12 +253,12 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 					Environment
 							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
 					"Geobook/");
-			if (!path.mkdirs()) {
-				Log.e(TAG, "Directory not created");
+			if (!path.isDirectory()) {
+				Log.e(TAG, "Directory does not exist");
 			}
 
 			// Get the new photos name and add to path
-			String fileName = getPhotoName();
+			String fileName = data.target.getPhoto();
 			File file = new File(path, fileName);
 			Log.d(TAG, file.getAbsolutePath());
 			// Write image to file
@@ -414,6 +414,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// Get the new photos name and add to path
 			String fileName = getPhotoName();
 			File file = new File(path, fileName);
+			data.target.photo(fileName);
 			Log.d(TAG, file.getAbsolutePath());
 			// Write image to file
 			try {
@@ -471,6 +472,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			String fileName = getPhotoName();
 			File file = new File(path, fileName);
 			Log.d(TAG, file.getAbsolutePath());
+			data.target.photo(fileName);
 			// Write image to file
 			try {
 				FileOutputStream fOut = new FileOutputStream(file);
@@ -606,7 +608,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			data.target
 					.description(((TextView) findViewById(R.id.user_description))
 							.getText().toString());
-			data.target.photo(this.getPhotoName());
+			// photo name is updated when photo is created
 			data.target.rating(String
 					.valueOf(((RatingBar) findViewById(R.id.user_rating_bar))
 							.getRating()));
@@ -616,7 +618,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 
 		this.update();
