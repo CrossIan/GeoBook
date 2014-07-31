@@ -368,7 +368,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	/*
 	 * Perform actions according to which activity is returning a result.
 	 */
-	protected void onActivityResult(int requestCode, int responseCode,
+	@Override
+	public void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
 		super.onActivityResult(requestCode, responseCode, intent);
 		//
