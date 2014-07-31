@@ -454,9 +454,10 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheDateFound = sdf.format(d);
 			cacheDateFoundText.setText("Date found: " + cacheDateFound);
 
+			updateUI();
 			//
 			// P
-		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE
+		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE +1000
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 

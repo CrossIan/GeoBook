@@ -436,7 +436,7 @@ public class Map extends FragmentActivity {
 			e.printStackTrace();
 		}
 
-		if (currentState.length() > 0)
+		if (currentState.length() > 1)
 			Toast.makeText(Map.this, currentCity + ", " + currentState,
 					Toast.LENGTH_SHORT).show();
 		else
