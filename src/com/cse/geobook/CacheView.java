@@ -1,6 +1,7 @@
 package com.cse.geobook;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,7 +68,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	//
 	// Data for this cache
 	public Person currentPerson;
-	public String userName, cacheName, cachePlacedBy, cacheDateFound;
+	public String userName, cacheName, cachePlacedBy, cacheDateFound,
+			cachePhoto;
 	public String userDescription;
 
 	public Double cacheLat, cacheLng, cacheDifficulty, cacheTerrain,
@@ -236,7 +239,16 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		// Set widget text
 		cacheNameText.setText(cacheName);
 		cachePlacedByText.setText("Placed by: \"" + cachePlacedBy + "\"");
-		cacheDateFoundText.setText("Date found: " + cacheDateFound);
+
+		String[] date = cacheDateFound.split("_");
+		if (date.length > 2) {
+
+			String tempd = date[2];
+			String realDate = tempd.substring(4, 6) + "/"
+					+ tempd.substring(6, 8) + "/" + tempd.substring(0, 4);
+			this.cacheDateFoundText.setText(realDate);
+		}
+
 		cacheDifficultyText.setText(Double.toString(cacheDifficulty));
 		cacheTerrainText.setText(Double.toString(cacheTerrain));
 		cacheAwesomenessText.setText(Double.toString(cacheAwesomeness));
@@ -246,8 +258,34 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		userDescriptionText.setText(userDescription);
 		// TODO: set PHOTO
 		if (this.data.target.getPhoto().length() > 0) {
+
+			File path = new File(
+					Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					"Geobook/");
+			if (!path.isDirectory()) {
+				Log.e(TAG, "Directory does not exist");
+			}
+
+			// Get the new photos name and add to path
+			String fileName = data.target.getPhoto();
+			File file = new File(path, fileName);
+			Log.d(TAG, file.getAbsolutePath());
+			// Write image to file
+			try {
+				FileInputStream fOut = new FileInputStream(file);
+				Bitmap bitmap = BitmapFactory
+						.decodeFile(file.getAbsolutePath());
+				// Drawable d = new BitmapDrawable(getResources(), myBitmap);
+				cacheThumbnail.setImageBitmap(bitmap);
+
+				fOut.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			// Bitmap imageBitmap = new Bitmap();
 			// cacheThumbnail.setImageBitmap(imageBitmap);
+
 		}
 
 	}
@@ -386,6 +424,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			// Get the new photos name and add to path
 			String fileName = getPhotoName();
 			File file = new File(path, fileName);
+			data.target.photo(fileName);
 			Log.d(TAG, file.getAbsolutePath());
 			// Write image to file
 			try {
@@ -443,6 +482,8 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			String fileName = getPhotoName();
 			File file = new File(path, fileName);
 			Log.d(TAG, file.getAbsolutePath());
+			cachePhoto = fileName;
+
 			// Write image to file
 			try {
 				FileOutputStream fOut = new FileOutputStream(file);
@@ -478,6 +519,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 				}
 			}
 		}
+		updateUI();
 
 	}
 
@@ -573,12 +615,21 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 		return imageFileName;
 	}
 
+	private void updateUI() {
+		data.target.photo(cachePhoto);
+		String[] date = cachePhoto.split("_");
+		String tempd = date[2];
+		String realDate = tempd.substring(4, 6) + "/" + tempd.substring(6, 8)
+				+ "/" + tempd.substring(0, 4);
+		this.cacheDateFoundText.setText(realDate);
+	}
+
 	private void update() {
 		if (this.cacheHasBeenFound) {
 			data.target
 					.description(((TextView) findViewById(R.id.user_description))
 							.getText().toString());
-			data.target.photo(this.getPhotoName());
+			// photo name is updated when photo is created
 			data.target.rating(String
 					.valueOf(((RatingBar) findViewById(R.id.user_rating_bar))
 							.getRating()));
@@ -588,7 +639,6 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 
 		this.update();

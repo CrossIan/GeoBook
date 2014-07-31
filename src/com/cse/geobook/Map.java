@@ -322,6 +322,7 @@ public class Map extends FragmentActivity {
 			extra.putParcelable("USER", (Parcelable) currentPerson);
 			extra.putString("CITY", currentCity);
 			extra.putString("STATE", currentState);
+			extra.putParcelable(Data.CACHE_DATA, this.caches);
 			profileIntent.putExtras(extra);
 
 			// Start profile activity
@@ -426,7 +427,7 @@ public class Map extends FragmentActivity {
 				String[] addressLine = addresses.get(0).getAddressLine(1)
 						.split(",");
 				currentCity = addressLine[0];
-				if (addressLine.length > 0)
+				if (addressLine.length > 1)
 					currentState = addressLine[1].substring(1, 3);
 				else
 					currentState = "";

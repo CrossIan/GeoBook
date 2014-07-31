@@ -2,17 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#666666"
+    android:background="@drawable/earth_logo"
     tools:context="${packageName}.${activityClass}" >
 
-    <ImageView
-        android:id="@+id/earthImage"
+    <TextView
+        android:id="@+id/login_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:contentDescription="@string/earthImageDescription" 
-        android:src="@drawable/earth_logo" />
-
+        android:layout_marginTop="30dp"
+         android:text="@string/geobook"
+        android:textColor="#000000"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -44,7 +44,7 @@
     <!-- STRINGS USED IN Profile -->
     <string name="title_activity_profile">User Profile</string>
     <string name="userProfileImageDescription">User\'s profile picture</string>
-    <string name="cacheProgress">X of Y Caches</string>
+    <string name="cacheProgress">% Caches Found</string>
     <string name="lastCacheFound">Cache Name</string>
     <string name="lastCacheDate">01/11/2014</string>
     <string name="lastCacheDifficulty">Hard</string>
@@ -63,5 +63,13 @@
     <!-- STRINGS USED IN ListView -->
     <string name="title_activity_listView">List View</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="photo">Photo</string>
+    <string name="share">Share</string>
+    <string name="foundit">Found it!</string>
+    <string name="geobook">GeoBook</string>
+    <string name="signin_hint">Sign in to get started</string>
+    <string name="bypass">Bypass</string>
+    <string name="signout">Signout</string>
+    <string name="revokeaccess">Revoke Access</string>
 
 </resources>
