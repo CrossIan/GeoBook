@@ -70,6 +70,7 @@
         <activity
             android:name=".CacheView"
             android:label="CacheView"
+            android:noHistory="true"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.CACHEVIEW" />
