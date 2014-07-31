@@ -368,10 +368,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	/*
 	 * Perform actions according to which activity is returning a result.
 	 */
-	@Override
-	public void onActivityResult(int requestCode, int responseCode,
+	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
-		super.onActivityResult(requestCode, responseCode, intent);
+		Log.v(TAG, "ActivityResult: " + requestCode);
 		//
 		// Google+ request result SUCCESS
 		if (requestCode == GOOGLE_REQUEST_CODE && responseCode == RESULT_OK) {
@@ -455,10 +454,9 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			cacheDateFound = sdf.format(d);
 			cacheDateFoundText.setText("Date found: " + cacheDateFound);
 
-			updateUI();
 			//
 			// P
-		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE + 1000
+		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 

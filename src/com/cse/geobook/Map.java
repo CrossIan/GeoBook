@@ -496,4 +496,5 @@ public class Map extends FragmentActivity {
 		}
 
 	}
+
 }
