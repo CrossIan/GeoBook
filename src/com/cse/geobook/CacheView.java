@@ -370,7 +370,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 	 */
 	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
-		Log.v(TAG, "ActivityResult: " + requestCode);
+		super.onActivityResult(requestCode, responseCode, intent);
 		//
 		// Google+ request result SUCCESS
 		if (requestCode == GOOGLE_REQUEST_CODE && responseCode == RESULT_OK) {
@@ -457,7 +457,7 @@ public class CacheView extends Activity implements ConnectionCallbacks,
 			updateUI();
 			//
 			// P
-		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE +1000
+		} else if (requestCode == PHOTO_SHARE_REQUEST_CODE + 1000
 				&& responseCode == RESULT_OK) {
 			Log.d(TAG, "Photo activity returned OK.");
 
