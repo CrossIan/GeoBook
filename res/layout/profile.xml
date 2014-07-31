@@ -1,11 +1,36 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/book" >
+    android:background="#666666" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="#666666" >
+
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/userProfileImageDescription"
+            android:src="@drawable/okay_guy" />
+
+        <TextView
+            android:id="@+id/last_cache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cache_progress_bar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="40dp"
+            android:text="Most Recent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#1919BA"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/progress_text"
@@ -16,7 +41,7 @@
             android:layout_marginTop="17dp"
             android:text="@string/cacheProgress"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="#FFFFFF" />
 
         <ProgressBar
             android:id="@+id/cache_progress_bar"
@@ -28,40 +53,74 @@
             android:max="100"
             android:progress="35" />
 
+        <ImageView
+            android:id="@+id/cache_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignLeft="@+id/profile_pic"
+            android:layout_below="@+id/last_cache"
+            android:contentDescription="Image of last cache found"
+            android:src="@drawable/chef" />
+
         <TextView
             android:id="@+id/user_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/cache_progress_bar"
+            android:layout_alignLeft="@+id/cache_name"
             android:layout_alignTop="@+id/profile_pic"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:layout_width="150dp"
             android:text="@string/userName"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#000000"
+            android:textColor="#1919BA"
             android:textSize="24sp" />
 
         <TextView
             android:id="@+id/location_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/user_name"
             android:layout_below="@+id/user_name"
-            android:layout_width="150dp"
             android:text="@string/currentRegion"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="15sp" />
 
-        <ImageView
-            android:id="@+id/profile_pic"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/cache_progress_bar"
-            android:contentDescription="@string/userProfileImageDescription"
-            android:src="@drawable/okay_guy" />
+        <TextView
+            android:id="@+id/cache_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/cache_progress_bar"
+            android:layout_alignTop="@+id/cache_image"
+            android:layout_marginBottom="5dp"
+            android:text="@string/lastCacheFound"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/cache_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/cache_name"
+            android:layout_below="@+id/cache_name"
+            android:layout_marginBottom="5dp"
+            android:text="@string/lastCacheDate"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/cache_difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/cache_date"
+            android:layout_below="@+id/cache_date"
+            android:layout_marginBottom="5dp"
+            android:text="@string/lastCacheDifficulty"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </ScrollView>

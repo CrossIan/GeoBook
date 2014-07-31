@@ -1,7 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/book" >
+    android:background="#666666" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,8 +14,8 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:text="@string/geobook"
-            android:textColor="#000000"
+            android:text="Geobook"
+            android:textColor="#1919BA"
             android:textSize="50sp"
             android:textStyle="bold" />
 
@@ -26,51 +26,45 @@
             android:layout_below="@+id/login_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:text="@string/signin_hint"
-            android:textColor="#000000"
-            android:textSize="20sp"
+            android:text="Sign in to get started"
+            android:textColor="#1919BA"
+            android:textSize="20dp"
             android:textStyle="italic" />
 
-        <LinearLayout
-            android:id="@+id/buttonbox"
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_below="@+id/sign_in_hint"
-            android:layout_gravity="center"
-            android:orientation="vertical" >
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
 
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/google_sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft= "25dp"
-                android:layout_marginTop="20dp" >
-            </com.google.android.gms.common.SignInButton>
+        <Button
+            android:id="@+id/sign_out_button"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="Sign out" />
 
-            <Button
-                android:id="@+id/bypass_button"
-                android:layout_width="160dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/bypass" />
+        <Button
+            android:id="@+id/revoke_access_button"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/google_sign_in_button"
+            android:layout_marginTop="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="Revoke Access"
+            android:layout_weight = "1.0" />
 
-            <Button
-                android:id="@+id/sign_out_button"
-                android:layout_width="160dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/signout" />
-
-            <Button
-                android:id="@+id/revoke_access_button"
-                android:layout_width="160dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/revokeaccess" />
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/bypass_button"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/google_sign_in_button"
+            android:layout_centerHorizontal="true"
+            android:text="Bypass" />
     </RelativeLayout>
 
 </ScrollView>

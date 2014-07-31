@@ -28,4 +28,9 @@ public class Settings extends Activity {
 		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_pinColor", "1");
 		
 	}
+	
+	public static String getProfileName(Context context){
+		return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_profileName", "John Doe");
+	}
+
 }

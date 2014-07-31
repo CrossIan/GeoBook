@@ -8,4 +8,8 @@
         android:entryValues="@array/ColorListValues"
         android:defaultValue="1" >
     </ListPreference>
+    <EditTextPreference 
+        android:key="pref_profileName"
+        android:title="Edit Profile Name"
+        android:dialogTitle="Customize the profile name"/>
 </PreferenceScreen>
